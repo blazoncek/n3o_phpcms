@@ -1,0 +1,10 @@
+.DS_Store
+.localized
+.htaccess
+*.sublime*
+_config.php
+diskusije/px/face/custom/
+media/
+servis/qry/*.sql
+servis/qry/*.php
+servis/template/*.php

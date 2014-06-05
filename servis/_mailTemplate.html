@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<title>#Title# - Newsletter</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1.0, minimum-scale=1, user-scalable=no, width=device-width">
+<style>
+HTML {margin:0;padding:0;}
+A,A:Visited,A:Active,A:Hover {color:#LinkColor#;text-decoration:none;}
+A:Visited {color:#TextColor#;}
+BODY {
+	background:#PageColor# url('#WebURL#/pic/page_bg.png') scroll top left !important;
+	color:#TextColor#;
+	font-family:'Trebuchet MS',Verdana,Helvetica,Arial,sans-serif;
+	font-size:11pt;
+	margin:0;padding:0;
+	text-shadow:0px 1px 2px rgba(0,0,0,.75);
+}
+P,BLOCKQUOTE, OL, UL {margin-top:.5em;margin-bottom:.5em;}
+H1, H2, H3 {font-weight:bold;text-align:left;margin-top:.5em;margin-bottom:.33em;}
+H1 {font-size:1.5em;}
+H2 {font-size:1.3em;}
+H3 {font-size:1.1em;border-bottom:none;}
+BLOCKQUOTE {padding:.75em;margin:.5em 2em;}
+#body {
+	position:relative;
+	background-color:#BackgColor#;
+	margin:0 auto;
+	max-width:#ContentW#px;
+	width:#ContentW#px;
+	box-shadow:0px 8px 15px rgba(0,0,0,.75);
+}
+#info, #foot {font-size:8.5pt;}
+#info {background-color:#PageColor#;text-align:center;padding-bottom:.5em;}
+#head {
+	background: #BckLoColor# url('#WebURL#/pic/title_bg.png') no-repeat right top !important;
+	border-bottom:1px #FrameColor# solid;
+	clear:both;
+	color: #TxtFrColor#;
+	text-shadow:0px 1px 3px rgba(0,0,0,.75);
+}
+#head, #content, #foot {padding:10px;}
+#foot {
+	background-color:#BckHiColor#;
+	border-top:1px solid #FrameColor#;
+	clear: both;
+	text-align:center;
+}
+.maintitle {
+	min-height:58px;
+	position:relative;
+}
+.maintitle .center {/*
+	margin-top:-2em;
+	position:absolute;
+	top:50%;
+	width:100%;
+*/}
+.maintitle H1 {
+	font-size:2.7em;
+	line-height:.9em;
+	letter-spacing:-1px;
+	margin:0;
+	padding:0;
+}
+.subtitle {font-size:.95em;font-style:italic;}
+.imgcenter, .imgleft, .imgright {
+	border:1px solid #FrameColor#;
+	background:#BckHiColor#;
+	padding: 4px;
+	height: auto;
+}
+.imgcenter {margin:0 5px;}
+.imgleft {margin:0px 7px 5px 0px;}
+.imgright {margin:0px 7px 0px 5px;}
+.quote {
+	background:#BckLoColor# url('pic/quote.png') no-repeat scroll left top !important;
+	border:1px #FrameColor# solid;
+	color: #TxtFrColor#;
+	font-family:georgia,times,serif;
+	font-style:italic;
+	padding:.75em;
+	margin:.5em 2em;
+	min-height:1.5em;
+	text-align:center;
+}
+.code {
+	background:#BckLoColor#;
+	border-left:3px #FrameColor# solid;
+	border-top:1px #FrameColor# dashed;
+	border-bottom:1px #FrameColor# dashed;
+	margin:.5em 2em;
+	padding:.5em 1em;
+	font-size:1.2em;
+	font-family:courier,monospace;
+	overflow:auto;
+}
+.smiley {border:none;width:15px;height:auto;}
+@media screen and (max-width:479px) {
+	body {background-size:auto 128px;font-size: 9pt;}
+	img {height:auto;max-width:290px;}
+	.maintitle {background-size:auto 40px;min-height: 29px;}
+	.smiley {width:30px;}
+	#body {width:320px;}
+	#info, #foot {font-size: 7pt;}
+}
+@media screen and (min-width:480px) and (max-width:640px) {
+	body {background-size:auto 128px;font-size: 8.5pt;}
+	img {height:auto;max-width:446px;}
+	.maintitle {background-size:auto 40px;min-height:29px;}
+	.smiley {width:30px;}
+	#body {width:476px;}
+	#info, #foot {font-size: 6.5pt;}
+}
+</style>
+</HEAD>
+<BODY>
+<div id="info">
+You're receiving this newsletter because you have previously requested to subscribe.<br>
+Having trouble reading this email? <a href="#WebURL#/viewmsg.php?id=#ID#">View it in your browser.</a>
+Not interested anymore? <a href="#WebURL#/unsubscribe.php">Unsubscribe</a>.
+</div>
+<div id="body">
+<div id="head">
+<div class="maintitle"><div class="center">
+<h1>#Title#</h1>
+<div class="subtitle">#SubTitle#</div>
+</div></div>
+</div>
+<div id="content">#MsgBody#</div>
+<div id="foot">
+<div class="copyright">#CopyRight#</div>
+</div>
+</div></BODY>
+</HTML>

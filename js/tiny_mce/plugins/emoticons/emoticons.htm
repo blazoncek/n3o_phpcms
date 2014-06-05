@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>{$lang_insert_emoticons_title}</title>
+<script language="javascript" src="../../tiny_mce_popup.js"></script>
+<script language="javascript">
+	function insertEmotion(code) {
+		if (window.opener) {
+			tinyMCE.execCommand("mceAddUndoLevel");
+			tinyMCE.execCommand("mceInsertContent",false,code);
+			window.close();
+		}
+	}
+</script>
+</head>
+<body onload="window.focus();" marginheight="0" marginwidth="0" leftmargin="0" topmargin="0">
+<div align="center">
+<div class="title">{$lang_insert_emoticons_title}:<br /><br /></div>
+<table border="0" cellspacing="0" cellpadding="4">
+  <tr>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :) ');"><img src="images/s02.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' ;) ');"><img src="images/s04.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :( ');"><img src="images/s01.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' ;( ');"><img src="images/s20.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :D ');"><img src="images/s03.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :O ');"><img src="images/s05.png" width="13" height="15" border="0" /></a></td>
+  </tr>
+  <tr>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :S ');"><img src="images/s06.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :P ');"><img src="images/s10.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :$ ');"><img src="images/s07.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :| ');"><img src="images/s09.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :/ ');"><img src="images/s19.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :\'( ');"><img src="images/s08.png" width="13" height="15" border="0" /></a></td>
+  </tr>
+  <tr>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' B) ');"><img src="images/s11.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' 8) ');"><img src="images/s22.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' O:) ');"><img src="images/s15.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' >:> ');"><img src="images/s16.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :* ');"><img src="images/s12.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' (L) ');"><img src="images/s13.png" width="13" height="15" border="0" /></a></td>
+  </tr>
+  <tr>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' (U) ');"><img src="images/s14.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' (T) ');"><img src="images/s17.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' :@ ');"><img src="images/s18.png" width="13" height="15" border="0" /></a></td>
+    <td><a href="javascript:void(0);" onmousedown="insertEmotion(' *FLOWER* ');"><img src="images/s21.png" width="13" height="15" border="0" /></a></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</div>
+</body>
+</html>

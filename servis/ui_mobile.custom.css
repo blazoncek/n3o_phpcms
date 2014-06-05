@@ -1,0 +1,26 @@
+@media all and (max-width: 450px){
+	.ui-field-contain, fieldset.ui-field-contain { padding: 0.3em 0; border-width: 0; margin: 0.2em 0; }
+	input.ui-input-text, textarea.ui-input-text { display: inline-block; }
+}
+.ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
+	padding-top: 0.6em;
+	padding-bottom: 0.6em;
+}
+.ui-li-heading {
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+}
+.ui-li-desc {
+	margin-bottom: 0.2em;
+}
+.ui-li-thumb {
+	max-width: 60px;
+	max-height: 60px;
+}
+.ui-li-has-thumb .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-thumb {
+	min-height: 43px;
+	padding-left: 80px;
+}
+.ui-btn-inner {
+	padding: 0.5em 20px;
+}

@@ -1,0 +1,9 @@
+# robots.txt
+
+User-agent: *
+Disallow: /pic/
+Disallow: /media/
+Disallow: _	# forms/special files
+Disallow: css.php
+Disallow: RSS.php
+Disallow: search.php
