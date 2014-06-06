@@ -38,7 +38,7 @@ $MaxRows = $Columns * max(min($Rows,25),1);
 $rub = $db->get_var("SELECT KategorijaID FROM Kategorije WHERE Ime IN ('fotografija','photography') LIMIT 1");
 
 $Slike = $db->get_results(
-	"SELECT
+	"SELECT DISTINCT
 		M.MediaID,
 		M.Datoteka,
 		M.Meta,

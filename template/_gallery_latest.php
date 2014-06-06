@@ -36,7 +36,7 @@ $bid = '';
 $rub = $db->get_var("SELECT KategorijaID FROM Kategorije WHERE Ime IN ('fotografija','photography') LIMIT 1");
 
 $Galerija = $db->get_results(
-	"SELECT
+	"SELECT DISTINCT
 		M.MediaID,
 		M.Naziv,
 		M.Datoteka,
