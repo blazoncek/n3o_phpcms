@@ -37,10 +37,10 @@ function fileExists($fileName, $caseSensitive=false)
 	if ( left($fileName,5)=='data:' || left($fileName,4)=='http' || left($fileName,3)=='ftp' ) {
 		return false;
 	}
-	
+
 	// handle UTF8 in filename on Windows systems
 	$fileName = ((strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? DecodeUTF8($fileName) : $fileName);
-	
+
     if ( file_exists($fileName) ) {
         return basename($fileName);
     }
@@ -74,19 +74,20 @@ function AddLightboxLink($str, $ID="", $folder="large")
 
 	preg_match_all("/<img[^>]*>/i", $str, $aRes);	// find all instances of <IMG> in string
 	foreach ( $aRes[0] as $img ) { // $aRes[0] contains all instances, there is no $aRes[1] since we do not have () in search
-		preg_match("/SRC=\"(?!(?:http|data))[^\"]*\"/i", $img, $aTags); // find SRC= content
-		foreach ( $aTags as $sTag ) {
-			if ( strtoupper(left($sTag, 4)) == "SRC=" ) {
-				$sTag = str_replace($WebPath.'/','',$sTag); // remove base
-				$sPath = dirname($StoreRoot ."/". substr($sTag, 5, strlen($sTag)-6)); // filesystem path
-				$rPath = dirname(substr($sTag, 5, strlen($sTag)-6)); // web relative path
-				$sName = basename(substr($sTag, 5, strlen($sTag)-6)); // filename
-				// check if large file exists
-				if ( fileExists($sPath .'/'. $folder .'/'. $sName) ) {
-					// add "lightbox" link to large image
-					$str = str_replace($img, "<a href=\"". $WebPath .'/'. $rPath .'/'. $folder .'/'. $sName ."\" class=\"fancybox\" rel=\"lightbox$ID\" title=\"$sName\">". $img ."</a>", $str);
-				}
-				break;
+		preg_match("/ALT=\"([^\"]*)\"/i", $img, $aAlt); // find ALT= content
+		preg_match("/SRC=\"((?!(?:http|data))[^\"]*)\"/i", $img, $aSrc); // find SRC= content
+		$sSrc = $aSrc[1]; // SRC="" content (without SRC="")
+		$sAlt = $aAlt[1]; // ALT="" content
+		if ( $sSrc != "" ) {
+			$sSrc  = str_replace($WebPath.'/','',$sSrc); // remove base
+			$sPath = dirname($StoreRoot .'/'. $sSrc); // filesystem path
+			$rPath = dirname($sSrc); // web relative path
+			$sName = basename($sSrc); // filename
+			$sAlt  = $sAlt=="" ? $sName : $sAlt;
+			// check if large file exists
+			if ( fileExists($sPath .'/'. $folder .'/'. $sName) ) {
+				// add "lightbox" link to large image
+				$str = str_replace($img, "<a href=\"". $WebPath .'/'. $rPath .'/'. $folder .'/'. $sName ."\" class=\"fancybox\" rel=\"lightbox$ID\" title=\"". $sAlt ."\">". $img ."</a>", $str);
 			}
 		}
 	}
@@ -107,18 +108,20 @@ function AddImageLink($str, $link="", $folder="large")
 
 	preg_match_all("/<img[^>]*>/i", $str, $aRes);	// find all instances of <IMG> in string
 	foreach ( $aRes[0] as $img ) { // $aRes[0] contains all instances, there is no $aRes[1] since we do not have () in search
-		preg_match("/SRC=\"(?!(?:http|data))[^\"]*\"/i", $img, $aTags);	// find SRC= content
-		foreach ( $aTags as $sTag ) {
-			if ( strtoupper(left($sTag, 4)) == "SRC=" ) {
-				$sPath = dirname($StoreRoot ."/". substr($sTag, 5, strlen($sTag)-6));	// filesystem path
-				$rPath = dirname(substr($sTag, 5, strlen($sTag)-6));	// web relative path
-				$sName = basename(substr($sTag, 5, strlen($sTag)-6));	// filename
-				// check if large file exists
-				if ( fileExists($sPath ."/". $folder .'/'. $sName) ) {
-					// add "lightbox" link to large image
-					$str = str_replace($img, "<a href=\"". $link . $rPath .'/'. $folder .'/'. $sName ."\" title=\"$sName\">". $img ."</a>", $str);
-				}
-				break;
+		preg_match("/ALT=\"([^\"]*)\"/i", $img, $aAlt); // find ALT= content
+		preg_match("/SRC=\"((?!(?:http|data))[^\"]*)\"/i", $img, $aSrc); // find SRC= content
+		$sSrc = $aSrc[1]; // SRC="" content (without SRC="")
+		$sAlt = $aAlt[1]; // ALT="" content
+		if ( $sSrc != "" ) {
+			$sSrc  = str_replace($WebPath.'/','',$sSrc); // remove base
+			$sPath = dirname($StoreRoot .'/'. $sSrc); // filesystem path
+			$rPath = dirname($sSrc); // web relative path
+			$sName = basename($sSrc); // filename
+			$sAlt  = $sAlt=="" ? $sName : $sAlt;
+			// check if large file exists
+			if ( fileExists($sPath .'/'. $folder .'/'. $sName) ) {
+				// add link to large image
+				$str = str_replace($img, "<a href=\"". $link . $rPath .'/'. $folder .'/'. $sName ."\" title=\"". $sAlt ."\">". $img ."</a>", $str);
 			}
 		}
 	}
@@ -329,7 +332,7 @@ function CleanString($text, $removepunct=false)
 	$trans[chr(159)] = '&Yuml;';    // Latin Capital Letter Y With Diaeresis
 	$trans['euro'] = '&euro;';    // euro currency symbol
 	ksort($trans);
-	 
+
 	foreach ($trans as $k => $v) {
 		$text = str_replace($v, $k, $text);
 	}
@@ -346,17 +349,17 @@ function CleanString($text, $removepunct=false)
 */
 	// 4) &amp; => & &quot; => '
 	$text = html_entity_decode($text);
-	 
+
 	// 5) remove Windows-1252 symbols like "TradeMark", "Euro"...
 	$text = preg_replace('/[^(\x20-\x7F)]*/','', $text);
-	
+
 	// 6) remove ASCII punctuators (except -_@)
 	if ( $removepunct ) $text = preg_replace('/[\x21-\x2C\x2E-\x2F\x3A-\x3F\x5B-\x5E\x7B-\x7D]/','',$text);
-	
+
 	$targets=array('\r\n','\n','\r','\t');
 	$results=array(" "," "," "," ");
 	$text = str_replace($targets,$results,$text);
-	 
+
 	return ($text);
 }
 
@@ -430,28 +433,28 @@ function ReplaceSmileys($str, $folder="./pic/")
 * Attributes:
 * DBFIELD - database field name
 * STRING - a search string to be parsed
-* 
+*
 * Returns:
 * SearchString
-* 
+*
 * A custom function to parse a complete search string in keywords (tokens)
 * used by SQL LIKE statement. to search using
 * OR technique. AND technique is achieved as a single OR token, composed of two
 * or more words combined with '+' (plus) sign.
-* 
+*
 * Examples:
 *   STRING: good manners
 *   RESULT: DBFIELD like '%good%' and DBFIELD like '%manners%'
-*   
+*
 *   STRING: good OR manners
 *   STRING: good ALI manners (slovenian implementation)
 *   STRING: good,manners
 *   STRING: good, manners
 *   RESULT: DBFIELD like '%good%' or DBFIELD like '%manners%'
-* 
+*
 *   STRING: -good -manners
 *   RESULT: DBFIELD not like '%good%' and DBFIELD not like '%manners%'
-* 
+*
 *   STRING: "good manners"
 *   RESULT: DBFIELD like '%good manners%'
 * -------------------------------------
@@ -489,7 +492,7 @@ function SearchString($DBField, $String="")
 	foreach ( $SearchSubstrings as $SearchSubstring ) {
 
 		$Nest .= $SearchSubstring .' ';
-		
+
 		// imamo citiran string (quote)
 		if ( left($SearchSubstring, 1)=='"' && right($SearchSubstring, 1) != '"' )
 			continue; // skok na naslednjo besedo
@@ -543,7 +546,7 @@ function SearchString($DBField, $String="")
 *  imagepath="[photopath]"					%Server path to the image directory
 *  thumbprefix="[prefix]"      /optional	%Server path to the thumbnail directory	or thumb prefix
 *  largeprefix="[largeprefix]" /optional	%Server path to the original image directory or large prefix
-*  maxsize=[number,array]      /optional	%Maximum width/height of image 
+*  maxsize=[number,array]      /optional	%Maximum width/height of image
 *  thumbsize=[number]          /optional	%Width/height of the generated thumbnail (<0 = square thumbnail (cropped))
 *  jpegquality=[number]        /optional	%JPEG quality % setting [0-100]
 *  nameconflict="[text]"       /optional	%Action to take if uploaded image's name is already on the server
@@ -575,54 +578,54 @@ function ImageResize(
 		$doit = false;
 		$message = "You need to specify a valid image path!";
 	} else {}
-	
+
 	if ( !isset($filefield) ) {
 		$doit = false;
 		$message = "You need to specify a file field!";
 	} else {}
-	
-	if ( !isset($thumbprefix) || !isset($thumbsize) ) { 
+
+	if ( !isset($thumbprefix) || !isset($thumbsize) ) {
 		$doit = false;
 		$message = "Wrong thumbnail size and prefix.";
 	} else {}
-	
-	if ( !isset($largeprefix) ) { 
+
+	if ( !isset($largeprefix) ) {
 		$doit = false;
 		$message = "Wrong large image prefix.";
 	} else {}
-	
+
 	if ( !(strtolower($nameconflict)=="makeunique"
 		|| strtolower($nameconflict)=="overwrite"
 		|| strtolower($nameconflict)=="error") ) {
 		$nameconflict = "makeunique";
 	} else {}
-	
+
 	// parse $filefield
 	if ( left($filefield,2)=='->' || left($filefield,2)=='=>' ) {
-	
+
 		// '->' or '=>' in front of actual name means already uploaded file (existing in the app folder)
 		// -> change the name of file
 		// => do not change the name (except uppercase and space)
 		$tmpfile = substr($filefield,2);
 		$photo   = (left($filefield,1)=='=' ? basename($tmpfile) : "photo". date("-Ymd-His") . strrchr(basename($tmpfile),'.'));
 		$photo   = strtolower(str_replace(' ', '-', $photo));
-		
+
 		if ( !contains(".gif,.jpg,.png", right($photo, 4)) ) {
 			$doit    = false;
 			$message = "Wrong image type. Only GIF, JPEG and PNG allowed.";
 		}
-	
+
 	} elseif ( !$_FILES[$filefield]['error'] ) {
-	
+
 		// file being uploaded
 		$tmpfile = $_FILES[$filefield]['tmp_name'];
 		$photo   = strtolower(str_replace(' ','-',CleanString(basename($_FILES[$filefield]['name']))));
-		
+
 		if ( !contains(".gif,.jpg,.png", right($photo, 4)) ) {
 			$doit    = false;
 			$message = "Wrong image type. Only GIF, JPG and PNG allowed.";
 		}
-	
+
 	} else {
 
 		$doit    = false;
@@ -631,7 +634,7 @@ function ImageResize(
 	}
 
 	if ( $doit ) {
-	
+
 		$ext    = strrchr($photo, '.');
 		$name   = left($photo, strlen($photo)-4);
 		$retina = (right($name, 3) === '@2x'); // check if 'retina' size/intent upload
@@ -666,7 +669,7 @@ function ImageResize(
 			$maxsize = min(abs($maxsize[0]),abs($maxsize[1]));
 		} else
 			$limit = $retina ? 2048 : 1024;
-		
+
 		// move file and resize image
 		if ( (left($filefield,2)=='->' ? rename($tmpfile, $largefile) : @move_uploaded_file($tmpfile, $largefile)) ) {
 			// resize image
@@ -686,11 +689,11 @@ function ImageResize(
 
 				// resize image if larger than limits
 				if ( isset($maxsize) && $maxsize > 0 && ($i_width > $maxsize || $i_height > $maxsize) ) {
-		
+
 					// resize retina image
 					if ( $retina ) $thumb->resize($maxsize*2, $maxsize*2)->save($imagepath .'/'. $name .'@2x'. $ext);
 					$thumb->resize($maxsize, $maxsize)->save($uploadfile);
-		
+
 					// get resized image dimesions
 					$size     = $thumb->getCurrentDimensions();
 					$r_width  = $size['width'];
@@ -704,7 +707,7 @@ function ImageResize(
 						$size = $thumb->getCurrentDimensions(); // $thumb == $largefile
 						$max  = max($size['width'],$size['height']);
 						$thumb->resize($max/2, $max/2)->save($uploadfile); // resize non-retina
-						
+
 						// get image dimensions
 						$size = $thumb->getCurrentDimensions();
 						$r_width  = $i_width  = $size['width'];
@@ -717,7 +720,7 @@ function ImageResize(
 					if ( $largefile != $uploadfile )
 						@unlink($largefile);
 				}
-				
+
 				// create thumbnail (<0 crop it square)
 				$square    = $thumbsize < 0;
 				$thumbsize = abs($thumbsize);
@@ -744,7 +747,7 @@ function ImageResize(
 				// get file size
 				$stat = stat($uploadfile);
 				$fileSize = (int)$stat['size'];
-				
+
 			} catch (Exception $e) {
 
 				// cleanup
@@ -753,7 +756,7 @@ function ImageResize(
 				@unlink($imagepath .'/'. $name .'@2x'. $ext); // resized retina image
 				@unlink($uploadfile); // resized image
 				@unlink($largefile); //original image
-				
+
 				trigger_error("Resize error!", E_USER_ERROR);
 				return false;
 			}
@@ -761,20 +764,20 @@ function ImageResize(
 
 			// cleanup
 			@unlink($largefile);
-			
+
 			trigger_error("Move error!", E_USER_ERROR);
 			return false;
 		}
-		
+
 		// return metadata
 		return array('name' => $name . $ext,
 			'iw' => $i_width, 'ih' => $i_height,
 			'rw' => $r_width, 'rh' => $r_height,
 			'tw' => $t_width, 'th' => $t_height,
 			'size' => $fileSize);
-	
+
 	} else {
-	
+
 		trigger_error($message, E_USER_NOTICE);
 		return false;
 	}
