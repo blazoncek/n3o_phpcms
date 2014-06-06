@@ -48,8 +48,8 @@ if ( isset($_GET['ID']) && $_GET['ID'] != "" ) {
 	echo "</div>\n";
 
 	// define type of links
-	$kat = ($TextPermalinks) ? ($IsIIS ? "$WebFile/" : ''). $KatText .'/' : '?kat='. $_GET['kat'];
-	$bid = ($TextPermalinks) ? $Teksti[0]->Ime .'/?' : '&amp;ID='. $_GET['ID'] .'&amp;';
+	$kat = $TextPermalinks ? ($IsIIS ? "$WebFile/" : ''). $KatText .'/' : '?kat='. $_GET['kat'];
+	$bid = $TextPermalinks ? $Teksti[0]->Ime .'/?' : '&amp;ID='. $_GET['ID'] .'&amp;';
 
 	// include grid display
 	include('__gallery.php');
@@ -96,12 +96,22 @@ if ( isset($_GET['ID']) && $_GET['ID'] != "" ) {
 					} else {
 						// otherwise get image from last upload (latest image)
 						$Slika = $db->get_var(
-							"SELECT
+							"SELECT DISTINCT
 								M.Datoteka
 							FROM
 								Media M
+								LEFT JOIN BesedilaSlike BS ON BS.MediaID = M.MediaID
 							WHERE
 								M.Tip = 'PIC'
+								AND BS.BesediloID IN (
+									SELECT DISTINCT
+										B.BesediloID
+									FROM
+										KategorijeBesedila KB
+										LEFT JOIN Besedila B ON KB.BesediloID = B.BesediloID
+									WHERE
+										KB.KategorijaID LIKE '". $db->escape($_GET['kat']) ."%'
+								)
 							ORDER BY
 								M.Datum DESC
 							LIMIT 1"
