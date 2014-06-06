@@ -207,7 +207,7 @@ if ( $getMessages ) foreach ( $getMessages as $msg ) {
 		?>
 		<IMG SRC="../diskusije/px/<?php echo $msg->Icon ?>.gif" ALIGN="absmiddle" ALT="<?php echo $Alt ?>" BORDER="0" WIDTH="12" HEIGHT="12">
 	<?php else : ?>
-		<IMG SRC="../diskusije/px/trans.gif" ALIGN="absmiddle" BORDER="0" HEIGHT="12" WIDTH="12">
+		<IMG SRC="../pic/trans.gif" ALIGN="absmiddle" BORDER="0" HEIGHT="12" WIDTH="12">
 	<?php endif ?>
 		</TD>
 		<TD ALIGN="right" CLASS="a10" WIDTH="70">Napisal:</TD>
