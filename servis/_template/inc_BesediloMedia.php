@@ -90,7 +90,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	if ( !$List ) 
-		echo "<TR><TD ALIGN=\"center\"><br><br>Ni podatkov!<br><br></TD></TR>\n";
+		echo "<TR><TD ALIGN=\"center\"><br><br>No data!<br><br></TD></TR>\n";
 	else {
 		$CurrentRow = 1;
 		$RecordCount = count( $List );
@@ -173,7 +173,7 @@ function checkMedia(ID, Naziv) {
 			else
 				echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
 			// delete
-			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkMedia('$Item->ID','$Item->Datoteka');\" TITLE=\"Briši\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\">\n";
+			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkMedia('$Item->ID','$Item->Datoteka');\" TITLE=\"Delete\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\">\n";
 		}
 		echo "</TD>\n";
 		echo "</TR>\n";

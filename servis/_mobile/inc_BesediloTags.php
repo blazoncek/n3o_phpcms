@@ -127,8 +127,8 @@ $('#edit').live('pageinit', function(event){
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"Oznake\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Oznake</h1>\n";
-echo "<a href=\"edit.php?Izbor=Besedila&ID=". $_GET['BesediloID'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"edit.php?Izbor=Besedila&ID=". $_GET['BesediloID'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 

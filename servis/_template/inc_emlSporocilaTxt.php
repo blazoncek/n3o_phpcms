@@ -115,7 +115,7 @@ $(document).ready(function(){
 <DIV CLASS="subtitle">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanj�ano okno" border="0" align="absmiddle" class="icon">&nbsp;Seznam</a></div></td>
+	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanj�ano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
 	<td id="editNote" align="right">emlSporocilaTxt - <B>Vnos sporočila</B>&nbsp;&nbsp;</td>
 </tr>
 </table>
@@ -128,10 +128,10 @@ $(document).ready(function(){
 <TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" WIDTH="100%">
 <TR>
 	<TD NOWRAP><B>Predmet:</B>&nbsp;</TD>
-	<TD><INPUT TYPE="text" NAME="Subject" MAXLENGTH="128" VALUE="<?php echo ($Podatek? $Podatek->Naziv: "") ?>" STYLE="width:100%" TABINDEX="7"></TD>
+	<TD><INPUT TYPE="text" NAME="Subject" MAXLENGTH="128" VALUE="<?php echo ($Podatek? $Podatek->Naziv : "") ?>" STYLE="width:100%" TABINDEX="7"></TD>
 	<TD>&nbsp;Jezik: 
 	<SELECT NAME="Jezik" SIZE="1" <?php echo (($Podatek)? "DISABLED": "") ?>>
-		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Izberi...</OPTION>
+		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
 $Jeziki = $db->get_results(
 	"SELECT J.Jezik, J.Opis ".
@@ -153,11 +153,11 @@ $All = $db->get_var(
 	</TD>
 	<TD ALIGN="right">
 	<INPUT TYPE="Button" VALUE=" Zapri " ONCLICK="loadTo('Edit','edit.php?Izbor=emlSporocila&ID=<?php echo (int)$_GET['emlMessageID'] ?>')" CLASS="but">
-	<INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but">
+	<INPUT TYPE="submit" VALUE=" Save " CLASS="but">
 	</TD>
 </TR>
 <!--TR>
-	<TD COLSPAN="4" VALIGN="top"><B>Vsebina:</B> <SPAN CLASS="f10 gry">(Copy/Paste iz Worda odsvetujemo)</SPAN></TD>
+	<TD COLSPAN="4" VALIGN="top"><B>Vsebina:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
 </TR-->
 <?php
 	if ( $Podatek ) {

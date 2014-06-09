@@ -42,7 +42,7 @@ function loop( $Menu="", &$BgCol="white" ) {
 		ORDER BY KategorijaID" );
 	
 	if ( $Menu == "" && count( $Kat ) == 0 ) {
-		echo "<tr><td align=\"center\" valign=\"middle\" height=\"100\"><b>Ni podatkov!</b></td></tr>\n";
+		echo "<tr><td align=\"center\" valign=\"middle\" height=\"100\"><b>No data!</b></td></tr>\n";
 	} else {
 
 		if ( $Kat ) foreach ( $Kat as $K ) {
@@ -125,7 +125,7 @@ function loop( $Menu="", &$BgCol="white" ) {
 						}
 						// delete
 						if ( contains($ACL,"D") )
-							echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Ime');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+							echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Ime');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 						else
 							echo "<img src=\"pic/trans.png\" height=\"11\" width=\"11\" border=\"0\" align=\"absmiddle\" class=\"icon\">";
 						echo "</td>\n";
@@ -168,7 +168,7 @@ function loop( $Menu="", &$BgCol="white" ) {
 					echo "</td>\n";
 					echo "<td align=\"right\" class=\"novo\">";
 					if ( contains($ACL,"D") )
-						echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+						echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 					else
 						echo "<img src=\"pic/trans.png\" height=\"11\" width=\"11\" border=\"0\" align=\"absmiddle\" class=\"icon\">";
 					echo "</td>\n";
@@ -250,7 +250,7 @@ if ( $Simple && $_GET['Find'] == "" ) {
 	echo "<OPTION VALUE=\"Datum\"".(($_GET['Sort']=="Datum")? " SELECTED": "").">Datum</OPTION>\n";
 	echo "</SELECT>\n";
 	echo "</TD>\n";
-	echo "<TD ALIGN=\"right\">Tip:\n";
+	echo "<TD ALIGN=\"right\">Type:\n";
 	echo "<SELECT NAME=\"Tip\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=".$_GET['Action']."&Sort=".$_GET['Sort']."&Tip='+this[this.selectedIndex].value);\">\n";
 	echo "<OPTION VALUE=\"\">- vsi tipi -</OPTION>\n";
 	$Tipi = $db->get_col( "SELECT SifrText FROM Sifranti WHERE SifrCtrl='BESE' ORDER BY SifrCtrl, SifrZapo" );
@@ -263,7 +263,7 @@ if ( $Simple && $_GET['Find'] == "" ) {
 	
 	if ( count( $List ) == 0 ) {
 		echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";
-		echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+		echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 		echo "</div>\n";
 	} else {
 
@@ -307,7 +307,7 @@ if ( $Simple && $_GET['Find'] == "" ) {
 					echo "<td>".left($Item->Name,30).(strlen($Item->Name)>30? "...": "")."</td>\n";
 				echo "<td align=\"right\" valign=\"top\" width=\"20\">";
 				if ( contains($ACL,"D") )
-					echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+					echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 				else
 					echo "&nbsp;";
 				echo "</td>\n";

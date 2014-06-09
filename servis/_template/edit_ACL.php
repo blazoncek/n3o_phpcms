@@ -25,10 +25,10 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 // get data
-$Podatek = $db->get_row( "SELECT * FROM SMACL WHERE ACLID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM SMACL WHERE ACLID = ". (int)$_GET['ID']);
 
 ?>
 <script language="JavaScript" type="text/javascript">
@@ -97,8 +97,6 @@ $(document).ready(function(){
 
 	// bind to the form's submit event
 	$("form[name='Vnos']").submit(function(){
-		// inside event callbacks 'this' is the DOM element so we first
-		// wrap it in a jQuery object and then invoke ajaxSubmit
 		$(this).ajaxSubmit({
 			target: '#divEdit', // target element(s) to be updated with server response
 			beforeSubmit: function( formDataArr, jqObj, options ) {
@@ -183,9 +181,9 @@ $(document).ready(function(){
 <?php endif ?>
 
 <?php if ( $_GET['ID'] == "0" ) : ?>
-<DIV ALIGN="center"><BR><BR><BR><B>Vnos ACL na tem mestu ni možen!</B></DIV>
+<DIV ALIGN="center"><BR><BR><BR><B>ACL entry is not possible (from this link)!</B></DIV>
 <?php else : ?>
-<DIV STYLE="width:430px;margin-top:10px;padding-left:10px;"><B>Ime ACL:</B>&nbsp;<SPAN CLASS="red"><?php echo (($Podatek)? $Podatek->Name: "") ?></SPAN></DIV>
+<DIV STYLE="width:430px;margin-top:10px;padding-left:10px;"><B>ACL name:</B>&nbsp;<SPAN CLASS="red"><?php echo (($Podatek) ? $Podatek->Name : "") ?></SPAN></DIV>
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" width="100%">
 <TR>
 	<TD width="50%">
@@ -208,15 +206,15 @@ $(document).ready(function(){
 	);
 ?>
 <FIELDSET ID="fldGroup">
-<LEGEND ID="lgdGroup"><B>Skupine</B></LEGEND>
+<LEGEND ID="lgdGroup"><B>Groups</B></LEGEND>
 <FORM NAME="Groups" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<INPUT Name="GroupList" Type="HIDDEN" VALUE="">
 	<INPUT Name="Action" Type="HIDDEN" VALUE="">
 <TABLE ALIGN="center" BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD ALIGN="right" WIDTH="45%">Niso v ACL:</TD>
+	<TD ALIGN="right" WIDTH="45%">Not included:</TD>
 	<TD ALIGN="center" WIDTH="10%"></TD>
-	<TD ALIGN="right" WIDTH="45%">So v ACL:</TD>
+	<TD ALIGN="right" WIDTH="45%">Included:</TD>
 </TR>
 <TR>
 	<TD ALIGN="left">
@@ -272,13 +270,13 @@ $(document).ready(function(){
 		);
 ?>
 <FIELDSET ID="fldUser">
-<LEGEND ID="lgdUser"><B>Uporabniki</B></LEGEND>
+<LEGEND ID="lgdUser"><B>Users</B></LEGEND>
 <FORM NAME="Users" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD ALIGN="right" WIDTH="45%">Niso v ACL:</TD>
+	<TD ALIGN="right" WIDTH="45%">Not included:</TD>
 	<TD ALIGN="center" WIDTH="10%"></TD>
-	<TD ALIGN="right" WIDTH="45%">So v ACL:</TD>
+	<TD ALIGN="right" WIDTH="45%">Included:</TD>
 </TR>
 <TR>
 	<TD ALIGN="left">
@@ -336,7 +334,7 @@ if ( count( $Members ) > 0 )
 	);
 ?>
 <FIELDSET ID="fldACL">
-<LEGEND ID="lgdACL">Dovoljenja</LEGEND>
+<LEGEND ID="lgdACL">Permissions</LEGEND>
 <DIV ID="divACL" STYLE="overflow:auto;">
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <THEAD>

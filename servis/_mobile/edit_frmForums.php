@@ -60,8 +60,8 @@ $('#edit').live('pageinit', function(event){
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"Forum\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Forum</h1>\n";
-echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 ?>
@@ -211,7 +211,7 @@ if ( count($List) ) {
 	echo "</ul>\n";
 } else {
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"color:red;padding:1em;text-align:center;\">\n";
-	echo "<B>Ni podatkov!</B>\n";
+	echo "<B>No data!</B>\n";
 	echo "</div>\n";
 }
 echo "</fieldset>\n";

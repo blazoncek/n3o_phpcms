@@ -120,7 +120,7 @@ if ( isset( $_POST['SQL'] ) ) {
 	echo "</TABLE>\n";
 
 	echo "</div>\n";
-	echo "<div><a href=\"".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."\" data-role=\"button\" data-direction=\"reverse\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-theme=\"c\" data-ajax=\"false\">Nazaj</a></div>\n";
+	echo "<div><a href=\"".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."\" data-role=\"button\" data-direction=\"reverse\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-theme=\"c\" data-ajax=\"false\">Back</a></div>\n";
 } else {
 ?>
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post" ENCTYPE="multipart/form-data">

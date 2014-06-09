@@ -25,12 +25,12 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$Podatek = $db->get_row( "SELECT * FROM Media WHERE MediaID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM Media WHERE MediaID = ". (int)$_GET['ID']);
 // get ACL
 if ( $Podatek )
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 else
 	$ACL = $ActionACL;
 
@@ -101,7 +101,7 @@ $(document).ready(function(){
 				var fObj = jqObj[0];	// form object
 				if (empty(fObj.Naziv))					{alert("Prosim vnesite naziv!"); fObj.Naziv.focus(); return false;}
 				if (fObj.Dodaj && empty(fObj.Dodaj))	{alert("Prosim, izberite ali dodajte datoteko!"); fObj.Dodaj.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
 		});
@@ -109,7 +109,7 @@ $(document).ready(function(){
 	});
 	$("form[name='Datoteka']").submit(function(){
 		var html = $('#thumbImage').html();
-		$('#thumbImage').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+		$('#thumbImage').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 		$(this).ajaxSubmit({
 			dataType: 'json',
 			target: '#thumbImage',
@@ -135,7 +135,7 @@ $(document).ready(function(){
 			  case 'fileupload' :
 			  case 'thumbImage' :
 				data.url = 'upload_image.php?mid=<?php echo $_GET['ID'] ?>&p=media';
-				data.context = $('#thumbImage').html('<div class="gry center"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</div>');
+				data.context = $('#thumbImage').html('<div class="gry center"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 			  	break;
 			}
 			data.submit();
@@ -230,10 +230,10 @@ $(document).ready(function(){
 	<LEGEND ID="lgdData">
 <?php if ( contains($ACL, "W") && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
-		echo "&MediaID=" . $_GET['ID'] . (($Podatek && $Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Uredi pravice\">";
-		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Dovoljenja\" ALIGN=\"absmiddle\"></A>&nbsp;:";
+		echo "&MediaID=" . $_GET['ID'] . (($Podatek && $Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
+		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 } ?>
-		Osnovni&nbsp;podatki</LEGEND>
+		Basic&nbsp;information</LEGEND>
 	<DIV ID="divData" STYLE="overflow:auto;">
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <?php if ( isset($_GET['KategorijaID']) ) : ?>
@@ -241,9 +241,9 @@ $(document).ready(function(){
 <?php endif ?>
 	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" WIDTH="100%">
 	<TR> 
-		<TD ALIGN="right"><FONT COLOR="red"><B>Izpis:</B></FONT>&nbsp;</TD>
+		<TD ALIGN="right"><FONT COLOR="red"><B>Show:</B></FONT>&nbsp;</TD>
 		<TD><INPUT TYPE="Checkbox" NAME="Izpis" VALUE="yes" <?php echo ($Podatek && $Podatek->Izpis)? " CHECKED": "" ?>></TD>
-		<TD ALIGN="right"><?php if ( $Podatek ) echo "Tip:&nbsp;<INPUT TYPE=\"Text\" SIZE=\"4\" VALUE=\"$Podatek->Tip\" DISABLED>" ?></TD>
+		<TD ALIGN="right"><?php if ( $Podatek ) echo "Type:&nbsp;<INPUT TYPE=\"Text\" SIZE=\"4\" VALUE=\"$Podatek->Tip\" DISABLED>" ?></TD>
 		<TD ALIGN="right" ID="thumbImage" ROWSPAN="<?php echo ($Podatek? 5: 4) ?>" VALIGN="top" WIDTH="130" HEIGHT="130">
 <?php if ( $Podatek && $Podatek->Slika != "" ) : ?>
 		<A HREF="../media/media/<?php echo $Podatek->Slika; ?>" CLASS="fancybox" REL="lightbox" TARGET="_blank">
@@ -257,53 +257,53 @@ $(document).ready(function(){
 		</TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right"><B>Ime:</B>&nbsp;</TD>
+		<TD ALIGN="right"><B>Title:</B>&nbsp;</TD>
 		<TD COLSPAN="2"><INPUT TYPE="text" NAME="Naziv" MAXLENGTH="32" VALUE="<?php if ( $Podatek ) echo $Podatek->Naziv ?>" STYLE="width:100%;"></TD>
 	</TR>
 <?php if ( $Podatek ) : ?>
 	<TR>
-		<TD ALIGN="right">Datoteka:&nbsp;</TD>
+		<TD ALIGN="right">File:&nbsp;</TD>
 		<TD VALIGN="top" COLSPAN="2">
 			<INPUT TYPE="Text" VALUE="<?php if ( $Podatek ) echo $Podatek->Datoteka ?>" DISABLED STYLE="width:100%;">
 		</TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right">Velikost:&nbsp;</TD>
+		<TD ALIGN="right">Size:&nbsp;</TD>
 		<TD>
 			<INPUT TYPE="Text" SIZE="4" VALUE="<?php if ( $Podatek ) echo (int)($Podatek->Velikost/1024) ?>" DISABLED STYLE="text-align:right;"> kB
 		</TD>
 	<?php if ( $Podatek->Tip == "PIC" ) : ?>
 		<TD ALIGN="right" CLASS="red f10">
-		Obnovi ikono:<INPUT NAME="ObnoviSliko" TYPE="CheckBox" STYLE="border:none;">
+		Recreate thumb: <INPUT NAME="ObnoviSliko" TYPE="CheckBox" STYLE="border:none;">
 		</TD>
 	<?php elseif ( $Podatek->Slika != "" ) : ?>
 		<TD ALIGN="right" CLASS="red">
-		Briši ikono:<INPUT NAME="BrisiSliko" TYPE="CheckBox" STYLE="border:none;">
+		Delete image:<INPUT NAME="BrisiSliko" TYPE="CheckBox" STYLE="border:none;">
 		</TD>
 	<?php endif ?>
 	</TR>
 <?php else : ?>
 	<TR>
-		<TD COLSPAN="3" CLASS="f10"><B>Datoteka:</B><br>
-		<INPUT TYPE="FILE" NAME="Dodaj" STYLE="border:none;"></TD>
+		<TD COLSPAN="3" CLASS="f10"><B>File:</B><br>
+		<INPUT TYPE="FILE" NAME="Add" STYLE="border:none;"></TD>
 	</TR>
 	<TR>
-		<TD COLSPAN="2" NOWRAP>Ikona:&nbsp;</TD>
+		<TD COLSPAN="2" NOWRAP>Image:&nbsp;</TD>
 	</TR>
 <?php endif ?>
 <?php if ( contains($ACL,"W") ) : ?>
 	<TR>
 		<TD COLSPAN="2" NOWRAP STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;">
-		K:<INPUT TYPE="CheckBox" NAME="S" VALUE="Yes" <?php echo (int)$DefThumbSize<0 ? "CHECKED" : "" ?>>
-		M:<INPUT TYPE="Text" NAME="T" SIZE="2" MAXLENGTH="3" VALUE="<?php echo abs((int)$DefThumbSize) ?>" TABINDEX="8" TITLE="Velikost male ikone v pikah. (48<x<128)">
-		S:<INPUT TYPE="Text" NAME="R" SIZE="3" MAXLENGTH="4" VALUE="<?php echo abs((int)$DefPicSize) ?>" TABINDEX="9" TITLE="Maksimalna velikost slike v pikah. (320<x<1024)">
+		Square:<INPUT TYPE="CheckBox" NAME="S" VALUE="Yes" <?php echo (int)$DefThumbSize<0 ? "CHECKED" : "" ?>>
+		Thumb:<INPUT TYPE="Text" NAME="T" SIZE="2" MAXLENGTH="3" VALUE="<?php echo abs((int)$DefThumbSize) ?>" TABINDEX="8" TITLE="Size in pixels. (48<x<128)">
+		Size:<INPUT TYPE="Text" NAME="R" SIZE="3" MAXLENGTH="4" VALUE="<?php echo abs((int)$DefPicSize) ?>" TABINDEX="9" TITLE="Size in pixels. (320<x<1024)">
 		</TD>
-		<TD ALIGN="right" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but"></TD>
+		<TD ALIGN="right" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 	</TR>
 <?php endif ?>
 <?php if ( $Podatek && $Podatek->Tip == 'PIC' ) : ?>
 	<TR>
-		<TD COLSPAN="4" CLASS="f10">Metapodatki o sliki: <span class="gry">(ne spreminjaj, če nisi prepričan kaj delaš)</span><BR>
+		<TD COLSPAN="4" CLASS="f10">Metadata: <span class="gry">(do not change, if not sure how/why)</span><BR>
 		<TEXTAREA NAME="Meta" STYLE="width:99%;height:64px;"><?php if ( $Podatek ) echo $Podatek->Meta ?></TEXTAREA>
 		</TD>
 	</TR>
@@ -314,12 +314,12 @@ $(document).ready(function(){
 	</FIELDSET>
 <?php if ( $Podatek && contains($ACL,"W") && $Podatek->Tip!='PIC' ) : ?>
 	<FIELDSET>
-		<LEGEND>Naloži&nbsp;ikono:</LEGEND>
+		<LEGEND>Upload:</LEGEND>
 		<FORM NAME="Datoteka" ACTION="upload_image.php?mid=<?php echo $_GET['ID'] ?>&p=media" METHOD="post" ENCTYPE="multipart/form-data">
 		<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 		<TR>
 			<TD><INPUT ID="fileupload" TYPE="FILE" NAME="file" STYLE="border:none;"><INPUT TYPE="Hidden" NAME="BrisiSliko" VALUE="1"></TD>
-			<TD ALIGN="right"><INPUT TYPE="submit" VALUE=" Dodaj " CLASS="but"></TD>
+			<TD ALIGN="right"><INPUT TYPE="submit" VALUE=" Add " CLASS="but"></TD>
 		</TR>
 		</TABLE>
 		</FORM>
@@ -332,9 +332,9 @@ $(document).ready(function(){
 	<FIELDSET ID="fldContent" style="min-height:200px;">
 	<LEGEND ID="lgdContent">
 	<?php if ( contains($ACL,"W") ) : ?>
-		<A HREF="javascript:void(0);" ONCLICK="loadTo('Names','inc.php?Izbor=MediaOpis&MediaID=<?php echo $_GET['ID'] ?>&ID=0')" TITLE="Dodaj"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Dodaj" BORDER="0" CLASS="icon"></A>&nbsp;:
+		<A HREF="javascript:void(0);" ONCLICK="loadTo('Names','inc.php?Izbor=MediaOpis&MediaID=<?php echo $_GET['ID'] ?>&ID=0')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 	<?php endif ?>
-		Nazivi in opisi</LEGEND>
+		Titles and descriptions</LEGEND>
 		<DIV ID="divNames" STYLE="overflow:none;">&nbsp;</DIV>
 	</FIELDSET>
 <?php endif ?>
@@ -353,23 +353,23 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<div id="findBe" class="find" style="margin:0;">
 		<form name="findFrmBe" action="inc.php?Izbor=MediaBesedila&MediaID=<?php echo $_GET['ID'] ?>" method="get">
-		<input id="findTxtBe" type="Text" name="Find" maxlength="32" value=" Pripni v besedilo " style="color:#aaa;" onkeypress="$('#clrSkFind').show();">
+		<input id="findTxtBe" type="Text" name="Find" maxlength="32" value=" Attach to text " style="color:#aaa;" onkeypress="$('#clrSkFind').show();">
 		<a id="findClrBe" href="javascript:void(0);" onclick="$(this).hide();$('#findTxtBe').val('').select();"><img src="pic/list.clear.gif" border="0"></a>
 		</form>
 		</div>
 <?php else : ?>
-		Pripeto v besedila
+		Attached to texts
 <?php endif ?>
 		</LEGEND>
-		<DIV ID="divBe" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<DIV ID="divBe" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 
 	</TD>
 	<TD VALIGN="top" WIDTH="50%">
 
 	<FIELDSET>
-		<LEGEND>Rubrike</LEGEND>
-		<DIV ID="divRu" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<LEGEND>Attached to categories</LEGEND>
+		<DIV ID="divRu" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 
 	</TD>

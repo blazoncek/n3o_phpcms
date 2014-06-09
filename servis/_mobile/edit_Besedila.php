@@ -105,8 +105,8 @@ function checkFld(fld, ID, Naziv) {
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"Besedila\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Besedila</h1>\n";
-echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 
@@ -124,7 +124,7 @@ if ( isset($Error) ) {
 		<INPUT TYPE="text" ID="fldIme" NAME="Ime" MAXLENGTH="127" VALUE="<?php echo $Podatek ? $Podatek->Ime : ''; ?>" placeholder="Ime" data-theme="d"><br />
 	</div>
 	<div data-role="fieldcontain">
-		<LABEL FOR="fldIzpis"><b>Izpis:</b></LABEL>
+		<LABEL FOR="fldIzpis"><b>Show:</b></LABEL>
 		<select ID="fldIzpis" NAME="Izpis" data-role="slider" data-theme="b">
 			<option value="no">No</option>
 			<option value="yes" <?php if ( $Podatek && $Podatek->Izpis ) echo "SELECTED" ?>>Yes</option>
@@ -159,7 +159,7 @@ if ( (int)$_GET['ID'] != 0 ) {
 		echo "<span class=\"ui-li-count\">".(($Naziv->Jezik=="")? "vsi": $Naziv->Jezik)."</span>";
 		echo (contains($ACL,"W")? "</a>": "");
 		if ( contains($ACL,"D") )
-			echo "<a href=\"#\" onclick=\"checkFld('BrisiOpis','$Naziv->ID','$Naziv->Naziv');\" data-theme=\"c\">Briši</a>";
+			echo "<a href=\"#\" onclick=\"checkFld('BrisiOpis','$Naziv->ID','$Naziv->Naziv');\" data-theme=\"c\">Delete</a>";
 		echo "</li>\n";
 	}
 	echo "<li data-icon=\"add\"><a href=\"inc.php?Izbor=BesediloOpis&BesediloID=". (int)$_GET['ID'] ."&ID=0\" title=\"Dodaj vsebino\" class=\"ui-btn-right\" data-iconpos=\"left\" data-icon=\"add\">Dodaj vsebino</a></li>\n";

@@ -25,9 +25,9 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$User = $db->get_row( "SELECT * FROM SMUser WHERE UserID = " . (int)$_GET['ID'] );
+$User = $db->get_row("SELECT * FROM SMUser WHERE UserID = ". (int)$_GET['ID']);
 ?>
 <script language="JavaScript" type="text/javascript">
 <!-- //
@@ -65,8 +65,6 @@ function setList( list_obj, select_obj ) {
 $(document).ready(function(){
 	// bind to the form's submit event
 	$("form[name='Vnos']").submit(function(){
-		// inside event callbacks 'this' is the DOM element so we first
-		// wrap it in a jQuery object and then invoke ajaxSubmit
 		$(this).ajaxSubmit({
 			target: '#divEdit', // target element(s) to be updated with server response
 			beforeSubmit: function( formDataArr, jqObj, options ) {
@@ -75,7 +73,7 @@ $(document).ready(function(){
 				if (!emailOK(fObj.Email))	{alert("Nepravilen email naslov!"); fObj.Email.focus(); return false;}
 				if (empty(fObj.Username))	{alert("Vnesite uporabniĹˇko ime!"); fObj.Username.focus(); return false;}
 				<?php if ( (int)$_GET['ID'] == 0 ) { ?>if (empty(fObj.Password))	{alert("Vnesite geslo!"); fObj.Password.focus(); return false;}<?php } ?>
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			}
 		});
@@ -110,7 +108,7 @@ $(document).ready(function(){
 	<TD VALIGN="top">
 
 	<FIELDSET ID="fldData" style="width:400px;">
-	<LEGEND ID="lgdData">Osnovni&nbsp;podatki</LEGEND>
+	<LEGEND ID="lgdData">Basic&nbsp;information</LEGEND>
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?><?php if ( isset($_GET['ID']) && $_GET['ID'] > 0 ) echo "&ID=".$_GET['ID'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 	<TR><TD COLSPAN="2" HEIGHT="10"></TD></TR>
@@ -120,7 +118,7 @@ if ( isset( $Error ) )
 else {
 ?>
 	<TR>
-		<TD ALIGN="right" WIDTH="35%"><B>Ime in priimek:</B>&nbsp;</TD>
+		<TD ALIGN="right" WIDTH="35%"><B>Full name:</B>&nbsp;</TD>
 		<TD><INPUT TYPE="text" NAME="Name" SIZE="43" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Name ?>" STYLE="width:100%;"></TD>
 	</TR>
 	<TR>
@@ -128,7 +126,7 @@ else {
 		<TD><INPUT TYPE="text" NAME="Email" SIZE="43" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Email ?>" STYLE="width:100%;"></TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right" WIDTH="35%"><B>Uporabniško ime:</B>&nbsp;</TD>
+		<TD ALIGN="right" WIDTH="35%"><B>Username:</B>&nbsp;</TD>
 		<TD><INPUT TYPE="text" NAME="Username" SIZE="43" MAXLENGTH="255" VALUE="<?php if ($User) echo $User->Username ?>" STYLE="width:100%;"></TD>
 <?php if ( $_GET['ID'] == "0" && $AuthDomain != "@") : ?>
 		<TD><A HREF="javascript:void(0);" ONCLICK="$('#LDAPsearch').load('vnos.php?Action=<?php echo $Action->Action ?>&Izbor=SelectADUser',{Find: document.Vnos.Username.value});"><IMG SRC="pic/control.find.gif" HEIGHT="14" WIDTH="14" BORDER=0 ALT="AD LookUp" ALIGN="absmiddle"></A></TD>
@@ -136,12 +134,12 @@ else {
 	</TR>
 <?php if ( $_GET['ID'] != "1" ) : ?>
 	<TR>
-		<TD ALIGN="right" WIDTH="35%"><B>Geslo:</B>&nbsp;</TD>
+		<TD ALIGN="right" WIDTH="35%"><B>Password:</B>&nbsp;</TD>
 		<TD><INPUT TYPE="Password" NAME="Password" SIZE="43" MAXLENGTH="255" VALUE="" STYLE="width:100%;"></TD>
 	</TR>
 <?php endif ?>
 	<TR>
-		<TD ALIGN="right" WIDTH="35%">Telefon:&nbsp;</TD>
+		<TD ALIGN="right" WIDTH="35%">Phone:&nbsp;</TD>
 		<TD><INPUT TYPE="text" NAME="Phone" SIZE="43" MAXLENGTH="25" VALUE="<?php if ($User) echo $User->Phone ?>" STYLE="width:100%;"></TD>
 	</TR>
 	<TR>
@@ -149,11 +147,11 @@ else {
 		<TD><INPUT TYPE="text" NAME="TwitterName" SIZE="43" MAXLENGTH="32" VALUE="<?php if ($User) echo $User->TwitterName ?>" STYLE="width:100%;"></TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right" WIDTH="35%">Privzeta skupina:&nbsp;</TD>
+		<TD ALIGN="right" WIDTH="35%">Default group:&nbsp;</TD>
 		<TD><SELECT NAME="DefGrp" SIZE="1" STYLE="width:100%;">
 			<option value="">
 <?php
-	$Grupe = $db->get_results( "SELECT * FROM SMGroup ORDER BY Name" );
+	$Grupe = $db->get_results("SELECT * FROM SMGroup ORDER BY Name");
 	foreach( $Grupe as $Grupa ) {
 		echo "\t\t<option value=\"$Grupa->GroupID\"";
 		echo (($User && $User->DefGrp == $Grupa->GroupID) || (!$User && $Grupa->GroupID == 1))? " SELECTED" : "";
@@ -170,7 +168,7 @@ else {
 if ( (int)$_GET['ID'] > 1 ) {
 ?>
 	<TR>
-		<TD ALIGN="right" WIDTH="35%">Aktiven:&nbsp;</TD>
+		<TD ALIGN="right" WIDTH="35%">Active:&nbsp;</TD>
 		<TD><INPUT TYPE="CheckBox" NAME="Active" VALUE="yes" <?php if ( $User && $User->Active ) echo "CHECKED " ?>/></TD>
 	</TR>
 <?php
@@ -181,12 +179,12 @@ if ( (int)$_GET['ID'] > 1 ) {
 }
 ?>
 	<TR>
-		<TD ALIGN="right" WIDTH="35%">Prijava:&nbsp;</TD>
+		<TD ALIGN="right" WIDTH="35%">Last login:&nbsp;</TD>
 		<TD><INPUT TYPE="Text" VALUE="<?php if ( $User && $User->LastLogon != "" ) echo date( "j.n.Y H:i:s", sqldate2time( $User->LastLogon ) ) ?>" DISABLED READONLY></TD>
 	</TR>
 <?php if ( contains($ActionACL,"W") ) : ?>
 	<TR>
-		<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Vnesi " CLASS="but"></TD>
+		<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 	</TR>
 <?php endif ?>
 	</TABLE>
@@ -227,16 +225,16 @@ if ( (int)$_GET['ID'] > 1 || ($_SESSION['UserID'] == 1 && (int)$_GET['ID'] == 1)
 		ORDER BY G.Name" );
 ?>
 	<FIELDSET ID="fldGroups" style="width:400px;">
-	<LEGEND ID="lgdGroups">Skupine</LEGEND>
+	<LEGEND ID="lgdGroups">Groups</LEGEND>
 	<FORM NAME="Grupe" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 		<INPUT Name="UserID" Type="HIDDEN" VALUE="<?php echo $User->UserID ?>">
 		<INPUT Name="GroupList" Type="HIDDEN" VALUE="">
 		<INPUT Name="Action" Type="HIDDEN" VALUE="">
 	<TABLE ALIGN="center" BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 	<TR>
-		<TD ALIGN="right" WIDTH="45%">Ni član:</TD>
+		<TD ALIGN="right" WIDTH="45%">Not a member:</TD>
 		<TD ALIGN="center" WIDTH="10%"></TD>
-		<TD ALIGN="right" WIDTH="45%">Je član:</TD>
+		<TD ALIGN="right" WIDTH="45%">Is a member:</TD>
 	</TR>
 	<TR>
 		<TD ALIGN="left">

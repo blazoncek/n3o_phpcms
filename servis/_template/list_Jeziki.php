@@ -65,7 +65,7 @@ $EndR = min(($Page * $MaxRows), $RecordCount);
 // display results
 if ( count( $List ) == 0 ) {
 	echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";
-	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 	echo "</div>\n";
 } else {
 
@@ -102,10 +102,10 @@ if ( count( $List ) == 0 ) {
 		echo "<tr bgcolor=\"$BgCol\">\n";
 		echo "<td width=\"28\" class=\"red\">[<b>".$Item->ID."</b>]</td>\n";
 		echo "<td><a href=\"javascript:void(0);\" onclick=\"loadTo('Edit','edit.php?Izbor=".$_GET['Izbor']."&Action=".$_GET['Action']."&ID=$Item->ID');\"><b>".left($Item->Name,30).(strlen($Item->Name)>30?"...":"")."</b></a>".(($Item->Enabled)? "":"*")."</td>\n";
-		echo "<td align=\"right\">".(($Item->DefLang)? "<img src=\"pic/list.flag.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\">":"")."</td>\n";
+		echo "<td align=\"right\">".(($Item->DefLang)? "<img src=\"pic/list.flag.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\">":"")."</td>\n";
 		echo "<td align=\"right\" valign=\"top\" width=\"20\">";
 		if ( contains($ActionACL,"D") )
-			echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+			echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 		else
 			echo "&nbsp;";
 		echo "</td>\n";

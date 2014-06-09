@@ -51,7 +51,7 @@ else
 
 if ( count( $List ) == 0 ) {
 	echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";
-	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 	echo "</div>\n";
 } else {
 	echo "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" class=\"frame\">\n";

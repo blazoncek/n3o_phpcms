@@ -90,7 +90,7 @@ $(document).ready(function(){
 				var fObj = jqObj[0];	// form object
 				if (fObj.photo_file.value=='') {alert("Izberite datoteko!"); fObj.photo_file.focus(); return false;}
 				if (fObj.maxsize.value=='')    {alert("Izberite velikost!"); fObj.maxsize.focus(); return false;}
-				$('#VnosSlikeD').html('<div align="center" class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</div>');
+				$('#VnosSlikeD').html('<div align="center" class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 				return true;
 			} // pre-submit callback
 		});
@@ -103,7 +103,7 @@ $(document).ready(function(){
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
 				if (fObj.Datoteka.value=='') {alert("Izberite datoteko na desni strani!"); fObj.Datoteka.focus(); return false;}
-				$('#ListSlike').html('<div align="center" class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</div>');
+				$('#ListSlike').html('<div align="center" class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 				return true;
 			} // pre-submit callback
 		});
@@ -133,7 +133,7 @@ $(window).unload(function(){
 			izberi velikost ikone: <input type="Text" name="thumbnail" size="3" maxlength="3" VALUE="<?php echo abs($_GET['T']) ?>"> pik
 			(0=brez ikone) ter obliko: <input name="square" type="checkbox" <?php echo (int)$_GET['T']<0 ? "checked" : "" ?> style="border:none;padding:0px;margin:0px;"> kvadratna</div>
 		<div align="right"><SPAN CLASS="f10">... in klikni <B>Dodaj &raquo;</B>.</SPAN>
-			<input type="submit" value=" Dodaj &raquo; " class="but"></div>
+			<input type="submit" value=" Add &raquo; " class="but"></div>
 		</form>
 
 		<form id="frm_image" action="inc.php?Izbor=SlikeList&amp;BesediloID=<?php echo $_GET['BesediloID'] ?>" method="post">

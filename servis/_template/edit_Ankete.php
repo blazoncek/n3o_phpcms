@@ -31,7 +31,7 @@ $Podatek = $db->get_row("SELECT * FROM Ankete WHERE ID=". (int)$_GET['ID']);
 
 // get ACL
 if ( $Podatek )
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 else
 	$ACL = $ActionACL;
 ?>
@@ -45,9 +45,9 @@ $(document).ready(function(){
 				target: '#divEdit',
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
-					if (empty(fObj.O1))	{alert("Anketa mora imeti vsaj 2 odgovora!"); fObj.O1.focus(); return false;}
-					if (empty(fObj.O2))	{alert("Anketa mora imeti vsaj 2 odgovora!"); fObj.O2.focus(); return false;}
-					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+					if (empty(fObj.O1))	{alert("Answer #1 required!"); fObj.O1.focus(); return false;}
+					if (empty(fObj.O2))	{alert("Answer #2 required!"); fObj.O2.focus(); return false;}
+					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 					return true;
 				} // pre-submit callback
 			});
@@ -61,9 +61,9 @@ $(document).ready(function(){
 		firstDay: 1,
 		//changeMonth: true,
 		//changeYear: true,
-		dayNamesMin: ['Ne','Po','To','Sr','Če','Pe','So'],
-		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Avg','Sep','Okt','Nov','Dec'],
-		monthNames: ['Januar','Februar','Marec','April','Maj','Junij','Julij','Avgust','September','Oktober','November','December'],
+		//dayNamesMin: ['Ne','Po','To','Sr','Če','Pe','So'],
+		//monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Avg','Sep','Okt','Nov','Dec'],
+		//monthNames: ['Januar','Februar','Marec','April','Maj','Junij','Julij','Avgust','September','Oktober','November','December'],
 		duration: ''
 	};
 	$("input[name='D']").datepicker(options);
@@ -82,18 +82,18 @@ $(document).ready(function(){
 	<LEGEND ID="lgdData">
 <?php if ( contains( $ACL, "W" ) && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
-		echo "&AnketaID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Uredi pravice\">";
-		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Dovoljenja\" ALIGN=\"absmiddle\"></A>&nbsp;:";
+		echo "&AnketaID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
+		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 }
 ?>
-		Osnovni&nbsp;podatki</LEGEND>
+		Basic&nbsp;information</LEGEND>
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER=0 CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <?php if ( !$Podatek ) : ?>
 	<TR>
-		<TD ALIGN="right">Jezik:&nbsp;</TD>
+		<TD ALIGN="right">Language:&nbsp;</TD>
 		<TD><SELECT NAME="Jezik" SIZE="1">
-			<OPTION VALUE="">- za vse jezike -</OPTION>
+			<OPTION VALUE="">- for all -</OPTION>
 <?php
 		// determine next poll date (14 days ahead)
 		$Datum = $db->get_var("SELECT max(Datum) FROM Ankete WHERE (Jezik='". $_GET['Tip'] ."' OR Jezik IS NULL)");
@@ -114,28 +114,28 @@ $(document).ready(function(){
 		<INPUT NAME="Jezik" VALUE="<?php echo $Podatek->Jezik ?>" TYPE="Hidden">
 <?php endif ?>
 	<TR>
-		<TD ALIGN="right">Datum:&nbsp;<br><SPAN CLASS="f10 gry">(začetek)</SPAN>&nbsp;</TD>
+		<TD ALIGN="right">Date:&nbsp;<br><SPAN CLASS="f10 gry">(start)</SPAN>&nbsp;</TD>
 		<TD><INPUT TYPE="Text" NAME="D" SIZE="10" MAXLENGTH="10" VALUE="<?php echo $Datum ?>" CLASS="txt"></TD>
-		<TD ALIGN="right">Možnih več odgovorov:&nbsp;<INPUT TYPE="Checkbox" NAME="Multiple"<?php echo (($Podatek && $Podatek->Multiple)? " CHECKED": "") ?>></TD>
+		<TD ALIGN="right">Multiple:&nbsp;<INPUT TYPE="Checkbox" NAME="Multiple"<?php echo (($Podatek && $Podatek->Multiple) ? " CHECKED" : "") ?>></TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right" VALIGN="top"><B>Vprašanje:</B><BR> <SPAN CLASS="f10 gry">max 255 znakov</SPAN>&nbsp;</TD>
-		<TD COLSPAN="2"><TEXTAREA NAME="V" ROWS="4" STYLE="width:100%;" WRAP="virtual"><?php echo ($Podatek)? $Podatek->Vprasanje: "" ?></TEXTAREA></TD>
+		<TD ALIGN="right" VALIGN="top"><B>Question:</B><BR> <SPAN CLASS="f10 gry">max 255 chars</SPAN>&nbsp;</TD>
+		<TD COLSPAN="2"><TEXTAREA NAME="V" ROWS="4" STYLE="width:100%;" WRAP="virtual"><?php echo ($Podatek) ? $Podatek->Vprasanje : "" ?></TEXTAREA></TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right" VALIGN="top"><B>Komentar:</B><BR> <SPAN CLASS="f10 gry">max 255 znakov</SPAN>&nbsp;</TD>
-		<TD COLSPAN="2"><TEXTAREA NAME="K" ROWS="4" STYLE="width:100%;" WRAP="virtual"><?php echo ($Podatek)? $Podatek->Komentar: "" ?></TEXTAREA></TD>
+		<TD ALIGN="right" VALIGN="top"><B>Comment:</B><BR> <SPAN CLASS="f10 gry">max 255 chars</SPAN>&nbsp;</TD>
+		<TD COLSPAN="2"><TEXTAREA NAME="K" ROWS="4" STYLE="width:100%;" WRAP="virtual"><?php echo ($Podatek) ? $Podatek->Komentar : "" ?></TEXTAREA></TD>
 	</TR>
 <?php for ( $i=1; $i<=10; $i++ ) : ?>
 	<TR>
-		<TD ALIGN="right">Odg. <?php echo $i ?>:&nbsp;</TD>
+		<TD ALIGN="right">Answer #<?php echo $i ?>:&nbsp;</TD>
 		<TD COLSPAN="2"><INPUT TYPE="Text" NAME="O<?php echo $i ?>" MAXLENGTH="64" VALUE="<?php if ($Podatek) eval('echo $Podatek->Odg'.$i.';') ?>" STYLE="width:100%;"></TD>
 	</TR>
 <?php endfor ?>
 <?php if ( contains($ACL,"W") ) : ?>
 	<TR>
 		<TD ALIGN="right" COLSPAN="3" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;">
-		<INPUT TYPE="Submit" VALUE="Zapiši" TABINDEX="1" CLASS="but"></TD>
+		<INPUT TYPE="Submit" VALUE=" Save " TABINDEX="1" CLASS="but"></TD>
 	</TR>
 <?php endif ?>
 	</TABLE>
@@ -148,7 +148,7 @@ $(document).ready(function(){
 <?php if ( (int)$_GET['ID'] ) : ?>
 	<!-- rezultati -->
 	<FIELDSET ID="fldData" style="width:240px;">
-	<LEGEND ID="lgdData">Rezultati</LEGEND>
+	<LEGEND ID="lgdData">Results</LEGEND>
 	<TABLE ID="results" BORDER="0" CELLPADDING="2" CELLSPACING="1" WIDTH="100%">
 	<TR>
 		<TD ALIGN="left">
@@ -171,8 +171,8 @@ $(document).ready(function(){
 			if ( $NPct<> 0) echo "<div style=\"display:inline-block;background-color:white;width:". $wht ."px;height:10px;\"></div>";
 			echo "&nbsp;&nbsp;&nbsp;<B>";
 			eval("echo $Rez;");
-			echo "</B>&nbsp;glas";
-			eval("echo koncnica($Rez,' ,ova,ovi,ov');");
+			echo "</B>&nbsp;vote";
+			eval("echo koncnica($Rez,' ,s,s,s');"); // for slovenian word endings
 			echo "&nbsp;($Pct%)<BR>\n";
 		}
 ?>

@@ -215,7 +215,7 @@ $(document).ready(function(){
 			iframe: false, // fix for listRefresh
 			target: '#VnosSlikeD',
 			beforeSubmit: function( formDataArr, jqObj, options ) {
-				$('#VnosSlikeD').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#VnosSlikeD').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
 		});
@@ -229,7 +229,7 @@ $(document).ready(function(){
 // display results
 if ( count($List) == 0 ) {
 	echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";
-	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 	echo "</div>\n";
 } else {
 
@@ -289,7 +289,7 @@ if ( count($List) == 0 ) {
 		echo "<td align=\"right\">&nbsp;".date("j.n.Y",sqldate2time($Item->Datum))."&nbsp;</td>\n";
 		echo "<td align=\"right\" valign=\"top\">";
 		echo "<a href=\"#\" onclick=\"window.opener.loadTo('Edit','edit.php?Izbor=Media&ID=$Item->MediaID'),window.parent.close()\" title=\"Uredi\"><IMG SRC=\"pic/list.edit.gif\" WIDTH=11 HEIGHT=11 ALT=\"Uredi\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></a>";
-		echo "<a href=\"javascript:deleteimg($Item->MediaID,'$Item->Naziv');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+		echo "<a href=\"javascript:deleteimg($Item->MediaID,'$Item->Naziv');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 		echo "</td>\n";
 		echo "</tr>\n";
 	}

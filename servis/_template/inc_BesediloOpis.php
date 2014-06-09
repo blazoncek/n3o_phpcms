@@ -222,7 +222,7 @@ $(document).ready(function(){
 <DIV CLASS="subtitle">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;Seznam</a></div></td>
+	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
 	<td id="editNote" align="right"><B>Vnos besedila</B>&nbsp;&nbsp;</td>
 </tr>
 </table>
@@ -243,7 +243,7 @@ $(document).ready(function(){
 	</TD>
 	<TD ALIGN="right">
 	<INPUT TYPE="Button" VALUE=" Zapri " ONCLICK="loadTo('Edit','edit.php?Izbor=Besedila&ID=<?php echo (int)$_GET['BesediloID'] ?>')" CLASS="but">
-	<INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but">
+	<INPUT TYPE="submit" VALUE=" Save " CLASS="but">
 	</TD>
 </TR>
 <TR>
@@ -254,7 +254,7 @@ $(document).ready(function(){
 	<TD COLSPAN="4" VALIGN="top"><TEXTAREA NAME="Povzetek" ROWS="3" STYLE="width:100%;" TABINDEX="9"><?php echo ($Podatek? $Podatek->Povzetek: "") ?></TEXTAREA></TD>
 </TR>
 <TR>
-	<TD COLSPAN="4" VALIGN="top"><B>Opis:</B> <SPAN CLASS="f10 gry">(Copy/Paste iz Worda odsvetujemo)</SPAN></TD>
+	<TD COLSPAN="4" VALIGN="top"><B>Opis:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
 </TR>
 <?php
 	$Opis = $Podatek ? str_replace("\\\"","\"",$Podatek->Opis) : ""; // strip escaped quotes

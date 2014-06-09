@@ -91,7 +91,7 @@ if ( isset($_GET['Check']) ) {
 	echo "<p>". $Msg ."</p>\n";
 	if ( !$IsApproved )
 		echo "<a href=\"". $_SERVER['PHP_SELF'] ."?". $_SERVER['QUERY_STRING'] ."&Approve=". (int)$_GET['Check'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"b\">Odobri</a>\n";
-	echo "<a href=\"". $_SERVER['PHP_SELF'] ."?". $_SERVER['QUERY_STRING'] ."&DelMessage=". (int)$_GET['Check'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"e\">Briši</a>\n";
+	echo "<a href=\"". $_SERVER['PHP_SELF'] ."?". $_SERVER['QUERY_STRING'] ."&DelMessage=". (int)$_GET['Check'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"e\">Delete</a>\n";
 	echo "</div>\n";
 
 	echo "</div>\n";
@@ -102,8 +102,8 @@ if ( isset($_GET['Check']) ) {
 	
 	echo "<div data-role=\"header\" data-theme=\"b\">\n";
 	echo "<h1>Sporočila</h1>\n";
-	echo "<a href=\"edit.php?Action=". $_GET['Action'] ."&ID=". $_GET['ID'] ."\" data-ajax=\"false\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\">Nazaj</a>\n";
-	echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+	echo "<a href=\"edit.php?Action=". $_GET['Action'] ."&ID=". $_GET['ID'] ."\" data-ajax=\"false\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\">Back</a>\n";
+	echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 	echo "</div>\n";
 
 	echo "\t<div data-role=\"content\">\n";
@@ -147,7 +147,7 @@ if ( isset($_GET['Check']) ) {
 		echo "</ul>\n";
 	} else {
 		echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"color:red;padding:1em;text-align:center;\">\n";
-		echo "<B>Ni podatkov!</B>\n";
+		echo "<B>No data!</B>\n";
 		echo "</div>\n";
 	}
 

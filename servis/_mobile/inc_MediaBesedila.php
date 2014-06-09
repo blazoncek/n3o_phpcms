@@ -88,8 +88,8 @@ $('#edit').live('pageinit', function(event){
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"Besedila\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Izberi besedilo</h1>\n";
-echo "<a href=\"edit.php?Izbor=Media&ID=". $_GET['MediaID'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"edit.php?Izbor=Media&ID=". $_GET['MediaID'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 
@@ -115,7 +115,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 	echo "<ul data-role=\"listview\" data-theme=\"d\">\n";
 	echo "<li data-theme=\"c\"><input type=\"text\" name=\"Find\" value=\"". $_GET['Find'] ."\" placeholder=\"Find\"></li>\n";
 	if ( !$List )
-		echo "<li data-theme=\"c\">Ni podatkov!</li>\n";
+		echo "<li data-theme=\"c\">No data!</li>\n";
 	else {
 		foreach ( $List as $Item ) {
 			echo "<li data-icon=\"check\">";

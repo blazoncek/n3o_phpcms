@@ -45,7 +45,7 @@ $(document).ready(function(){
 				if ( empty(fObj.Vzdevek) ) { alert("Prosim vnesite vzdevek!"); fObj.Vzdevek.focus(); return false; }
 				if ( empty(fObj.Email) ) { alert("Prosim vnesite email!"); fObj.Email.focus(); return false; }
 				if ( empty(fObj.Ime) ) { alert("Prosim vnesite ime!"); fObj.Ime.focus(); return false; }
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			}
 		});
@@ -66,7 +66,7 @@ $(document).ready(function(){
 <TR>
 	<TD VALIGN="top" WIDTH="65%">
 	<FIELDSET ID="fldData">
-	<LEGEND ID="lgdData">Osnovni&nbsp;podatki</LEGEND>
+	<LEGEND ID="lgdData">Basic&nbsp;information</LEGEND>
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post" ENCTYPE="multipart/form-data">
 	<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" WIDTH="100%">
 	<TR>
@@ -133,7 +133,7 @@ $(document).ready(function(){
 	</TR>
 	<TR>
 		<TD STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Action=<?php echo $_GET['Action'] ?>&Izbor=frmEmail&ID=<?php echo $_GET['ID'] ?>');">Sporočilo</A>&nbsp;</TD>
-		<TD ALIGN="right" COLSPAN="3" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="Submit" NAME="what" VALUE="Zapiši" CLASS="but"></TD>
+		<TD ALIGN="right" COLSPAN="3" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="Submit" NAME="what" VALUE=" Save " CLASS="but"></TD>
 	</TR>
 	</FORM>
 	</TABLE>
@@ -142,7 +142,7 @@ $(document).ready(function(){
 	
 	<TD VALIGN="top" WIDTH="35%">
 	<FIELDSET>
-	<LEGEND><!-- <A HREF="javascript:void(0);" ONCLICK="$('#divNiti').load('inc.php?Izbor=frmForums&ID=<?php echo $_GET['ID'] ?>&Add')" TITLE="Dodaj"><IMG SRC="pic/control.add.gif" WIDTH=14 HEIGHT=14 ALT="Dodaj" BORDER="0" CLASS="icon"></A> : -->
+	<LEGEND><!-- <A HREF="javascript:void(0);" ONCLICK="$('#divNiti').load('inc.php?Izbor=frmForums&ID=<?php echo $_GET['ID'] ?>&Add')" TITLE="Add"><IMG SRC="pic/control.add.gif" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A> : -->
 	Moderatorstvo</LEGEND>
 		<DIV ID="divNiti" STYLE="overflow:auto;height:156px;"> </DIV>
 	</FIELDSET>

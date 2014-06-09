@@ -211,7 +211,7 @@ $Members = $db->get_results(
 	<TD>
 	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 	<TR>
-		<TD WIDTH="60%" class="f10" STYLE="color: white;background-color: #6699CC;border-bottom:silver solid 1px;">Dovoljenja</TD>
+		<TD WIDTH="60%" class="f10" STYLE="color: white;background-color: #6699CC;border-bottom:silver solid 1px;">Permissions</TD>
 		<TD ALIGN="center" class="f10" STYLE="color: white;background-color: #6699CC;border-bottom:silver solid 1px;">Z/O</TD>
 		<TD ALIGN="center" class="f10" STYLE="color: white;background-color: #6699CC;border-bottom:silver solid 1px;">Pr</TD>
 		<TD ALIGN="center" class="f10" STYLE="color: white;background-color: #6699CC;border-bottom:silver solid 1px;">Ur</TD>

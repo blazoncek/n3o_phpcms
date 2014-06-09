@@ -88,7 +88,7 @@ $(document).ready(function(){
 	</TR>
 <?php if ( contains($ActionACL,"W") ) : ?>
 	<TR>
-		<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but"></TD>
+		<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 	</TR>
 <?php endif ?>
 	</FORM>
@@ -111,7 +111,7 @@ foreach ( $Podatki as $Podatek ) {
 </TR>
 <?php if ( contains($ActionACL,"W") ) : ?>
 <TR>
-	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but"></TD>
+	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 </TR>
 <?php endif ?>
 </FORM>
@@ -150,7 +150,7 @@ if ( $Jeziki ) {
 </TR>
 <?php if ( contains($ActionACL,"W") ) : ?>
 <TR>
-	<TD ALIGN="right" COLSPAN="2"><INPUT TYPE="submit" VALUE=" Dodaj " CLASS="but"></TD>
+	<TD ALIGN="right" COLSPAN="2"><INPUT TYPE="submit" VALUE=" Add " CLASS="but"></TD>
 </TR>
 <?php endif ?>
 </TABLE>

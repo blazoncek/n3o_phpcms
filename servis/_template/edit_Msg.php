@@ -75,7 +75,7 @@ $(document).ready(function(){
 				var fObj = jqObj[0];	// form object
 				if (empty(fObj.T))	{alert("Prosim vnesite dimenzijo!"); fObj.T.focus(); return false;}
 				if (empty(fObj.R))	{alert("Prosim vnesite dimenzijo!"); fObj.R.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
 		});

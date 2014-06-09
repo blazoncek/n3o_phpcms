@@ -77,7 +77,7 @@ $(document).ready(function(){
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
 				if (empty(fObj.Naziv))	{alert("Prosim vnesite ime grupe!"); fObj.Naziv.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
 		});
@@ -109,13 +109,13 @@ $(document).ready(function(){
 <!-- VSEBINA -->
 <FIELDSET ID="fldData" style="width:430px;">
 <LEGEND ID="lgdData">
-	Osnovni&nbsp;podatki</LEGEND>
+	Basic&nbsp;information</LEGEND>
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <TR><TD COLSPAN="2" HEIGHT="10"></TD></TR>
 <TR>
 	<TD ALIGN="right" WIDTH="25%"><B>Naziv skupine:</B>&nbsp;</TD>
-	<TD><INPUT TYPE="text" NAME="Naziv" SIZE="43" MAXLENGTH="50" VALUE="<?php echo ($Group? $Group->Naziv: "") ?>" STYLE="width:100%;"></TD>
+	<TD><INPUT TYPE="text" NAME="Naziv" SIZE="43" MAXLENGTH="50" VALUE="<?php echo ($Group? $Group->Naziv : "") ?>" STYLE="width:100%;"></TD>
 </TR>
 <TR>
 	<TD ALIGN="right" WIDTH="35%">Rubrika:&nbsp;</TD>

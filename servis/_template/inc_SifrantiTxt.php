@@ -112,7 +112,7 @@ $(document).ready(function(){
 <TR>
 	<TD ALIGN="right"><B>Jezik:</B>&nbsp;</TD>
 	<TD><SELECT <?php echo (($_GET['Jezik']!="Novo")? "DISABLED": "NAME=\"Jezik\"") ?> SIZE="1" TABINDEX="1">
-		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Izberi...</OPTION>
+		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
 $Jeziki = $db->get_results(
 	"SELECT J.Jezik, J.Opis ".
@@ -137,8 +137,8 @@ if ( $Jeziki )
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B>Naziv:</B>&nbsp;</TD>
-	<TD><INPUT TYPE="text" NAME="Naziv" MAXLENGTH="64" VALUE="<?php echo ($Podatek)? $Podatek->SifNaziv: "" ?>" STYLE="width:100%">
+	<TD ALIGN="right" VALIGN="baseline"><B>Title:</B>&nbsp;</TD>
+	<TD><INPUT TYPE="text" NAME="Naziv" MAXLENGTH="64" VALUE="<?php echo ($Podatek)? $Podatek->SifNaziv : "" ?>" STYLE="width:100%">
 		<?php echo ($Podatek) ?
 			"<div class=\"f10 gry\">". $Podatek->SifNazivDesc ."</div>" :
 			"<div><INPUT TYPE=\"text\" NAME=\"NazivDesc\" CLASS=\"f10\" style=\"color:#aaa;border:solid 1px #999;width:100%;\" VALUE=\" field description\" onfocus=\"this.value==' field description' ? this.value='' : i=0;\"></div>" ?>
@@ -171,7 +171,7 @@ if ( $Jeziki )
 <?php if ( contains($ACL,"W") ) : ?>
 <TR><TD COLSPAN="2"><HR SIZE="2"></TD></TR>
 <TR>
-	<TD ALIGN="right" COLSPAN="4"><INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but"></TD>
+	<TD ALIGN="right" COLSPAN="4"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 </TR>
 <?php endif ?>
 </TABLE>

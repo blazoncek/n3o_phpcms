@@ -223,8 +223,8 @@ if ( $getMessages ) foreach ( $getMessages as $msg ) {
 		<IMG SRC="../diskusije/px/note-check.gif" WIDTH=12 HEIGHT=12 ALIGN="absmiddle" ALT="" BORDER="0">
 		<A HREF="javascript:void(0);" ONCLICK="$('#divTopics').load('<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>&Approve=<?php echo $msg->ID ?>');" TITLE="Odobri">Odobri</A>&nbsp;
 	<?php endif ?>
-		<IMG SRC="../diskusije/px/note-del.gif" ALIGN="absmiddle" ALT="Briši sporočilo" BORDER="0" HEIGHT=12 WIDTH=12>
-		<A HREF="javascript:void(0);" ONCLICK="$('#divTopics').load('<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>&DelMessage=<?php echo $msg->ID ?>');" TITLE="Briši">Briši</A>&nbsp;
+		<IMG SRC="../diskusije/px/note-del.gif" ALIGN="absmiddle" ALT="Delete sporočilo" BORDER="0" HEIGHT=12 WIDTH=12>
+		<A HREF="javascript:void(0);" ONCLICK="$('#divTopics').load('<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>&DelMessage=<?php echo $msg->ID ?>');" TITLE="Delete">Delete</A>&nbsp;
 		</TD>
 	</TR>
 	</TABLE>
@@ -239,7 +239,7 @@ if ( $getMessages ) foreach ( $getMessages as $msg ) {
 		<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 			<TR BGCOLOR="WhiteSmoke">
 				<TD CLASS="a10">Pripeta datoteka:</TD>
-				<TD ALIGN="right"><A HREF="javascript:void(0);" ONCLICK="$('#divTopics').load('<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>&DelAttachment=<?php echo $msg->ID ?>');" TITLE="Briši sporočilo"><IMG SRC="../diskusije/px/note-del.gif" ALIGN="absmiddle" ALT="Briši sporočilo" BORDER="0" HEIGHT=12 WIDTH=12></A></TD>
+				<TD ALIGN="right"><A HREF="javascript:void(0);" ONCLICK="$('#divTopics').load('<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>&DelAttachment=<?php echo $msg->ID ?>');" TITLE="Delete sporočilo"><IMG SRC="../diskusije/px/note-del.gif" ALIGN="absmiddle" ALT="Delete sporočilo" BORDER="0" HEIGHT=12 WIDTH=12></A></TD>
 			</TR>
 			<TR BGCOLOR="White">
 				<TD CLASS="a10" COLSPAN="2"><IMG SRC="../diskusije/px/attachedfile.gif" WIDTH=12 HEIGHT=12 ALIGN="absmiddle" ALT="Pripeta datoteka" BORDER="0">&nbsp;<?php echo $msg->AttachedFile ?></TD>

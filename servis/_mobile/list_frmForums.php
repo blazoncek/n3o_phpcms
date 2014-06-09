@@ -62,8 +62,8 @@ $('#list').live('pageinit', function(event){
 echo "<div id=\"list\" data-role=\"page\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Forumi</h1>\n";
-echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Nazaj\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 //echo "<div style=\"margin-bottom:30px;\"><input type=\"search\" name=\"Find\" id=\"search\" value=\"". ($_GET['Find']!=""? $_GET['Find']: "") ."\" data-theme=\"d\" /></div>\n";
@@ -71,7 +71,7 @@ echo "<div data-role=\"content\">\n";
 // display results
 if ( count( $List ) == 0 ) {
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"color:red;padding:1em;text-align:center;\">\n";
-	echo "<B>Ni podatkov!</B>\n";
+	echo "<B>No data!</B>\n";
 	echo "</div>\n";
 } else {
 	echo "<ul data-role=\"listview\" data-filter-test=\"true\" data-theme=\"d\" data-divider-theme=\"d\" data-split-icon=\"delete\" data-split-theme=\"e\">\n";
@@ -109,7 +109,7 @@ if ( count( $List ) == 0 ) {
 			echo "</a>";
 			
 			if ( contains($ActionACL,"D") )
-				echo "<a href=\"#\" onclick=\"check('$Forum->ID','$Forum->ForumName');\">Briši</a>";
+				echo "<a href=\"#\" onclick=\"check('$Forum->ID','$Forum->ForumName');\">Delete</a>";
 			echo "</li>\n";
 		}
 	}

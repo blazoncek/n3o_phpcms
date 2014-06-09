@@ -53,7 +53,7 @@ $(document).ready(function(){
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
 					if ( empty(fObj.ForumName) ) { alert("Prosim vnesite ime."); fObj.ForumName.focus(); return false; }
-					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 					return true;
 				} // pre-submit callback
 			});
@@ -84,7 +84,7 @@ $(document).ready(function(){
 	<TD VALIGN="top">
 
 	<FIELDSET ID="fldData">
-		<LEGEND ID="lgdData">Osnovni&nbsp;podatki</LEGEND>
+		<LEGEND ID="lgdData">Basic&nbsp;information</LEGEND>
 
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
@@ -155,7 +155,7 @@ $(document).ready(function(){
 		max <INPUT NAME="MaxUploadSize" TYPE="Text" SIZE="3" MAXLENGTH="3" VALUE="<?php if ( $Podatek ) echo $Podatek->MaxUploadSize ?>" CLASS="txt"> kB&nbsp;</TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right" COLSPAN="4" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="Submit" VALUE="Zapiši" TABINDEX="1" CLASS="but"></TD>
+		<TD ALIGN="right" COLSPAN="4" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="Submit" VALUE=" Save " TABINDEX="1" CLASS="but"></TD>
 	</TR>
 	</TABLE>
 	</FORM>
@@ -165,12 +165,12 @@ $(document).ready(function(){
 	<TD VALIGN="top" WIDTH="280">
 	<FIELDSET ID="fldModeratorji">
 		<LEGEND>Dodatni moderatorji</LEGEND>
-		<DIV ID="divModeratorji" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<DIV ID="divModeratorji" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 	</TD>
 </TR>
 </TABLE>
 <FIELDSET ID="fldTopics">
 	<LEGEND><a href="javascript:void(0);" onclick="$('#divTopics').load('inc.php?Izbor=frmTopic&ForumID=<?php echo $_GET['ID'] ?>');" title="Osveži"><img src="pic/control.refresh.gif" alt="Osveži" border="0" align="absmiddle"></a>	: Teme</LEGEND>
-	<DIV ID="divTopics" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+	<DIV ID="divTopics" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 </FIELDSET>

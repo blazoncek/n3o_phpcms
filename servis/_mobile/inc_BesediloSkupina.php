@@ -96,8 +96,8 @@ $('#edit').live('pageinit', function(event){
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"Povezana besedila\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Povezana besedila</h1>\n";
-echo "<a href=\"edit.php?Izbor=Besedila&ID=". $_GET['BesediloID'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-role=\"button\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"edit.php?Izbor=Besedila&ID=". $_GET['BesediloID'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-role=\"button\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 
@@ -118,7 +118,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		WHERE
 			BS.BesediloID IS NULL
 			AND B.BesediloID <> ".(int)$_GET['BesediloID']."
-			AND B.Tip = '".(isset($Tip)? $Tip: "Besedilo")."'
+			AND B.Tip = '".(isset($Tip) ? $Tip : "Text")."'
 			AND B.Izpis = 1".
 			($_GET['Find']!=""? " AND (BO.Naslov LIKE '%".$_GET['Find']."%' OR B.Ime LIKE '%".$_GET['Find']."%' OR B.Tip LIKE '".$_GET['Find']."%')": " ").
 		"ORDER BY
@@ -128,7 +128,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 	echo "<ul data-role=\"listview\" data-theme=\"d\">\n";
 	echo "<li data-theme=\"c\"><input type=\"text\" name=\"Find\" value=\"". $_GET['Find'] ."\" placeholder=\"Find\"></li>\n";
 	if ( !$List ) 
-		echo "<li data-theme=\"c\">Ni podatkov!</li>\n";
+		echo "<li data-theme=\"c\">No data!</li>\n";
 	else {
 		foreach ( $List as $Item ) {
 			if ( $Item->ACLID )

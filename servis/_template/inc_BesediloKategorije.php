@@ -114,7 +114,7 @@ if ( !isset($_GET['Find']) ) {
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	if ( !$List ) 
-		echo "<TR><TD ALIGN=\"center\"><br><br>Ni podatkov!<br><br></TD></TR>\n";
+		echo "<TR><TD ALIGN=\"center\"><br><br>No data!<br><br></TD></TR>\n";
 	else {
 		$CurrentRow = 1;
 		$RecordCount = count( $List );

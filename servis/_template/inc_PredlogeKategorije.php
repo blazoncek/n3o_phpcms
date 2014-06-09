@@ -73,7 +73,7 @@ else {
 		echo "</TD>\n";
 		echo "<TD ALIGN=\"right\" NOWRAP WIDTH=\"40\">";
 		if ( contains($ACL,"W") ) {
-			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divRubrike').load('inc.php?Izbor=".$_GET['Izbor']."&PredlogaID=".$_GET['PredlogaID']."&Odstrani=$Item->ID');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\"></A>";
+			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divRubrike').load('inc.php?Izbor=".$_GET['Izbor']."&PredlogaID=".$_GET['PredlogaID']."&Odstrani=$Item->ID');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\"></A>";
 		}
 		echo "</TD>\n";
 		echo "</TR>\n";

@@ -90,7 +90,7 @@ echo "</TABLE>\n";
 // display results
 if ( count( $List ) == 0 ) {
 	echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";
-	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 	echo "</div>\n";
 } else {
 
@@ -135,7 +135,7 @@ if ( count( $List ) == 0 ) {
 			echo "<td align=\"center\">". date("j.n.Y",sqldate2time($Item->Datum)) ."</td>\n";
 			echo "<td align=\"right\" width=\"20\">";
 			if ( contains($ACL,"D") )
-				echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+				echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 			else
 				echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
 			echo "</td>\n";

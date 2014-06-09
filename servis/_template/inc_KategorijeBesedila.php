@@ -27,29 +27,30 @@
 
 // add category
 if ( isset($_GET['BesediloID']) && $_GET['BesediloID'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '".$_GET['KategorijaID']."'" );
+	$db->query("START TRANSACTION");
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '".$_GET['KategorijaID']."'" );
 	$db->query(
 		"INSERT INTO KategorijeBesedila (BesediloID, KategorijaID, Polozaj) ".
-		"VALUES (".(int)$_GET['BesediloID'].", '".$_GET['KategorijaID']."', ".($Polozaj? $Polozaj+1: 1).")" );
-	$db->query( "COMMIT" );
+		"VALUES (".(int)$_GET['BesediloID'].", '".$_GET['KategorijaID']."', ".($Polozaj? $Polozaj+1: 1).")"
+		);
+	$db->query("COMMIT");
 }
 
 // remove category
-if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
-	$db->query( "DELETE FROM KategorijeBesedila WHERE ID = ".(int)$_GET['Odstrani'] );
+if ( isset($_GET['Odstrani']) && $_GET['Odstrani'] != "" ) {
+	$db->query("DELETE FROM KategorijeBesedila WHERE ID = ".(int)$_GET['Odstrani']);
 }
 
 // move items up/down
-if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
+if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$db->query( "START TRANSACTION" );
-	if ( $ItemPos = $db->get_var( "SELECT Polozaj FROM KategorijeBesedila WHERE ID = ". (int)$_GET['Predmet'] ) ) {
+	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM KategorijeBesedila WHERE ID = ". (int)$_GET['Predmet']) ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
-		$db->query( "UPDATE KategorijeBesedila SET Polozaj = 9999     WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemNew" );
-		$db->query( "UPDATE KategorijeBesedila SET Polozaj = $ItemNew WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemPos" );
-		$db->query( "UPDATE KategorijeBesedila SET Polozaj = $ItemPos WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = 9999" );
+		$db->query("UPDATE KategorijeBesedila SET Polozaj = 9999     WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemNew");
+		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemNew WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemPos");
+		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemPos WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = 9999");
 	}
 	$db->query( "COMMIT" );
 	// update URI
@@ -57,9 +58,9 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Predmet=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
 }
 
-$ACLID = $db->get_var( "SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$_GET['KategorijaID']."'" );
+$ACLID = $db->get_var("SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$_GET['KategorijaID']."'");
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 
@@ -74,14 +75,14 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 				ON B.BesediloID = KB.BesediloID AND KB.KategorijaID = '".$_GET['KategorijaID']."' ".
 		($_GET['Find']!=""? "WHERE (B.Ime LIKE '%".$_GET['Find']."%' OR B.Tip LIKE '".$_GET['Find']."%')": "").
 		"ORDER BY B.Ime"
-	);
+		);
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	if ( !$List ) 
-		echo "<TR><TD ALIGN=\"center\"><br><br>Ni podatkov!<br><br></TD></TR>\n";
+		echo "<TR><TD ALIGN=\"center\"><br><br>No data!<br><br></TD></TR>\n";
 	else {
 		$CurrentRow = 1;
-		$RecordCount = count( $List );
+		$RecordCount = count($List);
 		foreach ( $List as $Item ) {
 			$rACL = userACL($Item->ACLID);
 			echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
@@ -136,7 +137,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 	if ( !$List ) {
 		echo "<div style=\"display: table;height: 100px;width: 100%;\">";
-		echo "<div style=\"table-cell;text-align: center;vertical-align: middle;\">Ni podatkov!</div>";
+		echo "<div style=\"table-cell;text-align: center;vertical-align: middle;\">No data!</div>";
 		echo "</div>\n";
 	} else {
 		if ( $NuPg > 1 ) {
@@ -172,7 +173,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			if ( contains($rACL,"L") )
 				echo $Item->Ime;
 			else
-				echo "-- skrito besedilo --";
+				echo "-- hidden text --";
 			if ( contains($rACL,"R") )
 				echo "</A>";
 			if ( !$Item->Izpis )
@@ -190,7 +191,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 					echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divBe').load('inc.php?Izbor=".$_GET['Izbor']."&KategorijaID=".$_GET['KategorijaID']."&pg=".$Page."&Predmet=$Item->ID&Smer=-1');\"><IMG SRC=\"pic/list.down.gif\" WIDTH=11 HEIGHT=11 ALT=\"Pomakni dol\" BORDER=\"0\" CLASS=\"icon\"></A>";
 				else
 					echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
-				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divBe').load('inc.php?Izbor=".$_GET['Izbor']."&KategorijaID=".$_GET['KategorijaID']."&pg=".$Page."&Odstrani=$Item->ID');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\"></A>";
+				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divBe').load('inc.php?Izbor=".$_GET['Izbor']."&KategorijaID=".$_GET['KategorijaID']."&pg=".$Page."&Odstrani=$Item->ID');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\"></A>";
 			}
 			echo "</TD>\n";
 			echo "</TR>\n";

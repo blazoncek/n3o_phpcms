@@ -42,7 +42,7 @@ function loop( $Menu="", &$BgCol="white" ) {
 		ORDER BY KategorijaID" );
 	
 	if ( $Menu == "" && count( $Kat ) == 0 ) {
-		echo "<tr><td align=\"center\" valign=\"middle\" height=\"100\"><b>Ni podatkov!</b></td></tr>\n";
+		echo "<tr><td align=\"center\" valign=\"middle\" height=\"100\"><b>No data!</b></td></tr>\n";
 	} else {
 		$CurrentRow = 1;
 		$RecordCount = count( $Kat );
@@ -107,7 +107,7 @@ function loop( $Menu="", &$BgCol="white" ) {
 					// Delete access
 					if ( contains($ACL,"D") && $K->ID != "00" )
 						echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$K->ID','$K->Name');\">".
-							"<img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+							"<img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 					else
 						echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
 				}
@@ -134,7 +134,7 @@ if ( $_GET['Find'] != "" ) {
 	
 	if ( count( $List ) == 0 ) {
 		echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";
-		echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+		echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 		echo "</div>\n";
 	} else {
 		echo "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" class=\"frame\">\n";
@@ -160,7 +160,7 @@ if ( $_GET['Find'] != "" ) {
 				echo "</td>\n";
 				echo "<td align=\"right\">";
 				if ( contains($rACL,"D") && left( $L->ID, 2 ) != "00" )
-					echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$L->ID','$L->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
+					echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$L->ID','$L->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 				else
 					echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
 				echo "</td>\n";

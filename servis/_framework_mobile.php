@@ -191,7 +191,7 @@ function loopXmenu($menuID="00", $Name="")
 		if ( strlen($menuID)>2 )
 			echo "\t\t<a href=\"./#menu".substr($menuID,strlen($menuID)-2)."\" title=\"Back\" class=\"ui-btn-left\" data-direction=\"reverse\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\">Back</a>\n";
 		else
-			echo "\t\t<a href=\"./\" title=\"Home\" class=\"ui-btn-left\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Domov</a>\n";
+			echo "\t\t<a href=\"./\" title=\"Home\" class=\"ui-btn-left\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Home</a>\n";
 		echo "\t</div>\n";
 
 		echo "\t<div data-role=\"content\">\n";

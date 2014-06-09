@@ -42,8 +42,8 @@ if ( $Podatek ) {
 echo "<div id=\"editText\" data-role=\"page\" data-title=\"Opisi & nazivi\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Opisi & nazivi</h1>\n";
-echo "<a href=\"edit.php?Izbor=Media&ID=".(int)$_GET['MediaID']."\" title=\"Podatki\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"edit.php?Izbor=Media&ID=".(int)$_GET['MediaID']."\" title=\"Podatki\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div id=\"editData\" data-role=\"content\">\n";
 
@@ -59,7 +59,7 @@ echo "\t<FORM NAME=\"MediaOpis\" ACTION=\"edit.php?Izbor=Media&ID=". $_GET['Medi
 <div data-role="fieldcontain">
 	<label for="frmJezik">Jezik:</label>
 	<SELECT ID="frmJezik" NAME="Jezik" SIZE="1" <?php echo (($Podatek)? "DISABLED": "NAME=\"Jezik\"") ?> data-theme="d">
-		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Izberi...</OPTION>
+		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
 $Jeziki = $db->get_results(
 	"SELECT J.Jezik, J.Opis ".
@@ -111,7 +111,7 @@ echo "</div>\n"; // page
 	echo "<div id=\"editText\" data-role=\"page\" data-title=\"Opisi & nazivi\">\n";
 	echo "<div data-role=\"header\" data-theme=\"b\">\n";
 	echo "<h1>Opisi & nazivi</h1>\n";
-	echo "<a href=\"#edit\" title=\"Podatki\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-direction=\"reverse\">Nazaj</a>\n";
+	echo "<a href=\"#edit\" title=\"Podatki\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-direction=\"reverse\">Back</a>\n";
 	echo "<a href=\"inc.php?Izbor=MediaOpis&MediaID=".(int)$_GET['MediaID']."&ID=0\" title=\"Opis\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"plus\">Dodaj</a>\n";
 	echo "</div>\n";
 	echo "<div id=\"editData\" data-role=\"content\">\n";
@@ -134,7 +134,7 @@ echo "</div>\n"; // page
 			echo "<span class=\"ui-li-count\">".(($Naziv->Jezik=="")? "vsi": $Naziv->Jezik)."</span>";
 			echo (contains($ACL,"W")? "</a>": "");
 			if ( contains($ACL,"D") )
-				echo "<a href=\"#\" onclick=\"checkTxt('$Naziv->ID','$Naziv->Naziv');\">Briši</a>";
+				echo "<a href=\"#\" onclick=\"checkTxt('$Naziv->ID','$Naziv->Naziv');\">Delete</a>";
 			echo "</li>\n";
 		}
 	}

@@ -84,8 +84,8 @@ $('#edit').live('pageinit', function(event){
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"Uporabniki\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Uporabniki</h1>\n";
-echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 //if ( (int)$_GET['ID'] != 0 )
 //	echo "<a href=\"#editGroups\" title=\"Skupine\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"gear\">Skupine</a>\n";
 echo "</div>\n";
@@ -100,7 +100,7 @@ if ( isset( $Error ) ) {
 	echo "</div>\n";
 } else {
 ?>
-	<fieldset class="ui-hide-label" data-role="fieldcontain"><legend>Osnovni podatki:</legend>
+	<fieldset class="ui-hide-label" data-role="fieldcontain"><legend>Basic&nbsp;information:</legend>
 		<LABEL FOR="frmUserName"><B>Ime in priimek:</B></LABEL>
 		<INPUT TYPE="text" ID="frmUserName" NAME="Name" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Name ?>" placeholder="Ime in priimek" data-theme="d"><br />
 		<LABEL FOR="frmUserEmail"><B>Email:</B></LABEL>
@@ -201,7 +201,7 @@ if ( (int)$_GET['ID'] != 0 ) {
 	echo "<div id=\"editGroups\" data-role=\"page\" data-title=\"Uporabniki\">\n";
 	echo "<div data-role=\"header\" data-theme=\"b\">\n";
 	echo "<h1>". $User->Name ."</h1>\n";
-	echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-rel=\"back\" data-transition=\"slide\">Nazaj</a>\n";
+	echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-rel=\"back\" data-transition=\"slide\">Back</a>\n";
 	echo "<a href=\"#edit\" title=\"Podatki\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"info\" data-direction=\"reverse\">Podatki</a>\n";
 	echo "</div>\n";
 	echo "<div data-role=\"content\">\n";

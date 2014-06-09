@@ -228,7 +228,7 @@ echo "<div id=\"list\" data-role=\"page\">\n";
 
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Čakajoče dat. &amp; spor.</h1>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-left\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Domov</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-left\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Home</a>\n";
 echo "</div>\n";
 
 echo "<div data-role=\"content\">\n";

@@ -40,7 +40,7 @@ if ( $getNotifys ) foreach ( $getNotifys as $Item ) {
 	echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='white';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 	echo "<TD>&nbsp;$Item->TopicName</TD>\n";
 	echo "<TD ALIGN=\"right\">";
-	echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divTeme').load('inc.php?Izbor=frmNotify&ID=".$_GET['ID']."&delNotify=$Item->ID');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>";
+	echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divTeme').load('inc.php?Izbor=frmNotify&ID=".$_GET['ID']."&delNotify=$Item->ID');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>";
 	echo "</TD>\n";
 	echo "</TR>\n";
 } else

@@ -93,7 +93,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 				ON B.BesediloID = BS.DodatniID AND BS.BesediloID = ".(int)$_GET['BesediloID']."
 		WHERE BS.BesediloID IS NULL
 			AND B.BesediloID <> ".(int)$_GET['BesediloID']."
-			AND B.Tip = '".(isset($Tip)? $Tip: "Besedilo")."'
+			AND B.Tip = '".(isset($Tip) ? $Tip : "Text")."'
 			AND B.Izpis = 1".
 			($_GET['Find']!=""? " AND (BO.Naslov LIKE '%".$_GET['Find']."%' OR B.Ime LIKE '%".$_GET['Find']."%' OR B.Tip LIKE '".$_GET['Find']."%')": " ").
 		"ORDER BY B.Ime"
@@ -101,7 +101,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	if ( !$List ) 
-		echo "<TR><TD ALIGN=\"center\"><br><br>Ni podatkov!<br><br></TD></TR>\n";
+		echo "<TR><TD ALIGN=\"center\"><br><br>No data!<br><br></TD></TR>\n";
 	else {
 		$CurrentRow = 1;
 		$RecordCount = count( $List );
@@ -168,7 +168,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divSk').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".$_GET['BesediloID']."&Dodatni=$Item->ID&Smer=1');\" TITLE=\"Dol\"><IMG SRC=\"pic/list.down.gif\" WIDTH=11 HEIGHT=11 ALT=\"Pomakni dol\" BORDER=\"0\" CLASS=\"icon\"></A>";
 			else
 				echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
-			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkDodatno('$Item->ID','$Item->Ime');\" TITLE=\"Briši\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\">\n";
+			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkDodatno('$Item->ID','$Item->Ime');\" TITLE=\"Delete\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\">\n";
 		}
 		echo "</TD>\n";
 		echo "</TR>\n";

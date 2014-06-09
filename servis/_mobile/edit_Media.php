@@ -121,8 +121,8 @@ function checkFld(fld, ID, Naziv) {
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"Datoteke\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Datoteke</h1>\n";
-echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 
@@ -136,11 +136,11 @@ if ( isset($Error) ) {
 } else {
 ?>
 	<div data-role="fieldcontain">
-		<LABEL FOR="frmNaziv"><B>Naziv:</B></LABEL>
+		<LABEL FOR="frmNaziv"><B>Title:</B></LABEL>
 		<INPUT TYPE="text" ID="frmNaziv" NAME="Naziv" MAXLENGTH="32" VALUE="<?php if ( $Podatek ) echo $Podatek->Naziv; ?>" placeholder="Naziv" data-theme="d"><br />
 	</div>
 	<div data-role="fieldcontain">
-		<LABEL FOR="frmIzpis"><b>Izpis:</b></LABEL>
+		<LABEL FOR="frmIzpis"><b>Show:</b></LABEL>
 		<select ID="frmIzpis" NAME="Izpis" data-role="slider" data-theme="b">
 			<option value="no">No</option>
 			<option value="yes" <?php if ( $Podatek && $Podatek->Izpis ) echo "SELECTED" ?>>Yes</option>
@@ -152,7 +152,7 @@ if ( isset($Error) ) {
 		<TEXTAREA ID="frmMeta" NAME="Meta" data-theme="d"><?php if ( $Podatek ) echo $Podatek->Meta ?></TEXTAREA>
 <?php elseif ( (int)$_GET['ID'] == 0 ) : ?>
 		<LABEL FOR="frmImage">Slika:</LABEL>
-		<INPUT TYPE="file" ID="frmImage" NAME="Dodaj" data-theme="d">
+		<INPUT TYPE="file" ID="frmImage" NAME="Add" data-theme="d">
 <?php endif ?>
 	</div>
 <?php if ( (int)$_GET['ID'] == 0 ) : ?>
@@ -196,7 +196,7 @@ if ( (int)$_GET['ID'] != 0 ) {
 		echo "<span class=\"ui-li-count\">".(($Naziv->Jezik=="")? "vsi": $Naziv->Jezik)."</span>";
 		echo (contains($ACL,"W")? "</a>": "");
 		if ( contains($ACL,"D") )
-			echo "<a href=\"#\" onclick=\"checkFld('BrisiOpis','$Naziv->ID','$Naziv->Naziv');\" data-theme=\"c\">Briši</a>";
+			echo "<a href=\"#\" onclick=\"checkFld('BrisiOpis','$Naziv->ID','$Naziv->Naziv');\" data-theme=\"c\">Delete</a>";
 		echo "</li>\n";
 	}
 	echo "<li data-icon=\"add\"><a href=\"inc.php?Izbor=MediaOpis&MediaID=". $_GET['ID'] ."&ID=0\" title=\"Dodaj opis\">Dodaj opis</a>\n";

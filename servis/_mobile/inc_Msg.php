@@ -84,7 +84,7 @@ if ( isset($_GET['file']) ) {
 	echo "<input name=\"R\" value=\"". $DefPicSize ."\" placeholder=\"Resized dimension (px)\">";
 	echo "<input type=\"submit\" value=\"Naloži\" data-iconpos=\"left\" data-icon=\"check\" data-theme=\"b\">";
 	//echo "<a href=\"list.php?Izbor=Msg&upload=". $_GET['file'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"b\">Naloži</a>\n";
-	echo "<a href=\"list.php?Izbor=Msg&delete=". $_GET['file'] ."\" data-role=\"button\" data-icon=\"minus\" data-ajax=\"false\" data-theme=\"e\">Briši</a>\n";
+	echo "<a href=\"list.php?Izbor=Msg&delete=". $_GET['file'] ."\" data-role=\"button\" data-icon=\"minus\" data-ajax=\"false\" data-theme=\"e\">Delete</a>\n";
 	echo "</form>\n";
 	echo "</div>\n";
 
@@ -145,7 +145,7 @@ if ( isset($_GET['message']) ) {
 	echo "<p><i>". $msgSubtitle ."</i></p>";
 	echo "<p>". $msgAbstract ."</p>";
 	echo "<a href=\"list.php?Izbor=Msg&process=". $_GET['message'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"b\">Naloži</a>\n";
-	echo "<a href=\"list.php?Izbor=Msg&remove=". $_GET['message'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"e\">Briši</a>\n";
+	echo "<a href=\"list.php?Izbor=Msg&remove=". $_GET['message'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"e\">Delete</a>\n";
 	echo "</div>\n";
 
 	echo "</div>\n";

@@ -149,7 +149,7 @@ $(document).ready(function(){
 	<INPUT TYPE="Hidden" NAME="Jezik" VALUE="<?php echo $Podatek->Jezik ?>"><b><?php echo $Podatek->Jezik=='' ? 'vsi' : $Podatek->Jezik ?></b>
 <?php else : ?>
 	<SELECT NAME="Jezik" SIZE="1">
-		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Izberi...</OPTION>
+		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
 $Jeziki = $db->get_results(
 	"SELECT J.Jezik, J.Opis ".
@@ -180,7 +180,7 @@ $All = $db->get_var(
 <?php endif ?>
 </TR>
 <TR>
-	<TD COLSPAN="4"><B>Opis:</B> <SPAN CLASS="f10 gry">(Copy/Paste iz Worda odsvetujemo)</SPAN></TD>
+	<TD COLSPAN="4"><B>Opis:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
 </TR>
 <?php
 	$Opis = $Podatek ? str_replace("\\\"","\"",$Podatek->Opis) : ""; // strip escaped quotes
@@ -205,7 +205,7 @@ $All = $db->get_var(
 	echo "<SCRIPT LANGUAGE=\"JavaScript\" TYPE=\"text/javascript\">\n";
 	echo "<!--\n";
 	echo "function checkTxt(ID, Naziv) {\n";
-	echo "\tif (confirm(\"Ali res želite brisati zapis '\"+Naziv+\"'?\"))\n";
+	echo "\tif (confirm(\"Do you want to delete '\"+Naziv+\"'?\"))\n";
 	echo "\t\tloadTo('Names','".$_SERVER['PHP_SELF']."?Izbor=".$_GET['Izbor']."&MediaID=".$_GET['MediaID']."&BrisiOpis='+ID);\n";
 	echo "\treturn false;\n";
 	echo "}\n";
@@ -229,7 +229,7 @@ $All = $db->get_var(
 			echo "<TD>".(contains($ACL,"W")? "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Names','inc.php?Izbor=MediaOpis&MediaID=".(int)$_GET['MediaID']."&ID=$Naziv->ID')\">": "");
 			echo "<B>".left($Naziv->Naziv,45).((strlen($Naziv->Naziv)>45)? "...": "")."</B>";
 			echo (contains($ACL,"W")? "</A>": "") . "</TD>\n";
-			echo "<TD ALIGN=\"right\" WIDTH=\"16\">".(contains($ACL,"W")? "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkTxt('$Naziv->ID','$Naziv->Naziv');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\"></A>": "")."</TD>\n";
+			echo "<TD ALIGN=\"right\" WIDTH=\"16\">".(contains($ACL,"W")? "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkTxt('$Naziv->ID','$Naziv->Naziv');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\"></A>": "")."</TD>\n";
 			echo "</TR>\n";
 		}
 	}

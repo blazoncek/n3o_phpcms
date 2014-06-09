@@ -37,7 +37,7 @@ $(document).ready(function(){
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
 				if (!empty(fObj.NewName) && empty(fObj.NewValue))	{alert("Prosim vnesite vrednost!"); fObj.NewValue.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			}
 		});
@@ -51,7 +51,7 @@ $(document).ready(function(){
 
 <FIELDSET ID="fldData" style="margin-top:5px;width:420px;">
 <LEGEND ID="lgdData">
-	Osnovni&nbsp;podatki</LEGEND>
+	Basic&nbsp;information</LEGEND>
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 	<TR>
@@ -83,7 +83,7 @@ if ( $Podatki ) foreach ( $Podatki as $Podatek ) {
 }
 ?>
 	<TR>
-		<TD COLSPAN="2" ALIGN="right" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="Submit" VALUE="Zapiši" CLASS="but"></TD>
+		<TD COLSPAN="2" ALIGN="right" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="Submit" VALUE=" Save " CLASS="but"></TD>
 	</TR>
 	</TABLE>
 </FIELDSET>

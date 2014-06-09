@@ -77,7 +77,7 @@ if ( isset( $_POST["NewPWD"] ) && $_POST["NewPWD"] != "" ) {
 		echo "<B>Geslo uspešno zamenjano!</B>\n";
 	}
 	echo "</div>\n";
-	echo "<div><a href=\"".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."\" data-role=\"button\" data-direction=\"reverse\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-theme=\"c\" data-ajax=\"false\">Nazaj</a></div>\n";
+	echo "<div><a href=\"".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."\" data-role=\"button\" data-direction=\"reverse\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-theme=\"c\" data-ajax=\"false\">Back</a></div>\n";
 } else {
 ?>
 <FORM ID="frmPassword" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>" METHOD="post">
@@ -92,7 +92,7 @@ if ( isset( $_POST["NewPWD"] ) && $_POST["NewPWD"] != "" ) {
 	<INPUT NAME="ConfPWD" ID="ConfPWD" TYPE="Password" SIZE="20" MAXLENGTH="16" placeholder="Novo geslo" data-theme="d"><br>
 </fieldset>
 <fieldset class="ui-grid-a">
-	<div class="ui-block-a"><a href="./" data-role="button" data-iconpos="left" data-icon="arrow-l" data-theme="c" data-ajax="false">Nazaj</a></div>
+	<div class="ui-block-a"><a href="./" data-role="button" data-iconpos="left" data-icon="arrow-l" data-theme="c" data-ajax="false">Back</a></div>
 	<div class="ui-block-b"><INPUT TYPE="submit" VALUE="Menjaj" data-iconpos="left" data-icon="check" data-theme="a"></div>
 </fieldset>
 </FORM>

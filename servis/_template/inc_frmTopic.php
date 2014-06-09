@@ -94,7 +94,7 @@ function checkTopic(ID, Naziv) {
 <?php if ( !$List ) : ?>
 <TR BGCOLOR="white">
 	<TD ALIGN="center" VALIGN="middle">
-	<BR><BR><B>Ni podatkov!</B><BR><BR><BR>
+	<BR><BR><B>No data!</B><BR><BR><BR>
 	</TD>
 </TR>
 <?php else : ?>
@@ -130,7 +130,7 @@ function checkTopic(ID, Naziv) {
 			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','inc.php?Izbor=frmPoll&TopicID=$Item->ID')\"><IMG SRC=\"pic/list.taskpad.gif\" WIDTH=11 HEIGHT=11 ALT=\"Anketa\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>&nbsp;";
 		echo "&nbsp;<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divTopics').load('".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."&Sticky=$Item->ID')\" TITLE=\"Pripni\"><IMG SRC=\"pic/list.pinned.gif\" WIDTH=11 HEIGHT=11 ALT=\"Lepljiva nit.\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>&nbsp;";
 		echo "&nbsp;<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divTopics').load('inc.php?Izbor=frmTopicMove&ForumID=".$_GET['ForumID'] . "&ID=$Item->ID');\" TITLE=\"Premakni\"><IMG SRC=\"pic/list.extern.gif\" WIDTH=11 HEIGHT=11 ALT=\"Premakni temo v drugo nit\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>&nbsp;";
-		echo "&nbsp;<A HREF=\"javascript:void(0);\" ONCLICK=\"checkTopic($Item->ID,'$Item->TopicName');\" TITLE=\"Briši\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>";
+		echo "&nbsp;<A HREF=\"javascript:void(0);\" ONCLICK=\"checkTopic($Item->ID,'$Item->TopicName');\" TITLE=\"Delete\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>";
 		echo "</TD>\n";
 		echo "</TR>\n";
 		$CurrentRow++;

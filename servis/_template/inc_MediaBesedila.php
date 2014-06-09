@@ -83,7 +83,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	if ( !$List ) 
-		echo "<TR><TD ALIGN=\"center\"><br><br>Ni podatkov!<br><br></TD></TR>\n";
+		echo "<TR><TD ALIGN=\"center\"><br><br>No data!<br><br></TD></TR>\n";
 	else {
 		$CurrentRow = 1;
 		$RecordCount = count( $List );
@@ -158,7 +158,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			echo "<TD ALIGN=\"right\" WIDTH=\"16\">";
 			if ( contains($rACL,"W") ) {
 				// delete
-				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divBe').load('inc.php?Izbor=".$_GET['Izbor']."&MediaID=".$_GET['MediaID']."&Odstrani=$Item->ID');\" TITLE=\"Odstrani\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\">\n";
+				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divBe').load('inc.php?Izbor=".$_GET['Izbor']."&MediaID=".$_GET['MediaID']."&Odstrani=$Item->ID');\" TITLE=\"Odstrani\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\">\n";
 			}
 			echo "</TD>\n";
 			echo "</TR>\n";

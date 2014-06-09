@@ -166,7 +166,7 @@ $(document).ready(function(){
 		pasteZone: null,
 		add: function(e, data) {
 			$('#loading').remove();
-			data.context = $('#divList').prepend('<div id="loading" class="gry center"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</div>');
+			data.context = $('#divList').prepend('<div id="loading" class="gry center"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 			data.url = 'upload_image.php?p='+$('input[name=base]').val()
 				+'&bid='+$('input[name=bid]').val()
 				+'&t='+$('input[name=thumbnail]').val()
@@ -181,7 +181,7 @@ $(document).ready(function(){
 				row  = "<TR ONMOUSEOVER=\"this.style.backgroundColor='#edf3fe';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">";
 				row += "<TD VALIGN=\"middle\">&nbsp;<a href=\"javascript:insertURL('"+file+"')\" class=\"red\">"+data.result.files['name']+"</a></TD>";
 				row += "<TD ALIGN=\"right\" class=\"red\">now&nbsp;</TD>\n";
-				row += "<TD ALIGN=\"right\"><a href=\"javascript:deleteimg('"+data.result.files['name']+"');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a></TD>";
+				row += "<TD ALIGN=\"right\"><a href=\"javascript:deleteimg('"+data.result.files['name']+"');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a></TD>";
 				row += "</TR>";
 				$('#tblList').prepend(row);
 			} else if ( data.result.files['error'] ) {
@@ -216,7 +216,7 @@ function deleteimg(img_name) {
 }
 
 function loading(o) {
-	$('#divList').html('<div class="gry" style="text-align:center;"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+	$('#divList').html('<div class="gry" style="text-align:center;"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 	o.submit();
 	return false;
 }
@@ -263,7 +263,7 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 	<td colspan="2" class="f10"><input name="large" type="checkbox" checked class="check"> Ohrani sliko &gt; 
 	<input name="maxsize" type="text" size="4" maxlength="4" value="<?php echo isset($_GET['S'])? $_GET['S']: "512" ?>" class="text" onchange="checkImg(this.form.file.value);">
 	pik.</td>
-	<td align="right" class="f10" width="30%"><input type="submit" value=" Dodaj &raquo; " class="but" style="font-weight:bold;">&nbsp;</td>
+	<td align="right" class="f10" width="30%"><input type="submit" value=" Add &raquo; " class="but" style="font-weight:bold;">&nbsp;</td>
 </tr>
 </table>
 </form>
@@ -399,7 +399,7 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		echo "&nbsp;<a href=\"javascript:insertURL('". $URLpath . $file[0] ."')\">";
 		echo left($file[0],33).((strlen($file[0])>33)? "...": "")."</a></TD>\n";
 		echo "<TD ALIGN=\"right\"".((isset($_POST['photo']) && $file[0]==$photo)? " class=\"red\">": "").">".date("j.n.y",$file[2])."&nbsp;</TD>\n";
-		echo "<TD ALIGN=\"right\"><a href=\"javascript:deleteimg('$file[0]');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a></td>\n";
+		echo "<TD ALIGN=\"right\"><a href=\"javascript:deleteimg('$file[0]');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a></td>\n";
 		echo "</TR>\n";
 	}
 	echo "</TABLE>\n";

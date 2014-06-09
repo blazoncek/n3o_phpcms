@@ -42,7 +42,7 @@ if ( $Podatek ) {
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 <!--
 function checkLang(ID, Naziv) {
-	if (confirm("Ali res želite brisati zapis '"+Naziv+"'?"))
+	if (confirm("Do you want to delete '"+Naziv+"'?"))
 		loadTo('Edit','edit.php?Action=<?php echo $Action->ActionID ?>&ID=<?php echo $_GET['ID'] ?>&BrisiOpis='+ID);
 	return false;
 }
@@ -95,7 +95,7 @@ $(document).ready(function(){
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
 				if (empty(fObj.Naziv))	{alert("Prosim vnesite ime sporočila!"); fObj.Naziv.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
 		});
@@ -132,10 +132,10 @@ $(document).ready(function(){
 		<LEGEND ID="lgdData">
 <?php if ( contains($ACL,"W") && $Podatek ) {
 		echo "\t\t<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
-		echo "&emlMessageID=". $_GET['ID'].(($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "")."')\" TITLE=\"Uredi pravice\">";
-		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Dovoljenja\" ALIGN=\"absmiddle\"></A>&nbsp;:";
+		echo "&emlMessageID=". $_GET['ID'].(($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "")."')\" TITLE=\"Edit permissions\">";
+		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 } ?>
-			Osnovni&nbsp;podatki
+			Basic&nbsp;information
 		</LEGEND>
 		
 		<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
@@ -144,7 +144,7 @@ $(document).ready(function(){
 			<TD ALIGN="right"><B>Oznaka:</B>&nbsp;</TD>
 			<TD><INPUT TYPE="text" NAME="Naziv" SIZE="25" MAXLENGTH="100" VALUE="<?php echo $Podatek ? $Podatek->Naziv : "" ?>"></TD>
 <?php if ( contains($ACL,"W") ) : ?>
-			<TD ALIGN="right"><INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but"></TD>
+			<TD ALIGN="right"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 <?php endif ?>
 		</TR>
 <?php if ( $Podatek && $Podatek->Datum!="" ) : ?>
@@ -161,7 +161,7 @@ $(document).ready(function(){
 	<FIELDSET ID="fldContent" style="min-height:8.5em;">
 		<LEGEND ID="lgdContent">
 <?php if ( contains($ACL,"W") ) : ?>
-		<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Izbor=emlSporocilaTxt&Action=<?php echo $Action->ActionID ?>&emlMessageID=<?php echo $_GET['ID'] ?>')" TITLE="Dodaj"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Dodaj" BORDER="0" CLASS="icon"></A>&nbsp;:
+		<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Izbor=emlSporocilaTxt&Action=<?php echo $Action->ActionID ?>&emlMessageID=<?php echo $_GET['ID'] ?>')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 <?php endif ?>
 		Vsebina</LEGEND>
 <?php
@@ -184,7 +184,7 @@ $(document).ready(function(){
 				echo "<TD ALIGN=\"right\" NOWRAP>\n";
 				echo "<A HREF=\"../viewmsg.php?id=".$Item->ID."\" TARGET=\"preview\" TITLE=\"Predogled\"><IMG SRC=\"pic/list.extern.gif\" WIDTH=11 HEIGHT=11 ALT=\"Predogled\" BORDER=\"0\" CLASS=\"icon\">\n";
 				if ( contains($ACL,"W") ) {
-					echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkLang('$Item->ID','$Item->Naziv');\" TITLE=\"Briši\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\">\n";
+					echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkLang('$Item->ID','$Item->Naziv');\" TITLE=\"Delete\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\">\n";
 				}
 				echo "</TD>\n";
 				echo "</TR>\n";
@@ -289,7 +289,7 @@ if ( (int)$_GET['ID'] > 0 ) {
 			<INPUT TYPE="File" NAME="Datoteka" STYLE="width:100%;border:none;">
 			</TD>
 			<TD ALIGN="right" WIDTH="10%" STYLE="border-bottom:darkgray solid 1px;">
-			<INPUT TYPE="submit" VALUE=" Dodaj " CLASS="find">
+			<INPUT TYPE="submit" VALUE=" Add " CLASS="find">
 			<!--- &nbsp;<A HREF="javascript:void(0);" ONCLICK="window.open('vnos.cfm?Izbor=emlSporocilaDoc&ID=#URL.ID#&DocID=0', 'mainscreen', 'scrollbars=Yes,status=no,menubar=no,toolbar=no,resizable=no,WIDTH=600,HEIGHT=480')">Nova priponka...</A> --->
 			</TD>
 		</TR>

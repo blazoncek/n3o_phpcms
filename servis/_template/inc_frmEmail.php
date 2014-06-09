@@ -132,7 +132,7 @@ $(document).ready(function(){
 <DIV CLASS="subtitle">
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjۡno okno" border="0" align="absmiddle" class="icon">&nbsp;Seznam</a></div></td>
+	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjۡno okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
 <?php if ( isset($_POST['Who']) ) : ?>
 	<TD id="editNote"><B CLASS="red">Sporočilo odposlano!</B></TD>
 <?php else : ?>

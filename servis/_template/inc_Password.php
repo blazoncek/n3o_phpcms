@@ -41,7 +41,7 @@ if ( isset( $_POST['NewPWD'] ) && $_POST['NewPWD'] != "" ) {
 <div class="subtitle">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;Seznam</a></div></td>
+	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
 	<td align="right">Menjava gesla</td>
 </tr>
 </table>

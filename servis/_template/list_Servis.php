@@ -42,7 +42,7 @@ function loop( $Menu="", &$BgCol="white" ) {
 		ORDER BY ActionID" );
 	
 	if ( $Menu == "" && count( $Kat ) == 0 ) {
-		echo "<tr><td align=\"center\" valign=\"middle\" height=\"100\"><b>Ni podatkov!</b></td></tr>\n";
+		echo "<tr><td align=\"center\" valign=\"middle\" height=\"100\"><b>No data!</b></td></tr>\n";
 	} else {
 		$CurrentRow = 1;
 		$RecordCount = count( $Kat );
@@ -136,7 +136,7 @@ if ( $_GET['Find'] != "" ) {
 		ORDER BY ActionID" );
 	
 	if ( count( $List ) == 0 ) {
-		echo "<div class=\"frame\" style=\"background-color:white;height:100px;text-align:center;vertical-align:middle;\"><b>Ni podatkov!</b></div>\n";
+		echo "<div class=\"frame\" style=\"background-color:white;height:100px;text-align:center;vertical-align:middle;\"><b>No data!</b></div>\n";
 	} else {
 		echo "<table width=\"100%\" border=\"0\" cellpadding=\"2\" cellspacing=\"0\" class=\"frame\">\n";
 		foreach( $List as $L ) {

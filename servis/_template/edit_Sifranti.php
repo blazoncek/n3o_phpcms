@@ -25,18 +25,17 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$Podatek = $db->get_row( "SELECT * FROM Sifranti WHERE SifrantID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM Sifranti WHERE SifrantID = ". (int)$_GET['ID']);
 if ( $Podatek )
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 else
 	$ACL = $ActionACL;
 ?>
 <script language="JavaScript" type="text/javascript">
 <!-- //
 $(document).ready(function(){
-	// bind to the form's submit event
 	$("form[name='Vnos']").each(function(){
 		$(this).submit(function(){
 			$(this).ajaxSubmit({
@@ -44,7 +43,7 @@ $(document).ready(function(){
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
 					if (empty(fObj.Ctrl))	{alert("Prosim, vnesi tip!"); fObj.Ctrl.focus(); return false;}
-					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 					return true;
 				} // pre-submit callback
 			});
@@ -81,15 +80,15 @@ $(document).ready(function(){
 <LEGEND ID="lgdData">
 <?php if ( contains( $ACL, "W" ) && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
-		echo "&SifrantID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ACLID=".$Podatek->ACLID: "") . "')\" TITLE=\"Uredi pravice\">";
-		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Dovoljenja\" ALIGN=\"absmiddle\"></A>&nbsp;:";
+		echo "&SifrantID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ACLID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
+		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 }
 ?>
-	Osnovni&nbsp;podatki</LEGEND>
+	Basic&nbsp;information</LEGEND>
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD ALIGN="right"><B>Tip:</B>&nbsp;</TD>
+	<TD ALIGN="right"><B>Type:</B>&nbsp;</TD>
 	<TD>
 <?php if ( isset($_GET['Tip']) ) : ?>
 	<INPUT NAME="Ctrl" TYPE="Hidden" VALUE="<?php echo $_GET['Tip'] ?>"><FONT COLOR="red"><B><?php echo $_GET['Tip'] ?></B></FONT>
@@ -105,7 +104,7 @@ $(document).ready(function(){
 	<TD><INPUT TYPE="text" NAME="Text" MAXLENGTH="10" SIZE="10" VALUE="<?php echo ($Podatek)? $Podatek->SifrText: "" ?>"></TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B># vred. 1:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B># value 1:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="NVal1" VALUE="<?php echo ($Podatek)? $Podatek->SifNVal1: "" ?>">
 		<?php echo ($Podatek) ?
 			"<div class=\"f10 gry\">". $Podatek->SifNVal1Desc ."</div>" :
@@ -113,7 +112,7 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B># vred. 2:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B># value 2:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="NVal2" VALUE="<?php echo ($Podatek)? $Podatek->SifNVal2: "" ?>">
 		<?php echo ($Podatek) ?
 			"<div class=\"f10 gry\">". $Podatek->SifNVal2Desc ."</div>" :
@@ -121,7 +120,7 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B># vred. 3:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B># value 3:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="NVal3" VALUE="<?php echo ($Podatek)? $Podatek->SifNVal3: "" ?>">
 		<?php echo ($Podatek) ?
 			"<div class=\"f10 gry\">". $Podatek->SifNVal3Desc ."</div>" :
@@ -129,7 +128,7 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B>D vred. 1:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B>D value 1:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="DVal1" MAXLENGTH="10" SIZE="10" VALUE="<?php echo ($Podatek && $Podatek->SifDVal1!="")? date("j.n.Y",sqldate2time($Podatek->SifDVal1)): "" ?>">
 		<?php echo ($Podatek) ?
 			"<div class=\"f10 gry\">". $Podatek->SifDVal1Desc ."</div>" :
@@ -137,7 +136,7 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B>D vred. 2:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B>D value 2:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="DVal2" MAXLENGTH="10" SIZE="10" VALUE="<?php echo ($Podatek && $Podatek->SifDVal2!="")? date("j.n.Y",sqldate2time($Podatek->SifDVal2)): "" ?>">
 		<?php echo ($Podatek) ?
 			"<div class=\"f10 gry\">". $Podatek->SifDVal2Desc ."</div>" :
@@ -145,7 +144,7 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B>D vred. 3:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B>D value 3:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="DVal3" MAXLENGTH="10" SIZE="10" VALUE="<?php echo ($Podatek && $Podatek->SifDVal3!="")? date("j.n.Y",sqldate2time($Podatek->SifDVal3)): "" ?>">
 		<?php echo ($Podatek) ?
 			"<div class=\"f10 gry\">". $Podatek->SifDVal3Desc ."</div>" :
@@ -153,7 +152,7 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B>L vred. 1:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B>L value 1:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="CheckBox" NAME="LVal1"<?php echo ($Podatek && $Podatek->SifLVal1)? " CHECKED": "" ?>>
 		<?php echo ($Podatek) ?
 			"<span class=\"f10 gry\">". $Podatek->SifLVal1Desc ."</span>" :
@@ -161,16 +160,16 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" VALIGN="baseline"><B>L vred. 2:</B>&nbsp;</TD>
+	<TD ALIGN="right" VALIGN="baseline"><B>L value 2:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="CheckBox" NAME="LVal2"<?php echo ($Podatek && $Podatek->SifLVal2)? " CHECKED": "" ?>>
 		<?php echo ($Podatek) ?
 			"<span class=\"f10 gry\">". $Podatek->SifLVal2Desc ."</span>" :
 			"<INPUT TYPE=\"text\" NAME=\"LVal2Desc\" CLASS=\"f10\" style=\"color:#aaa;border:solid 1px #999;\" VALUE=\" field description\" onfocus=\"this.value==' field description' ? this.value='' : i=0;\">" ?>
 	</TD>
 </TR>
-<?php if ( contains( $ACL, "W" ) ) : ?>
+<?php if ( contains($ACL, "W") ) : ?>
 <TR>
-	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but"></TD>
+	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 </TR>
 <?php endif ?>
 </TABLE>
@@ -184,7 +183,7 @@ $(document).ready(function(){
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 	<!--
 	function checkTxt(ID, Naziv) {
-		if (confirm("Ali res želite brisati zapis '"+Naziv+"'?"))
+		if (confirm("Do yo want to delete '"+Naziv+"'?"))
 			loadTo('Edit',"<?php echo $_SERVER['PHP_SELF']?>?Action=<?php echo $_GET['Action'] ?>&Izbor=<?php echo $_GET['Izbor'] ?>&ID=<?php echo $_GET['ID'] ?>&BrisiTxt="+ID);
 		return false;
 	}
@@ -193,9 +192,9 @@ $(document).ready(function(){
 	<FIELDSET ID="fldText" style="width:340px;">
 	<LEGEND ID="lgdText">
 <?php if ( contains($ACL,"W") ) : ?>
-		<A HREF="javascript:void(0);" ONCLICK="$('#editTekst').load('inc.php?Action=<?php echo $_GET['Action'] ?>&Izbor=SifrantiTxt&Jezik=Novo&ID=<?php echo $_GET['ID'] ?>')" TITLE="Dodaj"><IMG SRC="pic/control.add_document.gif" WIDTH=14 HEIGHT=14 ALT="Dodaj" BORDER="0" CLASS="icon"></A>&nbsp;:
+		<A HREF="javascript:void(0);" ONCLICK="$('#editTekst').load('inc.php?Action=<?php echo $_GET['Action'] ?>&Izbor=SifrantiTxt&Jezik=Novo&ID=<?php echo $_GET['ID'] ?>')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 <?php endif ?>
-		Teksti</LEGEND>
+		Text values</LEGEND>
 	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <?php
 	$Nazivi = $db->get_results(
@@ -206,13 +205,13 @@ $(document).ready(function(){
 	);
 
 	if ( !$Nazivi ) {
-		echo "<TR><TD ALIGN=\"center\">Ni tekstov!</TD></TR>\n";
+		echo "<TR><TD ALIGN=\"center\">No text values!</TD></TR>\n";
 	} else {
 		foreach ( $Nazivi as $Naziv ) {
 			echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 			echo "<TD WIDTH=\"8%\">&nbsp;[<FONT COLOR=\"Red\"><B>".(($Naziv->Jezik=="")? "vsi": $Naziv->Jezik)."</B></FONT>]</TD>\n";
 			echo "<TD><A HREF=\"javascript:void(0);\" ONCLICK=\"$('#editTekst').load('inc.php?Action=".$_GET['Action']."&Izbor=SifrantiTxt&Jezik=$Naziv->Jezik&ID=".$_GET['ID']."')\"><B>".left($Naziv->Naziv,45).((strlen($Naziv->Naziv)>45)? "...": "")."</B></A></TD>\n";
-			echo "<TD ALIGN=\"right\" WIDTH=\"8%\"><A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkTxt('$Naziv->ID','$Naziv->Naziv');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\"></A></TD>\n";
+			echo "<TD ALIGN=\"right\" WIDTH=\"8%\"><A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkTxt('$Naziv->ID','$Naziv->Naziv');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\"></A></TD>\n";
 			echo "</TR>\n";
 		}
 	}

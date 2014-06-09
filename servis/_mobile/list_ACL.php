@@ -77,8 +77,8 @@ $EndR = min(($Page * $MaxRows), $RecordCount);
 echo "<div id=\"list\" data-role=\"page\" data-title=\"ACL\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>ACL</h1>\n";
-echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Nazaj\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 echo "<div style=\"margin-bottom:30px;\"><input type=\"search\" name=\"Find\" id=\"search\" value=\"". ($_GET['Find']!=""? $_GET['Find']: "") ."\" data-theme=\"d\" /></div>\n";
@@ -87,7 +87,7 @@ echo "<div style=\"margin-bottom:30px;\"><input type=\"search\" name=\"Find\" id
 if ( $RecordCount == 0 ) {
 
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"color:red;padding:1em;text-align:center;\">\n";
-	echo "<B>Ni podatkov!</B>\n";
+	echo "<B>No data!</B>\n";
 	echo "</div>\n";
 
 } else {
@@ -102,7 +102,7 @@ if ( $RecordCount == 0 ) {
 		echo "<b>". $Item->Name ."</b>";
 		echo "</a>\n";
 		if ( contains($ActionACL,"D") && $Item->ACLID > 1 )
-			echo "<a href=\"#\" onclick=\"check('$Item->ACLID','$Item->Name');\">Briši</a>";
+			echo "<a href=\"#\" onclick=\"check('$Item->ACLID','$Item->Name');\">Delete</a>";
 		echo "</li>\n";
 	}
 	echo "</ul>\n";

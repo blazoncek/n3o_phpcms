@@ -73,7 +73,7 @@ $RecordCount = count($List) - 2; // ignore . and ..
 // display results
 if ( count($List) == 0 ) {
 	echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";
-	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+	echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 	echo "</div>\n";
 } else {
 
@@ -100,7 +100,7 @@ if ( count($List) == 0 ) {
 		echo "</td>\n";
 		echo "<td valign=\"middle\">&nbsp;<a href=\"javascript:void(0);\" onclick=\"loadTo('Edit','edit.php?Izbor=".$_GET['Izbor']."&file=$Slika');\">". $Slika ."</a></td>\n";
 		echo "<td align=\"right\" valign=\"middle\" width=\"20\">";
-		echo "<a href=\"javascript:void(0);\" title=\"Briši\" onclick=\"javascript:check('$Slika','$Slika');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Briši\" border=\"0\" align=\"absmiddle\" vspace=2 hspace=4 class=\"icon\"></a>";
+		echo "<a href=\"javascript:void(0);\" title=\"Delete\" onclick=\"javascript:check('$Slika','$Slika');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" vspace=2 hspace=4 class=\"icon\"></a>";
 		echo "</td>\n";
 		echo "</tr>\n";
 	}

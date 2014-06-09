@@ -163,7 +163,7 @@ $(window).resize(fixSize);
 <?php if ( !isset($List) ) : ?>
 	<TR BGCOLOR="white">
 		<TD ALIGN="center" VALIGN="middle">
-		<BR><BR><B>Ni podatkov!</B><BR><BR><BR>
+		<BR><BR><B>No data!</B><BR><BR><BR>
 		</TD>
 	</TR>
 <?php else : ?>

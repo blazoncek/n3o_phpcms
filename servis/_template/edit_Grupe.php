@@ -25,12 +25,12 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 $Group = $db->get_row(
 	"SELECT GroupID, Name
 	FROM SMGroup
-	WHERE GroupID = " . (int)$_GET['ID']
+	WHERE GroupID = ". (int)$_GET['ID']
 	);
 
 ?>
@@ -70,14 +70,12 @@ function setList(list_obj, select_obj) {
 $(document).ready(function(){
 	// bind to the form's submit event
 	$("form[name='Vnos']").submit(function(){
-		// inside event callbacks 'this' is the DOM element so we first
-		// wrap it in a jQuery object and then invoke ajaxSubmit
 		$(this).ajaxSubmit({
 			target: '#divEdit', // target element(s) to be updated with server response
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
 				if (empty(fObj.Name))	{alert("Prosim vnesite ime grupe!"); fObj.Name.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
 		});
@@ -109,12 +107,12 @@ $(document).ready(function(){
 
 <FIELDSET ID="fldData" style="width:430px;">
 <LEGEND ID="lgdData">
-	Osnovni&nbsp;podatki</LEGEND>
+	Basic&nbsp;information</LEGEND>
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?><?php /*if ( (int)$_GET['ID'] > 0 ) echo "&ID=".(int)$_GET['ID'];*/ ?>" METHOD="post">
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <TR><TD COLSPAN="2" HEIGHT="10"></TD></TR>
 <TR>
-	<TD ALIGN="right" WIDTH="25%"><B>Ime grupe:</B>&nbsp;</TD>
+	<TD ALIGN="right" WIDTH="25%"><B>Name:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="Name" SIZE="43" MAXLENGTH="50" VALUE="<?php echo ($Group? $Group->Name: "") ?>" STYLE="width:100%;"></TD>
 </TR>
 <?php
@@ -122,7 +120,7 @@ $(document).ready(function(){
 if ( (int)$_GET['ID'] > 2 || (int)$_GET['ID'] == 0 ) :
 ?>
 <TR>
-	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Vnesi " CLASS="but"></TD>
+	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 </TR>
 <?php endif ?>
 </TABLE>
@@ -163,13 +161,13 @@ if ( (int)$_GET['ID'] > 0 ) {
 		);
 ?>
 <FIELDSET ID="fldUser" style="width:430px;">
-<LEGEND ID="lgdUser">Uporabniki</LEGEND>
+<LEGEND ID="lgdUser">Users</LEGEND>
 <FORM NAME="Grupe" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <TABLE ID="results" BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD ALIGN="right" WIDTH="45%">Niso člani:</TD>
+	<TD ALIGN="right" WIDTH="45%">Not members:</TD>
 	<TD ALIGN="center" WIDTH="10%"></TD>
-	<TD ALIGN="right" WIDTH="45%">So člani:</TD>
+	<TD ALIGN="right" WIDTH="45%">Members:</TD>
 </TR>
 <TR>
 	<TD ALIGN="left">

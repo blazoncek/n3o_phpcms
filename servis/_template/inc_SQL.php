@@ -25,12 +25,12 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_POST['Load'] ) && $_POST['Load'] != "" ) {
+if ( isset($_POST['Load']) && $_POST['Load'] != "" ) {
 	// may also use $_SERVER['DOCUMENT_ROOT']
-	$SQLdata = file_get_contents( $StoreRoot ."/servis/qry/" . $_POST['Load'], "r" );
+	$SQLdata = file_get_contents($StoreRoot ."/servis/qry/". $_POST['Load'], "r");
 }
 
-if ( isset( $_POST['SQL'] ) && $_POST['SQL'] != "" )
+if ( isset($_POST['SQL']) && $_POST['SQL'] != "" )
 	$SQLdata = $_POST['SQL'];
 
 ?>
@@ -43,10 +43,7 @@ function customResize () {
 $(document).ready(function(){
 	window.customResize = customResize;
 
-	// bind to the form's submit event
 	$("form[name='Vnos']").submit(function(){
-		// inside event callbacks 'this' is the DOM element so we first
-		// wrap it in a jQuery object and then invoke ajaxSubmit
 		$(this).ajaxSubmit({target: '#divEdit'});
 		return false;
 	});
@@ -63,8 +60,8 @@ $(document).ready(function(){
 <div class="subtitle">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;Seznam</a></div></td>
-	<td align="right">Neposredni dostop do podatkov</td>
+	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
+	<td align="right">SQL database access (Use with caution!)</td>
 </tr>
 </table>
 </div>
@@ -72,15 +69,14 @@ $(document).ready(function(){
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post" ENCTYPE="multipart/form-data">
 <TABLE ALIGN="center" BORDER="0" CELLPADDING="1" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<!--TD ALIGN="left" VALIGN="bottom" WIDTH="22"><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon"></a></div></TD-->
-	<TD ALIGN="left" VALIGN="bottom">SQL ukaz(i):</TD>
-	<TD ALIGN="right" VALIGN="bottom">Preberi:
+	<TD ALIGN="left" VALIGN="bottom">SQL statement(s):</TD>
+	<TD ALIGN="right" VALIGN="bottom">Load:
 	<SELECT NAME="Load" SIZE="1">
-		<OPTION VALUE="">- izberi -</OPTION>
+		<OPTION VALUE="">- select -</OPTION>
 <?php
-	$SQLfiles = scandir( $StoreRoot ."/servis/qry/" );
+	$SQLfiles = scandir($StoreRoot ."/servis/qry/");
 	foreach ( $SQLfiles as $SQLfile )
-		if ( is_file( $StoreRoot."/servis/qry/".$SQLfile ) && right( $SQLfile, 4 ) == ".sql" )
+		if ( is_file($StoreRoot."/servis/qry/".$SQLfile) && right($SQLfile, 4) == ".sql" )
 			echo "<OPTION VALUE=\"$SQLfile\">$SQLfile</OPTION>\n";
 ?>
 	</SELECT>&nbsp;
@@ -88,7 +84,7 @@ $(document).ready(function(){
 	</TD>
 </TR>
 <TR>
-	<TD COLSPAN="2"><TEXTAREA NAME="SQL" ROWS="6" STYLE="width:100%;"><?php if (isset( $SQLdata )) echo $SQLdata; ?></TEXTAREA></TD>
+	<TD COLSPAN="2"><TEXTAREA NAME="SQL" ROWS="6" STYLE="width:100%;"><?php if (isset($SQLdata)) echo $SQLdata; ?></TEXTAREA></TD>
 </TR>
 </TABLE>
 </FORM>

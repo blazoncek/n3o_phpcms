@@ -182,7 +182,7 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 	echo "<OPTION VALUE=\"date\"".(($_GET['Sort']=="date")? " SELECTED": "").">Datum</OPTION>\n";
 	echo "</SELECT>\n";
 	echo "</TD>\n";
-	echo "<TD ALIGN=\"right\">Tip:\n";
+	echo "<TD ALIGN=\"right\">Type:\n";
 	echo "<SELECT NAME=\"Tip\" SIZE=\"1\" ONCHANGE=\"document.location.href='". preg_replace("/&Tip=[^&]/i","",$FindURL) .($_GET['Find']!='' ? '&Find='.$_GET['Find'] : '') ."&Tip='+this[this.selectedIndex].value;\">\n";
 	echo "<OPTION VALUE=\"\">- vsi tipi -</OPTION>\n";
 	$Tipi = $db->get_col( "SELECT SifrText FROM Sifranti WHERE SifrCtrl='BESE' ORDER BY SifrCtrl, SifrZapo" );
@@ -215,7 +215,7 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 
 	if ( count( $List ) == 0 ) {
 		echo "<div class=\"frame\" style=\"display:table;height:100px;width:308px;margin:5px;\">";
-		echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>Ni podatkov!</b></div>\n";
+		echo "<div style=\"background-color: white;display: table-cell;text-align: center;vertical-align: middle;\"><b>No data!</b></div>\n";
 		echo "</div>\n";
 	} else {
 		echo "<DIV id=\"divList\" style=\"overflow-y:auto;\">\n";

@@ -26,7 +26,7 @@
 */
 
 if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
-if ( !isset($_GET['Tip']) ) $_GET['Tip'] = "Besedilo";
+if ( !isset($_GET['Tip']) ) $_GET['Tip'] = "Text";
 
 // remove old image
 if ( isset($_POST['BrisiSliko']) || (isset($_FILES['file']) && !$_FILES['file']['error']) ) {

@@ -74,7 +74,7 @@ $(document).ready(function(){
 				var fObj = jqObj[0];	// form object
 				if (empty(fObj.Naziv))		{alert("Vnesite ime in priimek uporabnika!"); fObj.Naziv.focus(); return false;}
 				if (!emailOK(fObj.Email))	{alert("Nepravilen email naslov!"); fObj.Email.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			}
 		});
@@ -108,7 +108,7 @@ $(document).ready(function(){
 <TR>
 	<TD VALIGN="top" WIDTH="50%">
 	<FIELDSET ID="fldData">
-		<LEGEND ID="lgdData">Osnovni&nbsp;podatki</LEGEND>
+		<LEGEND ID="lgdData">Basic&nbsp;information</LEGEND>
 		<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?><?php if ( isset($_GET['ID']) && $_GET['ID'] > 0 ) echo "&ID=".$_GET['ID'] ?>" METHOD="post">
 		<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 		<TR><TD COLSPAN="2" HEIGHT="10"></TD></TR>

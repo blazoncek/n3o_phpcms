@@ -122,8 +122,8 @@ $('#edit').live('pageinit', function(event){
 echo "<div id=\"edit\" data-role=\"page\" data-title=\"ACL\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>". $Podatek->Name ."</h1>\n";
-echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-rel=\"back\" data-transition=\"slide\">Nazaj</a>\n";
-//echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-rel=\"back\" data-transition=\"slide\">Back</a>\n";
+//echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "<a href=\"#editUsers\" title=\"ACL\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"gear\">ACL</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
@@ -189,7 +189,7 @@ echo "</div>\n"; // page
 echo "<div id=\"editUsers\" data-role=\"page\" data-title=\"ACL\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>". $Podatek->Name ."</h1>\n";
-echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Nazaj\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-rel=\"back\" data-transition=\"slide\">Nazaj</a>\n";
+echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-rel=\"back\" data-transition=\"slide\">Back</a>\n";
 echo "<a href=\"#edit\" title=\"ACL\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"info\" data-direction=\"reverse\">ACL</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";

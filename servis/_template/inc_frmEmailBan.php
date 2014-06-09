@@ -83,7 +83,7 @@ $(document).ready(function(){
 <DIV CLASS="subtitle">
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
-	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;Seznam</a></div></td>
+	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
 	<td id="editNote" align="right"><B>Vnos blokiranih emailov</B>&nbsp;&nbsp;</td>
 </tr>
 </table>
@@ -91,13 +91,13 @@ $(document).ready(function(){
 <div id="divContent" style="padding: 5px; overflow: auto;">
 <FIELDSET ID="fldData" style="width:320px;">
 <LEGEND ID="lgdData">
-	Osnovni&nbsp;podatki</LEGEND>
+	Basic&nbsp;information</LEGEND>
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="2" WIDTH="100%">
 	<TR>
 		<TD ALIGN="right"><B>Email:</B>&nbsp;</TD>
 		<TD><INPUT TYPE="Text" NAME="addEmail" MAXLENGTH="15" VALUE="" CLASS="txt" STYLE="width:100%;"></TD>
-		<TD ALIGN="right"><INPUT TYPE="Submit" VALUE="Dodaj" TABINDEX="1" CLASS="but"></TD>
+		<TD ALIGN="right"><INPUT TYPE="Submit" VALUE="Add" TABINDEX="1" CLASS="but"></TD>
 	</TR>
 	<TR>
 		<TD CLASS="f10" COLSPAN="3">npr.: *@hotmail.com, ime@naslov.com</TD>

@@ -25,12 +25,12 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "00";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "00";
 
-$Podatek = $db->get_row( "SELECT * FROM Kategorije WHERE KategorijaID = '" . $_GET['ID'] . "'" );
+$Podatek = $db->get_row("SELECT * FROM Kategorije WHERE KategorijaID = '". $_GET['ID'] ."'");
 // get ACL
 if ( $Podatek ) {
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 } else
 	$ACL = $ActionACL;
 
@@ -65,7 +65,7 @@ $(document).ready(function(){
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
 				if (empty(fObj.Ime) && empty(fObj.Naslov))	{alert("Vpišite ime rubrike!"); fObj.Ime.focus(); return false;}
-				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
 		});
@@ -73,7 +73,7 @@ $(document).ready(function(){
 	});
 	$("form[name='Datoteka']").submit(function(){
 		var html = $('#thumbImage').html();
-		$('#thumbImage').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</span>');
+		$('#thumbImage').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 		$(this).ajaxSubmit({
 			dataType: 'json',
 			target: '#thumbImage',
@@ -99,11 +99,11 @@ $(document).ready(function(){
 			  case 'fileupload' :
 			  case 'thumbImage' :
 				data.url = 'upload_image.php?kid=<?php echo $_GET['ID'] ?>&p=rubrike';
-				data.context = $('#thumbImage').html('<div class="gry center"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</div>');
+				data.context = $('#thumbImage').html('<div class="gry center"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 			  	break;
 			  case 'divMe' :
 				data.url = 'upload_file.php?kid=<?php echo $_GET['ID'] ?>';
-				data.context = $('#divMe').html('<div class="gry center"><img src="pic/control.spinner.gif" alt="Posodabljam" border="0" height="14" width="14" align="absmiddle">&nbsp;: Posodabljam ...</div>');
+				data.context = $('#divMe').html('<div class="gry center"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 				break;
 			}
 			data.submit();
@@ -202,16 +202,16 @@ $(document).ready(function(){
 		<LEGEND ID="lgdData">
 <?php if ( contains($ACL,"W") && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
-		echo "&KategorijaID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Uredi pravice\">";
-		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Dovoljenja\" ALIGN=\"absmiddle\"></A>&nbsp;:";
+		echo "&KategorijaID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
+		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 } ?>
-			Osnovni&nbsp;podatki
+			Basic&nbsp;information
 		</LEGEND>
 
 		<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post" ENCTYPE="multipart/form-data">
 		<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 		<TR>
-			<TD ALIGN="right"><FONT COLOR="Red"><B>Izpis:</B></FONT>&nbsp;</TD>
+			<TD ALIGN="right"><FONT COLOR="Red"><B>Show:</B></FONT>&nbsp;</TD>
 			<TD NOWRAP><INPUT TYPE="Checkbox" NAME="Izpis"<?php echo ($Podatek && $Podatek->Izpis)? " CHECKED": "" ?> TABINDEX="1"></TD>
 			<TD ALIGN="right" ID="thumbImage" ROWSPAN="<?php echo ($Podatek && $Podatek->Slika!="") ? "5" : "4" ?>" VALIGN="top" WIDTH="130" HEIGHT="130">
 			<?php if ($Podatek && $Podatek->Slika != "") : ?>
@@ -224,23 +224,23 @@ $(document).ready(function(){
 			</TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right"><B>Iskalnik:</B>&nbsp;</TD>
-			<TD><INPUT TYPE="Checkbox" NAME="Iskanje"<?php echo ($Podatek && $Podatek->Iskanje)? " CHECKED": "" ?> TABINDEX="2"></TD>
+			<TD ALIGN="right"><B>Search&nbsp;enabled:</B>&nbsp;</TD>
+			<TD><INPUT TYPE="Checkbox" NAME="Iskanje"<?php echo ($Podatek && $Podatek->Iskanje) ? " CHECKED" : "" ?> TABINDEX="2"></TD>
 		</TR>
 	<?php if ( $Podatek && $Podatek->Slika != "" ) : ?>
 		<TR>
-			<TD ALIGN="right"><FONT COLOR="red">Briši ikono:</FONT>&nbsp;</TD>
+			<TD ALIGN="right"><FONT COLOR="red">Delete image:</FONT>&nbsp;</TD>
 			<TD><INPUT TYPE="Checkbox" NAME="BrisiSliko" TABINDEX="5" STYLE="border:none;background-color:red;"></TD>
 		</TR>
 	<?php endif ?>
 		<TR>
-			<TD ALIGN="right"><B>Ime:</B>&nbsp;</TD>
-			<TD><INPUT TYPE="text" NAME="Ime" MAXLENGTH="32" VALUE="<?php echo ($Podatek? $Podatek->Ime: "") ?>" TABINDEX="3" STYLE="width:100%;"></TD>
+			<TD ALIGN="right"><B>Name:</B>&nbsp;</TD>
+			<TD><INPUT TYPE="text" NAME="Ime" MAXLENGTH="32" VALUE="<?php echo ($Podatek ? $Podatek->Ime : "") ?>" TABINDEX="3" STYLE="width:100%;"></TD>
 		</TR>
 	<?php if ( contains($ACL,"W") ) : ?>
 		<TR>
-			<TD STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><?php if ( $Podatek ) : ?><A HREF="javascript:void(0);" ONCLICK="window.open('vnos.php?Izbor=KategorijePremik&KategorijaID=<?php echo $_GET['ID'] ?>','mainscreen','scrollbars=no,status=no,menubar=no,toolbar=no,resizable=no,WIDTH=480,HEIGHT=480')" TITLE="Premakni"><IMG SRC="pic/icon.sitemap.png" WIDTH="16" HEIGHT="16" ALT="Premakni" BORDER="0"></A><?php endif ?></TD>
-			<TD ALIGN="right" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Zapiši " CLASS="but" TABINDEX="6"></TD>
+			<TD STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><?php if ( $Podatek ) : ?><A HREF="javascript:void(0);" ONCLICK="window.open('vnos.php?Izbor=KategorijePremik&KategorijaID=<?php echo $_GET['ID'] ?>','mainscreen','scrollbars=no,status=no,menubar=no,toolbar=no,resizable=no,WIDTH=480,HEIGHT=480')" TITLE="Move"><IMG SRC="pic/icon.sitemap.png" WIDTH="16" HEIGHT="16" ALT="Move" BORDER="0"></A><?php endif ?></TD>
+			<TD ALIGN="right" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but" TABINDEX="6"></TD>
 		</TR>
 	<?php endif ?>
 		</TABLE>
@@ -248,12 +248,12 @@ $(document).ready(function(){
 	</FIELDSET>
 <?php if ( $Podatek && contains($ACL,"W") ) : ?>
 	<FIELDSET>
-		<LEGEND>Naloži&nbsp;ikono:</LEGEND>
+		<LEGEND>Upload&nbsp;image</LEGEND>
 		<FORM NAME="Datoteka" ACTION="upload_image.php?kid=<?php echo $_GET['ID'] ?>&p=rubrike" METHOD="post" ENCTYPE="multipart/form-data">
 		<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 		<TR>
 			<TD><INPUT ID="fileupload" TYPE="FILE" NAME="file" STYLE="border:none;"></TD>
-			<TD ALIGN="right"><INPUT TYPE="submit" VALUE=" Dodaj " CLASS="but"></TD>
+			<TD ALIGN="right"><INPUT TYPE="submit" VALUE=" Add " CLASS="but"></TD>
 		</TR>
 		</TABLE>
 		</FORM>
@@ -266,7 +266,7 @@ $(document).ready(function(){
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 	<!--
 	function checkLang(ID, Naziv) {
-		if (confirm("Ali res želite brisati zapis '"+Naziv+"'?"))
+		if (confirm("Do you want to delete '"+Naziv+"'?"))
 			loadTo('Edit','edit.php?Action=<?php echo $Action->ActionID ?>&ID=<?php echo $_GET['ID'] ?>&BrisiOpis='+ID);
 		return false;
 	}
@@ -276,24 +276,24 @@ $(document).ready(function(){
 	<FIELDSET ID="fldContent" style="min-height:196px;">
 		<LEGEND ID="lgdContent">
 <?php if ( contains($ACL,"W") ) : ?>
-		<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Izbor=KategorijeOpis&Action=<?php echo $Action->ActionID ?>&KategorijaID=<?php echo $_GET['ID'] ?>')" TITLE="Dodaj"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Dodaj" BORDER="0" CLASS="icon"></A>&nbsp;:
+		<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Izbor=KategorijeOpis&Action=<?php echo $Action->ActionID ?>&KategorijaID=<?php echo $_GET['ID'] ?>')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 <?php endif ?>
-		Nazivi in opisi</LEGEND>
+		Titles and descriptions</LEGEND>
 <?php
-		$List = $db->get_results( "SELECT ID, Naziv, Jezik FROM KategorijeNazivi WHERE KategorijaID='" . $_GET['ID'] . "' ORDER BY Jezik" );
+		$List = $db->get_results("SELECT ID, Naziv, Jezik FROM KategorijeNazivi WHERE KategorijaID='". $_GET['ID'] ."' ORDER BY Jezik");
 		echo "<TABLE BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 		if ( !$List ) 
 			echo "<TR><TD ALIGN=\"center\">Ni vsebin!</TD></TR>\n";
 		else {
 			$CurrentRow = 1;
-			$RecordCount = count( $List );
+			$RecordCount = count($List);
 			foreach ( $List as $Item ) {
 				echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
-				echo "<TD width=\"8%\">[<b class=\"red\">".($Item->Jezik? $Item->Jezik: "vsi")."</b>]</TD>\n";
+				echo "<TD width=\"8%\">[<b class=\"red\">".($Item->Jezik ? $Item->Jezik : "vsi")."</b>]</TD>\n";
 				echo "<TD><A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','inc.php?Izbor=KategorijeOpis&Action=".$Action->ActionID."&KategorijaID=".$_GET['ID']."&ID=".$Item->ID."');\"><B>$Item->Naziv</B></A></TD>\n";
 				echo "<TD ALIGN=\"right\" NOWRAP>\n";
 				if ( contains($ACL,"W") ) {
-					echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkLang('$Item->ID','$Item->Naziv');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\">\n";
+					echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkLang('$Item->ID','$Item->Naziv');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\">\n";
 				}
 				echo "</TD>\n";
 				echo "</TR>\n";
@@ -318,15 +318,15 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<div id="findLe" class="find" style="margin:0;">
 		<form name="findFrmLe" action="inc.php?Izbor=KategorijeVsebina&KategorijaID=<?php echo $_GET['ID'] ?>&Ekstra=2" method="get">
-		<input id="findTxtLe" type="Text" name="Find" maxlength="32" value=" Predloge " style="color:#aaa;">
+		<input id="findTxtLe" type="Text" name="Find" maxlength="32" value=" Template " style="color:#aaa;">
 		<a id="findClrLe" href="javascript:void(0);"><img src="pic/list.clear.gif" border="0"></a>
 		</form>
 		</div>
 <?php else : ?>
-		Menu (levo)
+		Menu (left)
 <?php endif ?>
 		</LEGEND>
-		<DIV ID="divLe" STYLE="overflow:auto;height:12em;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<DIV ID="divLe" STYLE="overflow:auto;height:12em;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 
 	</TD>
@@ -337,15 +337,15 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<div id="findCe" class="find" style="margin:0;">
 		<form name="findFrmCe" action="inc.php?Izbor=KategorijeVsebina&KategorijaID=<?php echo $_GET['ID'] ?>&Ekstra=0" method="get">
-		<input id="findTxtCe" type="Text" name="Find" maxlength="32" value=" Predloge " style="color:#aaa;">
+		<input id="findTxtCe" type="Text" name="Find" maxlength="32" value=" Template " style="color:#aaa;">
 		<a id="findClrCe" href="javascript:void(0);"><img src="pic/list.clear.gif" border="0"></a>
 		</form>
 		</div>
 <?php else : ?>
-		Vsebinske predloge
+		Content templates
 <?php endif ?>
 		</LEGEND>
-		<DIV ID="divCe" STYLE="overflow:auto;height:12em;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<DIV ID="divCe" STYLE="overflow:auto;height:12em;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 
 	</TD>
@@ -356,15 +356,15 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<div id="findDe" class="find" style="margin:0;">
 		<form name="findFrmDe" action="inc.php?Izbor=KategorijeVsebina&KategorijaID=<?php echo $_GET['ID'] ?>&Ekstra=1" method="get">
-		<input id="findTxtDe" type="Text" name="Find" maxlength="32" value=" Predloge " style="color:#aaa;">
+		<input id="findTxtDe" type="Text" name="Find" maxlength="32" value=" Template " style="color:#aaa;">
 		<a id="findClrDe" href="javascript:void(0);"><img src="pic/list.clear.gif" border="0"></a>
 		</form>
 		</div>
 <?php else : ?>
-		Ekstra (desno)
+		Extra (right)
 <?php endif ?>
 		</LEGEND>
-		<DIV ID="divDe" STYLE="overflow:auto;height:12em;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<DIV ID="divDe" STYLE="overflow:auto;height:12em;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 
 	</TD>
@@ -380,15 +380,15 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<div id="findBe" class="find" style="margin:0;">
 		<form name="findFrmBe" action="inc.php?Izbor=KategorijeBesedila&KategorijaID=<?php echo $_GET['ID'] ?>" method="get">
-		<input id="findTxtBe" type="Text" name="Find" maxlength="32" value=" Besedila " style="color:#aaa;">
+		<input id="findTxtBe" type="Text" name="Find" maxlength="32" value=" Texts " style="color:#aaa;">
 		<a id="findClrBe" href="javascript:void(0);"><img src="pic/list.clear.gif" border="0"></a>
 		</form>
 		</div>
 <?php else : ?>
-		Pripeta besedila
+		Content texts
 <?php endif ?>
 		</LEGEND>
-		<DIV ID="divBe" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<DIV ID="divBe" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 
 	</TD>
@@ -399,15 +399,15 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<div id="findMe" class="find" style="margin:0;">
 		<form name="findFrmMe" action="inc.php?Izbor=KategorijeMedia&KategorijaID=<?php echo $_GET['ID'] ?>" method="get">
-		<input id="findTxtMe" type="Text" name="Find" maxlength="32" value=" Priponke " style="color:#aaa;">
+		<input id="findTxtMe" type="Text" name="Find" maxlength="32" value=" Attachments " style="color:#aaa;">
 		<a id="findClrMe" href="javascript:void(0);"><img src="pic/list.clear.gif" border="0"></a>
 		</form>
 		</div>
 <?php else : ?>
-		Priponke
+		Attachments
 <?php endif ?>
 		</LEGEND>
-		<DIV ID="divMe" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Nalagam" border="0"> Nalagam ...</DIV>
+		<DIV ID="divMe" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 
 	</TD>

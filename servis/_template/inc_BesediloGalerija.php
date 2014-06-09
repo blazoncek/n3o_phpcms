@@ -106,7 +106,7 @@ function checkImg(ID, Naziv) {
 
 if ( !$List ) {
 	echo "<div style=\"display: table;height: 100px;width: 100%;\">";
-	echo "<div style=\"table-cell;text-align: center;vertical-align: middle;\">Ni podatkov!</div>";
+	echo "<div style=\"table-cell;text-align: center;vertical-align: middle;\">No data!</div>";
 	echo "</div>\n";
 } else {
 	if ( $NuPg > 1 ) {
@@ -147,7 +147,7 @@ if ( !$List ) {
 				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divSlike').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".$_GET['BesediloID']."&pg=".$Page."&Slika=$Item->ID&Smer=1');\" TITLE=\"Dol\"><IMG SRC=\"pic/list.down.gif\" WIDTH=11 HEIGHT=11 ALT=\"Pomakni dol\" BORDER=\"0\" CLASS=\"icon\"></A>";
 			else
 				echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
-			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkImg('$Item->ID','$Item->Datoteka');\" TITLE=\"Briši\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Briši\" BORDER=\"0\" CLASS=\"icon\">\n";
+			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"javascript:checkImg('$Item->ID','$Item->Datoteka');\" TITLE=\"Delete\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Delete\" BORDER=\"0\" CLASS=\"icon\">\n";
 		}
 		echo "</TD>\n";
 		echo "</TR>\n";

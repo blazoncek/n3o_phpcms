@@ -101,8 +101,8 @@ $EndR = min(($Page * $MaxRows), $RecordCount);
 echo "<div id=\"list\" data-role=\"page\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
 echo "<h1>Datoteke</h1>\n";
-echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Nazaj\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Nazaj</a>\n";
-//echo "<a href=\"./\" title=\"Domov\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Domov</a>\n";
+echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
+//echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=0\" title=\"Dodaj\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"plus\" data-ajax=\"false\">Dodaj</a>\n";
 
 echo "<div data-role=\"navbar\">\n";
@@ -134,7 +134,7 @@ echo "<div style=\"margin-bottom:30px;\"><input type=\"search\" name=\"Find\" id
 if ( $RecordCount == 0 ) {
 
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"color:red;padding:1em;text-align:center;\">\n";
-	echo "<B>Ni podatkov!</B>\n";
+	echo "<B>No data!</B>\n";
 	echo "</div>\n";
 
 } else {
@@ -168,7 +168,7 @@ if ( $RecordCount == 0 ) {
 			echo "<span class=\"ui-li-count\">".$Item->Tip."</span>";
 			echo "</a>";
 			if ( contains($ActionACL,"D") )
-				echo "<a href=\"#\" onclick=\"check('$Item->ID','$Item->Name');\">Briši</a>";
+				echo "<a href=\"#\" onclick=\"check('$Item->ID','$Item->Name');\">Delete</a>";
 			echo "</li>\n";
 		}
 	}
