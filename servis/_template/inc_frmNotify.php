@@ -5,8 +5,8 @@
 |   Version: 2.2.0                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
-|    Author: Blaû Kristan (blaz@kristan-sp.si)                              |
-| Copyright (c) 2007-2014, Blaû Kristan. All Rights Reserved.               |
+|    Author: Bla≈æ Kristan (blaz@kristan-sp.si)                              |
+| Copyright (c) 2007-2014, Bla≈æ Kristan. All Rights Reserved.               |
 | ------------------------------------------------------------------------- |
 |   License: Distributed under the Lesser General Public License (LGPL)     |
 |            http://www.gnu.org/copyleft/lesser.html                        |
@@ -26,7 +26,7 @@
 */
 
 if ( isset($_GET['delNotify']) )
-	$db->query( "DELETE FROM frmNotify WHERE ID = ".(int)$_GET['delNotify'] );
+	$db->query("DELETE FROM frmNotify WHERE ID = ".(int)$_GET['delNotify']);
 
 $getNotifys = $db->get_results(
 	"SELECT N.ID, T.ID AS TopicID, T.TopicName
@@ -44,6 +44,6 @@ if ( $getNotifys ) foreach ( $getNotifys as $Item ) {
 	echo "</TD>\n";
 	echo "</TR>\n";
 } else
-	echo "<TR><TD ALIGN=\"center\" COLSPAN=\"3\">Nima naroƒçenih tem!</TD></TR>\n";
+	echo "<TR><TD ALIGN=\"center\" COLSPAN=\"3\">No subscriptions!</TD></TR>\n";
 echo "</TABLE>\n";
 ?>

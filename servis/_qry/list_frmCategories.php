@@ -26,15 +26,15 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$db->query( "UPDATE frmForums SET CategoryID = NULL WHERE CategoryID = ". (int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM frmCategories WHERE ID = ". (int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 // move items up/down
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// calculate new position
 	$ItemPos = $db->get_var( "SELECT CategoryOrder FROM frmCategories WHERE ID = ".(int)$_GET['Item'] );
 	$ItemNew = $ItemPos + (int)$_GET['Smer'];
@@ -42,6 +42,6 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	$db->query( "UPDATE frmCategories SET CategoryOrder=9999     WHERE CategoryOrder=$ItemNew" );
 	$db->query( "UPDATE frmCategories SET CategoryOrder=$ItemNew WHERE CategoryOrder=$ItemPos" );
 	$db->query( "UPDATE frmCategories SET CategoryOrder=$ItemPos WHERE CategoryOrder=9999" );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

@@ -34,7 +34,7 @@ $Podatek = $db->get_row(
 );
 // get ACL
 if ( $Podatek ) {
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 } else
 	$ACL = $ActionACL;
 
@@ -124,7 +124,6 @@ $(document).ready(function(){
 });
 //-->
 </SCRIPT>
-<!-- VSEBINA -->
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <TR>
 	<TD VALIGN="top" WIDTH="50%">
@@ -141,7 +140,7 @@ $(document).ready(function(){
 		<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 		<TABLE BORDER=0 CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 		<TR>
-			<TD ALIGN="right"><B>Oznaka:</B>&nbsp;</TD>
+			<TD ALIGN="right"><B>Titile:</B>&nbsp;</TD>
 			<TD><INPUT TYPE="text" NAME="Naziv" SIZE="25" MAXLENGTH="100" VALUE="<?php echo $Podatek ? $Podatek->Naziv : "" ?>"></TD>
 <?php if ( contains($ACL,"W") ) : ?>
 			<TD ALIGN="right"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
@@ -149,7 +148,7 @@ $(document).ready(function(){
 		</TR>
 <?php if ( $Podatek && $Podatek->Datum!="" ) : ?>
 		<TR>
-			<TD ALIGN="right">Odposlano:&nbsp;</TD>
+			<TD ALIGN="right">Sent:&nbsp;</TD>
 			<TD><?php echo date('j.n.Y @ H:m',sqldate2time($Podatek->Datum)); ?></TD>
 		</TR>
 <?php endif ?>
@@ -163,7 +162,7 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Izbor=emlSporocilaTxt&Action=<?php echo $Action->ActionID ?>&emlMessageID=<?php echo $_GET['ID'] ?>')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 <?php endif ?>
-		Vsebina</LEGEND>
+		Content</LEGEND>
 <?php
 		$List = $db->get_results(
 			"SELECT emlMessageTxtID AS ID, Naziv, Jezik
@@ -173,13 +172,13 @@ $(document).ready(function(){
 		);
 		echo "<TABLE BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 		if ( !$List ) 
-			echo "<TR><TD ALIGN=\"center\">Ni vsebin!</TD></TR>\n";
+			echo "<TR><TD ALIGN=\"center\">No content!</TD></TR>\n";
 		else {
 			$CurrentRow = 1;
 			$RecordCount = count( $List );
 			foreach ( $List as $Item ) {
 				echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
-				echo "<TD width=\"8%\">[<b class=\"red\">".($Item->Jezik? $Item->Jezik: "vsi")."</b>]</TD>\n";
+				echo "<TD width=\"8%\">[<b class=\"red\">".($Item->Jezik ? $Item->Jezik : "vsi")."</b>]</TD>\n";
 				echo "<TD><A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','inc.php?Izbor=emlSporocilaTxt&Action=".$Action->ActionID."&emlMessageID=".$_GET['ID']."&ID=".$Item->ID."');\"><B>$Item->Naziv</B></A></TD>\n";
 				echo "<TD ALIGN=\"right\" NOWRAP>\n";
 				echo "<A HREF=\"../viewmsg.php?id=".$Item->ID."\" TARGET=\"preview\" TITLE=\"Predogled\"><IMG SRC=\"pic/list.extern.gif\" WIDTH=11 HEIGHT=11 ALT=\"Predogled\" BORDER=\"0\" CLASS=\"icon\">\n";
@@ -197,7 +196,6 @@ $(document).ready(function(){
 <?php endif ?>
 	</TD>
 
-	<!--- SKUPINE SPOROČILA --->
 	<TD VALIGN="top" WIDTH="50%">
 <?php
 if ( (int)$_GET['ID'] > 0 ) {
@@ -221,13 +219,13 @@ if ( (int)$_GET['ID'] > 0 ) {
 	);
 ?>
 	<FIELDSET ID="fldGroup">
-	<LEGEND ID="lgdGroup">Skupine</LEGEND>
+	<LEGEND ID="lgdGroup">Groups</LEGEND>
 	<FORM NAME="Grupe" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE ID="results" BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 	<TR>
-		<TD ALIGN="right" WIDTH="45%">Ne pošlji:</TD>
+		<TD ALIGN="right" WIDTH="45%">Do not send:</TD>
 		<TD ALIGN="center" WIDTH="10%"></TD>
-		<TD ALIGN="right" WIDTH="45%">Pošlji:</TD>
+		<TD ALIGN="right" WIDTH="45%">Send to:</TD>
 	</TR>
 	<TR>
 		<TD ALIGN="left">
@@ -265,60 +263,6 @@ if ( (int)$_GET['ID'] > 0 ) {
 	</FIELDSET>
 	</TD>
 </TR>
-
-<?php if ( false && $Podatek ) : ?>
-<TR>
-	<TD>
-<?php /*
-	<!-- PRIPONKE -->
-	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" STYLE="border:inset 1px;">
-	<TR>
-		<TD>
-		<TABLE ALIGN="center" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="subtitle" WIDTH="100%">
-		<TR>
-			<TD WIDTH="18"></TD>
-			<TD ALIGN="center"><B>Priponke</B></TD>
-			<TD WIDTH="18"><A HREF="javascript:results1.style.display==''?collapse.src='#application.pic#/menu/control.plus.gif':collapse.src='#application.pic#/menu/control.minus.gif',results1.style.display==''?results1.style.display='none':results1.style.display='',void 0;"><IMG ID="collapse" SRC="#application.pic#/menu/control.minus.gif" HEIGHT="14" WIDTH="14" ALT="Prika�i/Skrij" BORDER="0"></A></TD>
-		</TR>
-		</TABLE>
-		<TABLE ID="results1" BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
-		<CFIF ACL CONTAINS "W">
-		<FORM NAME="Vnos" ACTION="#cgi.script_name#?#cgi.query_string#" METHOD="post" ENCTYPE="multipart/form-data">
-		<TR CLASS="novo">
-			<TD COLSPAN="2" STYLE="border-bottom:darkgray solid 1px;">
-			<INPUT TYPE="File" NAME="Datoteka" STYLE="width:100%;border:none;">
-			</TD>
-			<TD ALIGN="right" WIDTH="10%" STYLE="border-bottom:darkgray solid 1px;">
-			<INPUT TYPE="submit" VALUE=" Add " CLASS="find">
-			<!--- &nbsp;<A HREF="javascript:void(0);" ONCLICK="window.open('vnos.cfm?Izbor=emlSporocilaDoc&ID=#URL.ID#&DocID=0', 'mainscreen', 'scrollbars=Yes,status=no,menubar=no,toolbar=no,resizable=no,WIDTH=600,HEIGHT=480')">Nova priponka...</A> --->
-			</TD>
-		</TR>
-		</FORM>
-		</CFIF>
-		<CFQUERY NAME="List" DATASOURCE="#DSN#">
-			SELECT emlMessageDocID, Datoteka
-			FROM emlMessagesDoc
-			WHERE emlMessageID = #val(URL.ID)#
-		</CFQUERY>
-		<CFIF List.RecordCount EQ 0>
-		<TR><TD ALIGN="center" COLSPAN="3">Ni priponk!</TD></TR>
-		<CFELSE>
-		<CFLOOP QUERY="List">
-		<TR ONMOUSEOVER="this.style.backgroundColor='whitesmoke';" ONMOUSEOUT="this.style.backgroundColor='';">
-			<TD WIDTH="8%">&nbsp;[<FONT COLOR="Red"><B>#List.CurrentRow#</B></FONT>]</TD>
-			<TD><B>#left(List.Datoteka,65)#<CFIF len(List.Datoteka) GT 65>...</CFIF></B></TD>
-			<TD ALIGN="right" WIDTH="8%"><CFIF ACL CONTAINS "W"><A HREF="javascript:void(0);" ONCLICK="javascript:check2('#List.emlMessageDocID#','#replace(replace(List.Datoteka,"'","`","ALL"),chr(34),"`","ALL")#');"><IMG SRC="#application.pic#/menu/list.delete.gif" WIDTH=11 HEIGHT=11 ALT="Bri�i" BORDER="0" CLASS="icon"></CFIF></TD>
-		</TR>
-		</CFLOOP>
-		</CFIF>
-		</TABLE>
-		</TD>
-	</TR>
-	</TABLE>
-*/ ?>
-	</TD>
-</TR>
-<?php endif ?>
 </TABLE>
 <?php
 }

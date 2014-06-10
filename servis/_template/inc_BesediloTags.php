@@ -28,78 +28,71 @@
 // add category
 if ( isset($_GET['newtag']) && $_GET['newtag'] != "" ) {
 	try {
-		$db->query( "START TRANSACTION" );
-		$ID = $db->get_var( "SELECT TagID FROM Tags WHERE TagName='".$_GET['newtag']."'" );
+		$db->query("START TRANSACTION");
+		$ID = $db->get_var("SELECT TagID FROM Tags WHERE TagName='". $db->escape($_GET['newtag']) ."'");
 		if ( $ID ) {
-			if ( !$db->get_var( "SELECT ID FROM BesedilaTags ".
-				"WHERE BesediloID=".(int)$_GET['BesediloID']." AND TagID=".$ID ) )
-				$db->query(
-					"INSERT INTO BesedilaTags (BesediloID, TagID) ".
-					"VALUES (".(int)$_GET['BesediloID'].",".$ID.")" );
+			if ( !$db->get_var("SELECT ID FROM BesedilaTags WHERE BesediloID=". (int)$_GET['BesediloID'] ." AND TagID=". $ID) )
+				$db->query("INSERT INTO BesedilaTags (BesediloID, TagID) VALUES (". (int)$_GET['BesediloID'] .",". $ID .")");
 		} else {
-			$db->query(
-				"INSERT INTO Tags (TagName) ".
-				"VALUES ('".$_GET['newtag']."')" );
-			$ID = $db->get_var( "SELECT TagID FROM Tags WHERE TagName='".$_GET['newtag']."'" );
-			$db->query(
-				"INSERT INTO BesedilaTags (BesediloID, TagID) ".
-				"VALUES (".(int)$_GET['BesediloID'].",".$ID.")" );
+			$db->query("INSERT INTO Tags (TagName) VALUES ('". $db->escape($_GET['newtag']) ."')");
+			$ID = $db->get_var("SELECT TagID FROM Tags WHERE TagName='". $db->escape($_GET['newtag'])."'");
+			$db->query("INSERT INTO BesedilaTags (BesediloID, TagID) VALUES (". (int)$_GET['BesediloID'] .",". $ID .")");
 		}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	} catch (Exception $e) {
-		$db->query( "ROLLBACK TRANSACTION" );
+		$db->query("ROLLBACK TRANSACTION");
 	}
 }
 
 // remove category
 if ( isset($_GET['deltag']) && $_GET['deltag'] != "" ) {
 	try {
-		$db->query( "START TRANSACTION" );
-		$ID = $db->get_var( "SELECT TagID FROM BesedilaTags WHERE ID=".(int)$_GET['deltag'] );
-		$db->query( "DELETE FROM BesedilaTags WHERE ID=".(int)$_GET['deltag'] );
+		$db->query("START TRANSACTION");
+		$ID = $db->get_var("SELECT TagID FROM BesedilaTags WHERE ID=". (int)$_GET['deltag']);
+		$db->query("DELETE FROM BesedilaTags WHERE ID=". (int)$_GET['deltag']);
 		try {
-			@$db->query( "DELETE FROM Tags WHERE TagID=".$ID );
+			@$db->query("DELETE FROM Tags WHERE TagID=". $ID);
 		} catch (Exception $e) {}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	} catch (Exception $e) {
-		$db->query( "ROLLBACK TRANSACTION" );
+		$db->query("ROLLBACK TRANSACTION");
 	}
 }
 
 // display list of assigned tags
 $List = $db->get_results(
-	"SELECT BT.ID, T.TagName ".
-	"FROM BesedilaTags BT ".
-	"	LEFT JOIN Tags T ON BT.TagID = T.TagID ".
-	"WHERE BT.BesediloID = ".(int)$_GET['BesediloID']." ".
-	"ORDER BY T.TagName" );
+	"SELECT BT.ID, T.TagName
+	FROM BesedilaTags BT
+		LEFT JOIN Tags T ON BT.TagID = T.TagID
+	WHERE BT.BesediloID = ". (int)$_GET['BesediloID'] ."
+	ORDER BY T.TagName"
+	);
 
 echo "<script language=\"JavaScript\" type=\"text/javascript\">\n";
 echo "<!-- //\n";
 echo "$(document).ready(function(){\n";
-echo "\t// bind to the form's submit event\n";
-echo "\t$(\"form[name='AddTag']\").submit(function(){\n";
-echo "\t\t$(this).ajaxSubmit({\n";
-echo "\t\t\ttarget: '#tags',\n";
-echo "\t\t\tbeforeSubmit: function( formDataArr, jqObj, options ){\n";
-echo "\t\t\t\tvar fObj = jqObj[0];	// form object\n";
-echo "\t\t\t\treturn true;\n";
-echo "\t\t\t} // pre-submit callback\n";
-echo "\t\t});\n";
-echo "\t\treturn false;\n";
-echo "\t});\n";
-echo "\t$('#newtag').select().autocomplete({\n";
-echo "\t\tsource: \"json.php?Izbor=getTags&BesediloID=".(int)$_GET['BesediloID']."\",\n";
-echo "\t\tminLength: 2,\n";
-echo "\t\tdelay: 500,\n";
-echo "\t\tselect: function( event, ui ) {\n";
-echo "\t\t\t$('#tags').load('inc.php?Izbor=BesediloTags&BesediloID=".(int)$_GET['BesediloID']."&newtag='+ui.item.value);\n";
-echo "\t\t}\n";
-echo "\t});\n";
-//echo "\t$('#newtag').change(function(){\n";
-//echo "\t\t$('#tags').load('inc.php?Izbor=BesediloTags&BesediloID=".(int)$_GET['BesediloID']."&newtag='+$('#newtag').val());\n";
-//echo "\t});\n";
-echo "\t$('#newtag').width($('#tags').parent().width()-16);\n";
+echo "$(\"form[name='AddTag']\").submit(function(){\n";
+echo "$(this).ajaxSubmit({\n";
+echo "target: '#tags',\n";
+echo "beforeSubmit: function( formDataArr, jqObj, options ){\n";
+echo "var fObj = jqObj[0];	// form object\n";
+echo "return true;\n";
+echo "} // pre-submit callback\n";
+echo "});\n";
+echo "return false;\n";
+echo "});\n";
+echo "$('#newtag').select().autocomplete({\n";
+echo "source: \"json.php?Izbor=getTags&BesediloID=".(int)$_GET['BesediloID']."\",\n";
+echo "minLength: 2,\n";
+echo "delay: 500,\n";
+echo "select: function( event, ui ) {\n";
+echo "$('#tags').load('inc.php?Izbor=BesediloTags&BesediloID=".(int)$_GET['BesediloID']."&newtag='+ui.item.value);\n";
+echo "}\n";
+echo "});\n";
+//echo "$('#newtag').change(function(){\n";
+//echo "$('#tags').load('inc.php?Izbor=BesediloTags&BesediloID=".(int)$_GET['BesediloID']."&newtag='+$('#newtag').val());\n";
+//echo "});\n";
+echo "$('#newtag').width($('#tags').parent().width()-16);\n";
 echo "});\n";
 echo "//-->\n";
 echo "</script>\n";
@@ -114,7 +107,7 @@ echo "</div>\n";
 
 echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 if ( !$List ) 
-	echo "<TR><TD ALIGN=\"center\">Ni dodeljenih oznak!</TD></TR>\n";
+	echo "<TR><TD ALIGN=\"center\">No assigned tags!</TD></TR>\n";
 else {
 	$CurrentRow = 1;
 	$RecordCount = count( $List );

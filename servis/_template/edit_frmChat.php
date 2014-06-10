@@ -25,10 +25,10 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 // get data
-$Podatek = $db->get_row( "SELECT * FROM chtRooms WHERE ID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM chtRooms WHERE ID = ". (int)$_GET['ID']);
 
 ?>
 <script language="JavaScript" type="text/javascript">
@@ -42,7 +42,7 @@ $(document).ready(function(){
 			target: '#divEdit', // target element(s) to be updated with server response
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Name))	{alert("Prosim vnesite ime!"); fObj.Name.focus(); return false;}
+				if (empty(fObj.Name))	{alert("Please enter title!"); fObj.Name.focus(); return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			}
@@ -61,7 +61,7 @@ $(document).ready(function(){
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="2" WIDTH="100%">
 	<TR>
-		<TD ALIGN="right"><B>Ime:</B>&nbsp;</TD>
+		<TD ALIGN="right"><B>Title:</B>&nbsp;</TD>
 		<TD><INPUT TYPE="Text" NAME="Name" MAXLENGTH="50" VALUE="<?php echo ($Podatek? $Podatek->Room: "") ?>" CLASS="txt" STYLE="width:100%"></TD>
 	</TR>
 	<TR>

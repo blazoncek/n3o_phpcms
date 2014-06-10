@@ -26,10 +26,10 @@
 */
 
 if ( isset($_POST['NitID']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$db->query( "UPDATE frmTopics   SET ForumID = ".(int)$_POST['NitID']." WHERE ID = ".(int)$_POST['TemaID'] );
 	$db->query( "UPDATE frmMessages SET ForumID = ".(int)$_POST['NitID']." WHERE TopicID = ".(int)$_POST['TemaID'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset($_GET['Sticky']) ) {
@@ -45,13 +45,13 @@ if ( isset($_GET['DelTopic']) ) {
 		if ( $DelMessage->AttachedFile != "")
 			@unlink( $StoreRoot . '/diskusije/datoteke/' . $DelMessage->AttachedFile );
 	}
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$db->query( "UPDATE Besedila       SET ForumTopicID = NULL WHERE ForumTopicID = ".(int)$_GET['DelTopic'] );
 	$db->query( "UPDATE frmPvtMessages SET TopicID = NULL      WHERE TopicID = ".(int)$_GET['DelTopic'] );
 	$db->query( "DELETE FROM frmNotify   WHERE TopicID = ".(int)$_GET['DelTopic'] );
 	$db->query( "DELETE FROM frmMessages WHERE TopicID = ".(int)$_GET['DelTopic'] );
 	$db->query( "DELETE FROM frmTopics   WHERE ID = ".(int)$_GET['DelTopic'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 
 	// update URI
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&DelTopic=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
@@ -104,7 +104,7 @@ function checkTopic(ID, Naziv) {
 	foreach ( $List as $Item ) {
 		$Title = $Item->TopicName;
 		if ( $Title == "" )
-			$Title = "(brez naziva)";
+			$Title = "(no title)";
 		echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 		echo "<TD ALIGN=\"center\" WIDTH=\"11\">";
 		if ( $Item->Sticky )

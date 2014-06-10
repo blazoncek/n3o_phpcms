@@ -27,12 +27,12 @@
 ?>
 <TABLE WIDTH="100%" BORDER="0" CELLPADDING="2" CELLSPACING="0" CLASS="frame">
 <TR ONMOUSEOVER="this.style.backgroundColor='white';" ONMOUSEOUT="this.style.backgroundColor='';">
-	<TD><A HREF="javascript:void(0);" onclick="loadTo('Edit','edit.php?Izbor=frmSetup');">Parametri</A></TD>
+	<TD><A HREF="javascript:void(0);" onclick="loadTo('Edit','edit.php?Izbor=frmSetup');">Parameters</A></TD>
 </TR>
 <TR ONMOUSEOVER="this.style.backgroundColor='white';" ONMOUSEOUT="this.style.backgroundColor='';">
-	<TD><A HREF="javascript:void(0);" onclick="loadTo('Edit','inc.php?Izbor=frmIPBan');">Blokiranje IP naslovov</A></TD>
+	<TD><A HREF="javascript:void(0);" onclick="loadTo('Edit','inc.php?Izbor=frmIPBan');">Blocked IP addresses</A></TD>
 </TR>
 <TR ONMOUSEOVER="this.style.backgroundColor='white';" ONMOUSEOUT="this.style.backgroundColor='';">
-	<TD><A HREF="javascript:void(0);" onclick="loadTo('Edit','inc.php?Izbor=frmEmailBan');">Blokiranje email naslovov</A></TD>
+	<TD><A HREF="javascript:void(0);" onclick="loadTo('Edit','inc.php?Izbor=frmEmailBan');">Blocked email addresses</A></TD>
 </TR>
 </TABLE>

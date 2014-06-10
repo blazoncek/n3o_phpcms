@@ -27,7 +27,7 @@
 
 // delete image from list
 if ( isset($_GET['BrisiSliko']) && $_GET['BrisiSliko'] != "" ) {
-	$db->query( "DELETE FROM BesedilaSlike WHERE ID = ".(int)$_GET['BrisiSliko'] );
+	$db->query("DELETE FROM BesedilaSlike WHERE ID = ". (int)$_GET['BrisiSliko']);
 }
 
 // move items up/down
@@ -44,7 +44,7 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$db->query("COMMIT");
 }
 
-$ACLID = $db->get_var("SELECT ACLID FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID']);
+$ACLID = $db->get_var("SELECT ACLID FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 if ( $ACLID )
 	$ACL = userACL($ACLID);
 else
@@ -52,23 +52,23 @@ else
 
 // seznam slik 
 $List = $db->get_results(
-	"SELECT".
-	"	BS.ID,".
-	"	BS.MediaID,".
-	"	BS.BesediloID,".
-	"	M.Datoteka,".
-	"	M.Naziv,".
-	"	BS.Polozaj,".
-	"	M.Meta ".
-	"FROM".
-	"	BesedilaSlike BS".
-	"	LEFT OUTER JOIN Media M".
-	"		ON M.MediaID = BS.MediaID ".
-	"WHERE".
-	"	BS.BesediloID = ".(int)$_GET['BesediloID']." ".
-	"ORDER BY".
-	"	BS.Polozaj"
-);
+	"SELECT
+		BS.ID,
+		BS.MediaID,
+		BS.BesediloID,
+		M.Datoteka,
+		M.Naziv,
+		BS.Polozaj,
+		M.Meta
+	FROM
+		BesedilaSlike BS
+		LEFT OUTER JOIN Media M
+			ON M.MediaID = BS.MediaID
+	WHERE
+		BS.BesediloID = ".(int)$_GET['BesediloID']."
+	ORDER BY
+		BS.Polozaj"
+	);
 $RecordCount = count($List);
 
 // are we requested do display different page?
@@ -96,7 +96,7 @@ $EndR = min(($Page * $MaxRows), $RecordCount);
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 <!--
 function checkImg(ID, Naziv) {
-	if (confirm("Odstranim sliko '"+Naziv+"'?"))
+	if (confirm("Remove image '"+Naziv+"'?"))
 		setTimeout("$('#divSlike').load('inc.php?Izbor=<?php echo $_GET['Izbor'] ?>&BesediloID=<?php echo $_GET['BesediloID'] ?>&pg=<?php echo $Page ?>&BrisiSliko="+ID+"')",100);
 	return false;
 }

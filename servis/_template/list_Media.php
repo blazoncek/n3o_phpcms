@@ -26,11 +26,11 @@
 */
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset( $_GET['ID'] ) )   $_GET['ID'] = "0";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
-if ( !isset( $_GET['Tip'] ) )  $_GET['Tip'] = "";
-if ( !isset( $_GET['Sort'] ) ) $_GET['Sort'] = "";
-if ( !isset( $_GET['Show'] ) ) $_GET['Show'] = "";
+if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
+if ( !isset($_GET['Tip']) )  $_GET['Tip'] = "";
+if ( !isset($_GET['Sort']) ) $_GET['Sort'] = "";
+if ( !isset($_GET['Show']) ) $_GET['Show'] = "";
 
 // define sort order
 $Sort = "M.MediaID DESC";
@@ -95,16 +95,16 @@ echo "<TABLE WIDTH=\"100%\" BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" CLA
 echo "<TR>\n";
 echo "<TD>Sort:\n";
 echo "<SELECT NAME=\"Sort\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=".$_GET['Action']."&Tip=".$_GET['Tip']."&Sort='+this[this.selectedIndex].value);\">\n";
-echo "<OPTION VALUE=\"Vnos\">Zaporedje vnosa</OPTION>\n";
-echo "<OPTION VALUE=\"Naziv\"".(($_GET['Sort']=="Naziv")? " SELECTED": "").">Naziv</OPTION>\n";
-echo "<OPTION VALUE=\"Datoteka\"".(($_GET['Sort']=="Datoteka")? " SELECTED": "").">Datoteka</OPTION>\n";
-echo "<OPTION VALUE=\"Datum\"".(($_GET['Sort']=="Datum")? " SELECTED": "").">Datum</OPTION>\n";
+echo "<OPTION VALUE=\"Vnos\">Entry ID</OPTION>\n";
+echo "<OPTION VALUE=\"Naziv\"".(($_GET['Sort']=="Naziv")? " SELECTED": "").">Title</OPTION>\n";
+echo "<OPTION VALUE=\"Datoteka\"".(($_GET['Sort']=="Datoteka")? " SELECTED": "").">File</OPTION>\n";
+echo "<OPTION VALUE=\"Datum\"".(($_GET['Sort']=="Datum")? " SELECTED": "").">Date</OPTION>\n";
 echo "</SELECT>\n";
 echo "</TD>\n";
 echo "<TD ALIGN=\"right\">Type:\n";
 echo "<SELECT NAME=\"Tip\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=".$_GET['Action']."&Sort=".$_GET['Sort']."&Tip='+this[this.selectedIndex].value);\">\n";
-echo "<OPTION VALUE=\"\">- vsi tipi -</OPTION>\n";
-$Tipi = $db->get_col( "SELECT DISTINCT Tip FROM Media ORDER BY Tip" );
+echo "<OPTION VALUE=\"\">- all types -</OPTION>\n";
+$Tipi = $db->get_col("SELECT DISTINCT Tip FROM Media ORDER BY Tip");
 if ( $Tipi ) foreach ( $Tipi as $Tip )
 	echo "<OPTION VALUE=\"$Tip\"".(($_GET['Tip']==$Tip)? " SELECTED": "").">$Tip</OPTION>\n";
 echo "</SELECT>\n";

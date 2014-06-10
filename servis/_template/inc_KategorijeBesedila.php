@@ -43,7 +43,7 @@ if ( isset($_GET['Odstrani']) && $_GET['Odstrani'] != "" ) {
 
 // move items up/down
 if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM KategorijeBesedila WHERE ID = ". (int)$_GET['Predmet']) ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
@@ -52,7 +52,7 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemNew WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemPos");
 		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemPos WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = 9999");
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	// update URI
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Smer=[-0-9]+/", "", $_SERVER['QUERY_STRING'] );
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Predmet=[0-9]+/", "", $_SERVER['QUERY_STRING'] );

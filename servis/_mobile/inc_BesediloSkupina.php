@@ -27,46 +27,48 @@
 
 // add additional text
 if ( isset($_GET['DodatniID']) && $_GET['DodatniID'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+	$db->query("START TRANSACTION");
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ". (int)$_GET['BesediloID']);
+	$db->query(
+		"INSERT INTO BesedilaSkupine (BesediloID, DodatniID, Polozaj)
+		VALUES (". (int)$_GET['BesediloID'] .", ". (int)$_GET['DodatniID'] .", ". ($Polozaj ? $Polozaj+ 1: 1) .")"
+		);
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ". (int)$_GET['DodatniID']);
 	$db->query(
 		"INSERT INTO BesedilaSkupine (BesediloID, DodatniID, Polozaj) ".
-		"VALUES (".(int)$_GET['BesediloID'].", ".(int)$_GET['DodatniID'].", ".($Polozaj? $Polozaj+1: 1).")" );
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ".(int)$_GET['DodatniID'] );
-	$db->query(
-		"INSERT INTO BesedilaSkupine (BesediloID, DodatniID, Polozaj) ".
-		"VALUES (".(int)$_GET['DodatniID'].", ".(int)$_GET['BesediloID'].", ".($Polozaj? $Polozaj+1: 1).")" );
-	$db->query( "COMMIT" );
+		"VALUES (". (int)$_GET['DodatniID'] .", ". (int)$_GET['BesediloID'] .", ". ($Polozaj ? $Polozaj+1 : 1) .")"
+		);
+	$db->query("COMMIT");
 }
 
 // delete additional text from list
 if ( isset( $_GET['BrisiDodatni'] ) && $_GET['BrisiDodatni'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	$x = $db->get_row( "SELECT BesediloID, DodatniID FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni'] );
-	if ( $x ) $db->query( "DELETE FROM BesedilaSkupine WHERE BesediloID  = $x->DodatniID AND DodatniID = $x->BesediloID" );
-	$db->query( "DELETE FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni'] );
-	$db->query( "COMMIT" );
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT BesediloID, DodatniID FROM BesedilaSkupine WHERE ID = ". (int)$_GET['BrisiDodatni']);
+	if ( $x ) $db->query("DELETE FROM BesedilaSkupine WHERE BesediloID = $x->DodatniID AND DodatniID = $x->BesediloID");
+	$db->query("DELETE FROM BesedilaSkupine WHERE ID = ". (int)$_GET['BrisiDodatni']);
+	$db->query("COMMIT");
 }
 
 // move items up/down
-if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	if ( $ItemPos = $db->get_var( "SELECT Polozaj FROM BesedilaSkupine WHERE ID = ". (int)$_GET['Dodatni'] ) ) {
+if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
+	$db->query("START TRANSACTION");
+	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM BesedilaSkupine WHERE ID = ". (int)$_GET['Dodatni']) ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
-		$db->query( "UPDATE BesedilaSkupine SET Polozaj = 9999     WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemNew" );
-		$db->query( "UPDATE BesedilaSkupine SET Polozaj = $ItemNew WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemPos" );
-		$db->query( "UPDATE BesedilaSkupine SET Polozaj = $ItemPos WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = 9999" );
+		$db->query("UPDATE BesedilaSkupine SET Polozaj = 9999     WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemNew");
+		$db->query("UPDATE BesedilaSkupine SET Polozaj = $ItemNew WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemPos");
+		$db->query("UPDATE BesedilaSkupine SET Polozaj = $ItemPos WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = 9999");
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
-$Tip = $db->get_var( "SELECT Tip FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+$Tip = $db->get_var("SELECT Tip FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 
-$ACLID = $db->get_var( "SELECT ACLID FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+$ACLID = $db->get_var("SELECT ACLID FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 
@@ -93,9 +95,9 @@ $('#edit').live('pageinit', function(event){
 <?php
 
 // page head
-echo "<div id=\"edit\" data-role=\"page\" data-title=\"Povezana besedila\">\n";
+echo "<div id=\"edit\" data-role=\"page\" data-title=\"Related texts\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Povezana besedila</h1>\n";
+echo "<h1>Related texts</h1>\n";
 echo "<a href=\"edit.php?Izbor=Besedila&ID=". $_GET['BesediloID'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
 echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-role=\"button\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
@@ -114,13 +116,13 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		FROM
 			Besedila B
 			LEFT JOIN BesedilaOpisi BO ON B.BesediloID = BO.BesediloID
-			LEFT JOIN BesedilaSkupine BS ON B.BesediloID = BS.DodatniID AND BS.BesediloID = ".(int)$_GET['BesediloID']."
+			LEFT JOIN BesedilaSkupine BS ON B.BesediloID = BS.DodatniID AND BS.BesediloID = ". (int)$_GET['BesediloID'] ."
 		WHERE
 			BS.BesediloID IS NULL
-			AND B.BesediloID <> ".(int)$_GET['BesediloID']."
-			AND B.Tip = '".(isset($Tip) ? $Tip : "Text")."'
+			AND B.BesediloID <> ". (int)$_GET['BesediloID'] ."
+			AND B.Tip = '". (isset($Tip) ? $Tip : "Text") ."'
 			AND B.Izpis = 1".
-			($_GET['Find']!=""? " AND (BO.Naslov LIKE '%".$_GET['Find']."%' OR B.Ime LIKE '%".$_GET['Find']."%' OR B.Tip LIKE '".$_GET['Find']."%')": " ").
+			($_GET['Find']!=""? " AND (BO.Naslov LIKE '%". $_GET['Find'] ."%' OR B.Ime LIKE '%". $_GET['Find'] ."%' OR B.Tip LIKE '". $_GET['Find'] ."%')" : " ").
 		"ORDER BY
 			B.Ime"
 	);
@@ -132,7 +134,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 	else {
 		foreach ( $List as $Item ) {
 			if ( $Item->ACLID )
-				$rACL = userACL( $Item->ACLID );
+				$rACL = userACL($Item->ACLID);
 			else
 				$rACL = "LRWDX";
 			echo "<li data-icon=\"check\">";
@@ -157,10 +159,10 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		FROM BesedilaSkupine BS
 			LEFT JOIN Besedila B ON BS.DodatniID = B.BesediloID
 		WHERE
-			BS.BesediloID = ".(int)$_GET['BesediloID']."
+			BS.BesediloID = ". (int)$_GET['BesediloID'] ."
 		ORDER BY
 			BS.BesediloID, BS.Polozaj"
-	);
+		);
 
 	echo "<ul data-role=\"listview\" data-theme=\"d\">\n";
 	echo "<li data-theme=\"c\"><input type=\"text\" name=\"Find\" placeholder=\"Find\"></li>\n";

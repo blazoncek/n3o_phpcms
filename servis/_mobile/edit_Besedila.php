@@ -25,12 +25,12 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$Podatek = $db->get_row( "SELECT * FROM Besedila WHERE BesediloID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM Besedila WHERE BesediloID = ". (int)$_GET['ID']);
 // get ACL
 if ( $Podatek )
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 else
 	$ACL = $ActionACL;
 ?>
@@ -89,7 +89,7 @@ $('#edit').live('pageinit', function(event){
 });
 
 function checkFld(fld, ID, Naziv) {
-	if (confirm("Ali res želite odstraniti '"+Naziv+"'?")) {
+	if (confirm("Do you want to remove '"+Naziv+"'?")) {
 		URL = "<?php echo $_SERVER['PHP_SELF'] ?>?Izbor=<?php echo $_GET['Izbor'] ?>&ID=<?php echo $_GET['ID'] ?>";
 		$.mobile.changePage(URL, {
 			reloadPage: true,
@@ -102,9 +102,9 @@ function checkFld(fld, ID, Naziv) {
 //-->
 </script>
 <?php
-echo "<div id=\"edit\" data-role=\"page\" data-title=\"Besedila\">\n";
+echo "<div id=\"edit\" data-role=\"page\" data-title=\"Texts\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Besedila</h1>\n";
+echo "<h1>Texts</h1>\n";
 echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
 echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
@@ -115,13 +115,13 @@ if ( (int)$_GET['ID'] == 0 )
 
 if ( isset($Error) ) {
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"padding:1em;text-align:center;\">";
-	echo "<b>Prišlo je do napake!</b><br>Podatki niso vpisani.";
+	echo "<b>Error!</b><br>Data not saved.";
 	echo "</div>\n";
 } else {
 ?>
 	<div data-role="fieldcontain">
-		<LABEL FOR="fldIme"><B>Ime:</B></LABEL>
-		<INPUT TYPE="text" ID="fldIme" NAME="Ime" MAXLENGTH="127" VALUE="<?php echo $Podatek ? $Podatek->Ime : ''; ?>" placeholder="Ime" data-theme="d"><br />
+		<LABEL FOR="fldIme"><B>Name:</B></LABEL>
+		<INPUT TYPE="text" ID="fldIme" NAME="Ime" MAXLENGTH="127" VALUE="<?php echo $Podatek ? $Podatek->Ime : ''; ?>" placeholder="Name" data-theme="d"><br />
 	</div>
 	<div data-role="fieldcontain">
 		<LABEL FOR="fldIzpis"><b>Show:</b></LABEL>
@@ -132,8 +132,8 @@ if ( isset($Error) ) {
 	</div>
 	<div data-role="fieldcontain">
 		<?php $Datum = date("d.n.Y", $Podatek ? sqldate2time($Podatek->Datum) : time()); ?>
-		<LABEL FOR="fldDatum"><B>Datum:</B></LABEL>
-		<INPUT TYPE="date" ID="fldDatum" NAME="Datum" MAXLENGTH="10" VALUE="<?php echo $Datum; ?>" CLASS="datepicker" placeholder="Datum" data-theme="d" data-role="datebox" data-options='{"mode": "calbox"}'><br />
+		<LABEL FOR="fldDatum"><B>Date:</B></LABEL>
+		<INPUT TYPE="date" ID="fldDatum" NAME="Datum" MAXLENGTH="10" VALUE="<?php echo $Datum; ?>" CLASS="datepicker" placeholder="Date" data-theme="d" data-role="datebox" data-options='{"mode": "calbox"}'><br />
 		<LABEL FOR="fldURL"><B>URL:</B></LABEL>
 		<INPUT TYPE="text" ID="fldURL" NAME="URL" MAXLENGTH="128" VALUE="<?php echo $Podatek ? $Podatek->URL : ''; ?>" placeholder="URL" data-theme="d"><br />
 	</div>
@@ -145,11 +145,11 @@ if ( (int)$_GET['ID'] != 0 ) {
 	echo "<fieldset class=\"ui-hide-label\" data-role=\"fieldcontain\" data-theme=\"a\">";
 	echo "<legend>Vsebina</legend>\n";
 	$List = $db->get_results(
-		"SELECT ID, Naslov AS Naziv, Jezik, Polozaj ".
-		"FROM BesedilaOpisi ".
-		"WHERE BesediloID = ".(int)$_GET['ID']." ".
-		"ORDER BY Jezik, Polozaj"
-	);
+		"SELECT ID, Naslov AS Naziv, Jezik, Polozaj
+		FROM BesedilaOpisi
+		WHERE BesediloID = ".(int)$_GET['ID']."
+		ORDER BY Jezik, Polozaj"
+		);
 
 	echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\" data-split-icon=\"delete\" data-split-theme=\"a\" data-count-theme=\"e\">\n";
 	if ( $List ) foreach ( $List as $Naziv ) {
@@ -198,11 +198,11 @@ if ( (int)$_GET['ID'] != 0 ) {
 	echo "<fieldset class=\"ui-hide-label\" data-role=\"fieldcontain\" data-theme=\"a\">";
 	echo "<legend>Povezana besedila</legend>\n";
 	$List = $db->get_results(
-		"SELECT BS.ID, BS.DodatniID, BS.Polozaj, B.Ime, B.ACLID ".
-		"FROM BesedilaSkupine BS ".
-		"	LEFT JOIN Besedila B ON BS.DodatniID = B.BesediloID ".
-		"WHERE BS.BesediloID = ".(int)$_GET['ID']." ".
-		"ORDER BY BS.BesediloID, BS.Polozaj"
+		"SELECT BS.ID, BS.DodatniID, BS.Polozaj, B.Ime, B.ACLID
+		FROM BesedilaSkupine BS
+			LEFT JOIN Besedila B ON BS.DodatniID = B.BesediloID
+		WHERE BS.BesediloID = ".(int)$_GET['ID']."
+		ORDER BY BS.BesediloID, BS.Polozaj"
 		);
 
 	echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">\n";

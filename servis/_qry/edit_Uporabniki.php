@@ -25,11 +25,11 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 if ( $_GET['ID'] == "0" ) {
 	if ( isset($_POST['Name']) ) {
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		$db->query( "INSERT INTO SMUser (Name, Email, Phone, TwitterName, Username, Password, Active, DefGrp)
 			VALUES ('".$db->escape($_POST['Name'])."', '".
 				$db->escape($_POST['Email'])."', '".
@@ -45,11 +45,11 @@ if ( $_GET['ID'] == "0" ) {
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
 		// add new user to everyone group
 		$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES (1, $db->insert_id)" );
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	}
 } else {
 	if ( count($_POST) && !isset($_POST['GroupList']) ) {
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		foreach ( $_POST as $name => $value ) {
 			switch ( $name ) {
 				case "DefGrp":
@@ -70,11 +70,11 @@ if ( $_GET['ID'] == "0" ) {
 		}
 		if ( isset($_POST['Name']) && isset($_POST['Password']) )
 			$db->query( "UPDATE SMUser SET Active = ".( (isset($_POST['Active']) && $_POST['Active']=="yes") ? "1" : "0" )." WHERE UserID = " . (int)$_GET['ID'] );
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 
 	} else if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset( $_POST['Action'] ) ) {
 
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		if ( $_POST['Action'] == "Add" )
 			foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
 				$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
@@ -87,7 +87,7 @@ if ( $_GET['ID'] == "0" ) {
 				$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
 			}
 		}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	}
 }
 ?>

@@ -26,10 +26,10 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] > 1 ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// never delete administrator (UserID==1)
 	$db->query( "DELETE FROM emlMembersGrp WHERE emlMemberID=".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM emlMembers    WHERE emlMemberID=".(int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

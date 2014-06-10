@@ -25,11 +25,7 @@
 '---------------------------------------------------------------------------'
 */
 
-$Texts = $db->get_results(
-	"SELECT *
-	FROM emlMessagesTxt
-	WHERE emlMessageID=". (int)$_GET['ID']
-);
+$Texts = $db->get_results("SELECT * FROM emlMessagesTxt WHERE emlMessageID=". (int)$_GET['ID']);
 
 if ( $Texts ) foreach ( $Texts as $Text ) {
 	$MailList = $db->get_results(
@@ -47,27 +43,26 @@ if ( $Texts ) foreach ( $Texts as $Text ) {
 			AND EMG.emlGroupID IS NOT NULL
 			AND EMSG.emlMessageGrpID IS NOT NULL
 			AND EMSG.emlMessageID =". (int)$_GET['ID'] ."
-			AND (EM.Jezik IS NULL OR EM.Jezik = '".$Text->Jezik."')"
+			AND (EM.Jezik IS NULL OR EM.Jezik = '". $Text->Jezik ."')"
 	);
 	$Lang = $Text->Jezik=='' ? $db->get_var('SELECT Jezik FROM Jeziki WHERE DefLang=1') : $Text->Jezik;
 
 	$Subject = $Text->Naziv;
 	$Body    = $Text->Opis;
 	// format plaintext body
-	$AltBody = preg_replace( "/<([\/]*)DIV([^>]*)>/i", "<\1p>", $Body );
-	//$AltBody = str_ireplace( '</p>', "\n", $AltBody );
-	$AltBody = str_ireplace( '<li>', '* ', $AltBody );
-	$AltBody = str_ireplace( '&nbsp;', ' ', $AltBody );
-	$AltBody = str_ireplace( '&lt;', '<', $AltBody );
-	$AltBody = str_ireplace( '&gt;', '>', $AltBody );
-	$AltBody = preg_replace( '/<br.*>/i', '\n', $AltBody );
-	$AltBody = preg_replace( '/\&(ra|la)quo\;/i', '\"', $AltBody );
-	$AltBody = preg_replace( '/\&[a-zA-Z]+\;/i', '', $AltBody );
-	$AltBody = preg_replace( '/<([\/]*)([^>]*)>/i', '', $AltBody ); // remove all tags
+	$AltBody = preg_replace("/<([\/]*)DIV([^>]*)>/i", "<\1p>", $Body);
+	$AltBody = str_ireplace('<li>', '* ', $AltBody);
+	$AltBody = str_ireplace('&nbsp;', ' ', $AltBody);
+	$AltBody = str_ireplace('&lt;', '<', $AltBody);
+	$AltBody = str_ireplace('&gt;', '>', $AltBody);
+	$AltBody = preg_replace('/<br.*>/i', '\n', $AltBody);
+	$AltBody = preg_replace('/\&(ra|la)quo\;/i', '\"', $AltBody);
+	$AltBody = preg_replace('/\&[a-zA-Z]+\;/i', '', $AltBody);
+	$AltBody = preg_replace('/<([\/]*)([^>]*)>/i', '', $AltBody); // remove all tags
 	// make absolute URLs
-	$Body    = preg_replace( "/(src=\")/i", '$1'.$WebURL.'/', $Body );
+	$Body    = preg_replace("/(src=\")/i", '$1'.$WebURL.'/', $Body);
 	// convert text sileys into images
-	$Body    = ReplaceSmileys( $Body, $WebURL."/pic/");
+	$Body    = ReplaceSmileys($Body, $WebURL ."/pic/");
 /*
  * TODO: embeding an image into $Body using the following
 	try {
@@ -133,9 +128,9 @@ if ( $Texts ) foreach ( $Texts as $Text ) {
 <div class="frame" style="display: table;margin: 0 auto;height: 100px;width: 320px;">
 <div style="background-color: white;display: table-cell;text-align: center;vertical-align: middle;">
 <?php if ( isset($error) && !$error ) : ?>
-	<B>Sporočilo odposlano!</B>
+	<B>Message sent!</B>
 <?php else : ?>
-	<B CLASS="red">Sporočilo NI odposlano!</B>
+	<B CLASS="red">Message NOT sent!</B>
 <?php endif ?>
 </div>
 </div>

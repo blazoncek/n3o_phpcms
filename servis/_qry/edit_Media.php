@@ -231,7 +231,7 @@ if ( isset($_FILES['file']) && !$_FILES['file']['error'] ) {
 }
 
 if ( !isset($Error) && count($_POST) && !isset($_POST['Naslov']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	
 	if ( $_GET['ID'] != "0" ) {
 

@@ -5,8 +5,8 @@
 |   Version: 2.2.0                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
-|    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
-| Copyright (c) 2007-2014, Blaž Kristan. All Rights Reserved.               |
+|    Author: BlaÅ¾ Kristan (blaz@kristan-sp.si)                              |
+| Copyright (c) 2007-2014, BlaÅ¾ Kristan. All Rights Reserved.               |
 | ------------------------------------------------------------------------- |
 |   License: Distributed under the Lesser General Public License (LGPL)     |
 |            http://www.gnu.org/copyleft/lesser.html                        |
@@ -26,10 +26,10 @@
 */
 
 if ( isset($_POST['addEmail']) && $_POST['addEmail']!='' )
-	$db->query( "INSERT INTO frmBanList (Email) VALUES ('".$_POST['addEmail']."')" );
+	$db->query("INSERT INTO frmBanList (Email) VALUES ('". $db->escape($_POST['addEmail']) ."')");
 
 if ( isset($_POST['Brisi']) && $_POST['Brisi']!='' )
-	$db->query( "DELETE FROM frmBanList WHERE ID = ".(int)$_POST['Brisi'] );
+	$db->query("DELETE FROM frmBanList WHERE ID = ". (int)$_POST['Brisi']);
 
 $BanList = $db->get_results(
 	"SELECT
@@ -84,7 +84,7 @@ $(document).ready(function(){
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
-	<td id="editNote" align="right"><B>Vnos blokiranih emailov</B>&nbsp;&nbsp;</td>
+	<td id="editNote" align="right"><B>Blocked email addresses</B>&nbsp;&nbsp;</td>
 </tr>
 </table>
 </DIV>
@@ -100,7 +100,7 @@ $(document).ready(function(){
 		<TD ALIGN="right"><INPUT TYPE="Submit" VALUE="Add" TABINDEX="1" CLASS="but"></TD>
 	</TR>
 	<TR>
-		<TD CLASS="f10" COLSPAN="3">npr.: *@hotmail.com, ime@naslov.com</TD>
+		<TD CLASS="f10" COLSPAN="3">e.g.: *@hotmail.com, name@domain.com</TD>
 	</TR>
 	</TABLE>
 	</FORM>
@@ -113,7 +113,7 @@ if ( $BanList ) foreach ( $BanList as $Item ) {
 	echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 	echo "<TD VALIGN=\"top\">$Title</TD>\n";
 	echo "<TD ALIGN=\"right\" WIDTH=\"20\">";
-	echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divEdit').load('inc.php?Izbor=frmEmailBan',{Brisi:$Item->ID});\" TITLE=\"BriÅ¡i\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=\"11\" HEIGHT=\"11\" ALT=\"BriÅ¡i\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>";
+	echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#divEdit').load('inc.php?Izbor=frmEmailBan',{Brisi:$Item->ID});\" TITLE=\"Delete\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=\"11\" HEIGHT=\"11\" ALT=\"BriÅ¡i\" BORDER=\"0\" ALIGN=\"absmiddle\" CLASS=\"icon\"></A>";
 	echo "</TD>\n";
 	echo "</TR>\n";
 }

@@ -40,27 +40,28 @@ if ( isset($_FILES['file']) && !$_FILES['file']['error'] ) {
 		$Size = filesize($uploadfile);
 		$Tip  = strtoupper(right($Datoteka,3));
 
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		$db->query(
-			"INSERT INTO Media (".
-			"	Naziv,".
-			"	Datoteka,".
-			"	Velikost,".
-			"	Tip,".
-			"	Slika,".
-			"	Datum,".
-			"	Izpis,".
-			"	Meta".
-			") VALUES (".
-			"	'". $db->escape($Datoteka) ."',".
-			"	'". $db->escape($Datoteka) ."',".
-			"	$Size,".
-			"	'$Tip',".
-			"	NULL,".
-			"	'".date("Y-m-d H:i:s")."',".
-			"	1,".
-			"	NULL )"
-		);
+			"INSERT INTO Media (
+				Naziv,
+				Datoteka,
+				Velikost,
+				Tip,
+				Slika,
+				Datum,
+				Izpis,
+				Meta
+			) VALUES (
+				'". $db->escape($Datoteka) ."',
+				'". $db->escape($Datoteka) ."',
+				$Size,
+				'$Tip',
+				NULL,
+				'".date("Y-m-d H:i:s")."',
+				1,
+				NULL
+			)"
+			);
 		// get inserted ID
 		$id = $db->insert_id;
 		
@@ -69,24 +70,26 @@ if ( isset($_FILES['file']) && !$_FILES['file']['error'] ) {
 			$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaMedia WHERE BesediloID = ". (int)$_GET['bid']);
 			$db->query(
 				"INSERT INTO BesedilaMedia (BesediloID, MediaID, Polozaj) ".
-				"VALUES (". (int)$_GET['bid'] .",". $id .",".($Polozaj? $Polozaj+1: 1).")" );
+				"VALUES (". (int)$_GET['bid'] .",". $id .",".($Polozaj? $Polozaj+1: 1).")"
+				);
 		}
 		
 		// attach uploaded file to category
 		if ( isset($_GET['kid']) && $_GET['kid'] != '' ) {
 			$Polozaj = $db->get_var("SELECT max(Polozaj)+1 FROM KategorijeMedia WHERE KategorijaID='". $db->escape($_GET['kid']) ."'");
 			$db->query(
-				"INSERT INTO KategorijeMedia (".
-				"	KategorijaID,".
-				"	MediaID,".
-				"	Polozaj".
-				") VALUES (".
-				"	'". $db->escape($_GET['kid']) ."',".
-				"	". $id .",".
-				"	".(($Polozaj)? $Polozaj: "1")." )"
-			);
+				"INSERT INTO KategorijeMedia (
+					KategorijaID,
+					MediaID,
+					Polozaj
+				) VALUES (
+					'". $db->escape($_GET['kid']) ."',
+					". $id .",
+					". ($Polozaj ? $Polozaj : "1") ."
+				)"
+				);
 		}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 		
 		echo json_encode(array('files' => array(
 				'name' => $Datoteka,
@@ -103,4 +106,3 @@ if ( isset($_FILES['file']) && !$_FILES['file']['error'] ) {
 			'error' => "Invalid upload."
 		)));
 }
-?>

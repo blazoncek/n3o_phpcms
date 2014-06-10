@@ -26,7 +26,7 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] > 1 ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$db->query( "UPDATE SMActions   SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
 	$db->query( "UPDATE Sifranti    SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
 	$db->query( "UPDATE Kategorije  SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
@@ -37,6 +37,6 @@ if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] > 1 ) {
 	$db->query( "UPDATE emlMessages SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM SMACLr WHERE ACLID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM SMACL  WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

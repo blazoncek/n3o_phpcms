@@ -50,10 +50,10 @@ $List = $db->get_results(
 	FROM Media M
 		LEFT JOIN MediaOpisi MO ON M.MediaID = MO.MediaID
 	WHERE 1=1 " .
-		(($_GET['Find']=="")? "": "AND (M.Naziv LIKE '%".$_GET['Find']."%' OR M.Datoteka LIKE '%".$_GET['Find']."%' OR MO.Naslov LIKE '%".$_GET['Find']."%' OR MO.Opis LIKE '%".$_GET['Find']."%')") .
-		(($_GET['Tip']=="")? "": "AND M.Tip='".$_GET['Tip']."' ") .
-	"ORDER BY $Sort"
-);
+		(($_GET['Find']=="") ? "" : "AND (M.Naziv LIKE '%". $_GET['Find'] ."%' OR M.Datoteka LIKE '%". $_GET['Find'] ."%' OR MO.Naslov LIKE '%". $_GET['Find'] ."%' OR MO.Opis LIKE '%". $_GET['Find'] ."%')") .
+		(($_GET['Tip']=="") ? "" : "AND M.Tip='". $_GET['Tip'] ."' ") ."
+	ORDER BY ". $Sort
+	);
 
 $RecordCount = count( $List );
 ?>
@@ -100,27 +100,26 @@ $EndR = min(($Page * $MaxRows), $RecordCount);
 
 echo "<div id=\"list\" data-role=\"page\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Datoteke</h1>\n";
+echo "<h1>Attachments</h1>\n";
 echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
-//echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=0\" title=\"Dodaj\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"plus\" data-ajax=\"false\">Dodaj</a>\n";
 
 echo "<div data-role=\"navbar\">\n";
 echo "<ul>";
 echo "<li>";
 echo "<SELECT NAME=\"Sort\" SIZE=\"1\">";
-echo "<OPTION VALUE=\"\">Zaporedje vnosa</OPTION>";
-echo "<OPTION VALUE=\"Naziv\"".(($_GET['Sort']=="Naziv")? " SELECTED": "").">Naziv</OPTION>";
-echo "<OPTION VALUE=\"Datoteka\"".(($_GET['Sort']=="Datoteka")? " SELECTED": "").">Datoteka</OPTION>";
-echo "<OPTION VALUE=\"Datum\"".(($_GET['Sort']=="Datum")? " SELECTED": "").">Datum</OPTION>";
+echo "<OPTION VALUE=\"\">Entry ID</OPTION>";
+echo "<OPTION VALUE=\"Naziv\"".(($_GET['Sort']=="Naziv")? " SELECTED": "").">Title</OPTION>";
+echo "<OPTION VALUE=\"Datoteka\"".(($_GET['Sort']=="Datoteka")? " SELECTED": "").">File</OPTION>";
+echo "<OPTION VALUE=\"Datum\"".(($_GET['Sort']=="Datum")? " SELECTED": "").">Date</OPTION>";
 echo "</SELECT>";
 echo "</li>\n";
 echo "<li>";
 echo "<SELECT NAME=\"Tip\" SIZE=\"1\">";
-echo "<OPTION VALUE=\"\">- vsi tipi -</OPTION>";
-$Tipi = $db->get_col( "SELECT DISTINCT Tip FROM Media ORDER BY Tip" );
+echo "<OPTION VALUE=\"\">- all types -</OPTION>";
+$Tipi = $db->get_col("SELECT DISTINCT Tip FROM Media ORDER BY Tip");
 if ( $Tipi ) foreach ( $Tipi as $Tip )
-	echo "<OPTION VALUE=\"$Tip\"".(($_GET['Tip']==$Tip)? " SELECTED": "").">$Tip</OPTION>";
+	echo "<OPTION VALUE=\"$Tip\"". ($_GET['Tip']==$Tip ? " SELECTED" : "") .">$Tip</OPTION>";
 echo "</SELECT>";
 echo "</li>\n";
 echo "</ul>\n";
@@ -128,7 +127,7 @@ echo "</div>\n";
 
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
-echo "<div style=\"margin-bottom:30px;\"><input type=\"search\" name=\"Find\" id=\"search\" value=\"". ($_GET['Find']!=""? $_GET['Find']: "") ."\" data-theme=\"d\" data-mini=\"true\" /></div>\n";
+echo "<div style=\"margin-bottom:30px;\"><input type=\"search\" name=\"Find\" id=\"search\" value=\"". ($_GET['Find']!="" ? $_GET['Find'] : "") ."\" data-theme=\"d\" data-mini=\"true\" /></div>\n";
 
 // display results
 if ( $RecordCount == 0 ) {
@@ -156,16 +155,18 @@ if ( $RecordCount == 0 ) {
 			echo "<li>";
 			echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=$Item->ID\" data-ajax=\"false\">";
 			if ( $Item->Tip == "PIC" )
-				echo "<img src=\"../". dirname($Item->Datoteka)."/thumbs/".basename($Item->Datoteka) ."\">";
+				echo "<img src=\"../". dirname($Item->Datoteka) ."/thumbs/". basename($Item->Datoteka) ."\">";
 			echo "<h3>". $Item->Name ."</h3>";
 			//echo ($Item->Naslov=="")? "" : "<p>". $Item->Naslov ."</p>";
+
 			if (count($Opisi)) {
 				echo "<p style=\"color:red;\">";
-				foreach ($Opisi as $Opis ) echo ($Opis->Jezik=="" ? "<i>vsi</i>" : $Opis->Jezik) ." ";
+				foreach ($Opisi as $Opis )
+					echo ($Opis->Jezik=="" ? "<i>all</i>" : $Opis->Jezik) ." ";
 				echo "</p>\n";
 			}
 			echo ($Item->Izpis)? "" : "<p class=\"ui-li-aside\" style=\"color:red;\">skrito</p>";
-			echo "<span class=\"ui-li-count\">".$Item->Tip."</span>";
+			echo "<span class=\"ui-li-count\">". $Item->Tip ."</span>";
 			echo "</a>";
 			if ( contains($ActionACL,"D") )
 				echo "<a href=\"#\" onclick=\"check('$Item->ID','$Item->Name');\">Delete</a>";
@@ -173,7 +174,7 @@ if ( $RecordCount == 0 ) {
 		}
 	}
 	if ( $_GET['Find']=="" && $RecordCount == 25 )
-		echo "<li style=\"text-align:center;\">... za več podatkov išči ...</li>\n";
+		echo "<li style=\"text-align:center;\">... 'search' for more results ...</li>\n";
 	echo "</ul>\n";
 }
 echo "</div>\n";
@@ -187,7 +188,7 @@ if ( $NuPg > 1 ) {
 		echo "<a href=\"list.php?Action=". $_GET['Action'] . ($_GET['Sort']!=""? "&Sort=".$_GET['Sort']: "") . ($_GET['Tip']!=""? "&Tip=".$_GET['Tip']: "") . ($_GET['Find']!=""? "&Find=".$_GET['Find']: "") ."&pg=$i\" data-ajax=\"false\"". ( $i == $Page ? " data-theme=\"b\"" : "" ) .">";
 		if ( $i == $EdPg && $EdPg < $NuPg )
 			echo "&gt;";
-		else if ( $i == $StPg && $StPg > 1 )
+		elseif ( $i == $StPg && $StPg > 1 )
 			echo "&lt;";
 		else
 			echo "$i";

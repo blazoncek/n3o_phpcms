@@ -26,15 +26,15 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// delete data
 	$db->query( "DELETE FROM frmModerators WHERE ForumID = ". (int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM frmForums     WHERE ID      = ". (int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// move up/down
 	$KatID = $db->get_var( "SELECT CategoryID FROM frmForums WHERE ID = " . (int)$_GET['ID'] );
 	$Staro = $db->get_var( "SELECT ForumOrder FROM frmForums WHERE ID = " . (int)$_GET['ID'] );
@@ -42,6 +42,6 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	@$db->query( "UPDATE frmForums SET ForumOrder = 9999   WHERE CategoryID = $KatID AND ForumOrder = $Novo" );
 	@$db->query( "UPDATE frmForums SET ForumOrder = $Novo  WHERE CategoryID = $KatID AND ForumOrder = $Staro" );
 	@$db->query( "UPDATE frmForums SET ForumOrder = $Staro WHERE CategoryID = $KatID AND ForumOrder = 9999" );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

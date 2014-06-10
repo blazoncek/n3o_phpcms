@@ -46,7 +46,7 @@ if ( !$MaxRows ) $MaxRows = 25; // default value
 
 // check if session still active
 if ( !(isset($_SESSION['Authenticated']) && $_SESSION['Authenticated']) ) {
-	$Error = "<p align=\"center\" style=\"color:red;\"><B>Session expired!</b> Please login again.</p>\n";
+	$Error = "<p align=\"center\" style=\"color:red;\"><B>Session expired!</b><br>Please login again.</p>\n";
 } else
 
 // get action & ACL
@@ -68,7 +68,7 @@ if ( isset($Action) && $Action ) {
 	$Error = "<p align=\"center\"><b style=\"color:red;\">Not implemented!</b></p>\n";
 }
 
-if ( isset($Error) ) header( "Refresh:1; URL=./" ); // no, login
+if ( isset($Error) ) header("Refresh:1; URL=./"); // no, login
 
 if ( $Mobile ) {
 	echo "<html>\n";
@@ -85,7 +85,7 @@ if ( $Mobile ) {
 } else {}
 
 // error handling
-if ( isset( $Error ) ) {
+if ( isset($Error) ) {
 	echo "<div id=\"list\" data-role=\"page\">\n";
 	echo "\t<div data-role=\"header\" data-theme=\"e\">\n";
 	echo "\t\t<h1>". $_GET['Izbor'] ."</h1>\n";

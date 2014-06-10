@@ -47,7 +47,7 @@ $(document).ready(function(){
 
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="title" WIDTH="100%">
 <TR>
-	<TD ALIGN="center"><B>Premik teme v forumu</B></TD>
+	<TD ALIGN="center"><B>Move topic</B></TD>
 </TR>
 </TABLE>
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
@@ -61,7 +61,7 @@ $(document).ready(function(){
 		<FORM NAME="Forum" ACTION="inc.php?Izbor=frmTopic&ForumID=<?php echo $_GET['ForumID'] ?>" METHOD="post">
 		<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 		<TR>
-			<TD ALIGN="right" NOWRAP><B>V nit:</B></TD>
+			<TD ALIGN="right" NOWRAP><B>Into thread:</B></TD>
 			<TD>
 			<SELECT NAME="NitID" SIZE="1" STYLE="width:240px;">
 <?php
@@ -79,7 +79,7 @@ $(document).ready(function(){
 		</TR>
 		<TR>
 			<TD ALIGN="right" COLSPAN="2"><INPUT TYPE="Hidden" NAME="TemaID" VALUE="<?php echo $_GET['ID'] ?>">
-			<INPUT VALUE="Premakni" TYPE="Submit" CLASS="but">
+			<INPUT VALUE="Move" TYPE="Submit" CLASS="but">
 			</TD>
 		</TR>
 		</TABLE>

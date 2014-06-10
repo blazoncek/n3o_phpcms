@@ -26,9 +26,9 @@
 */
 
 if ( isset($_GET['Brisi']) && (int)$_GET['Brisi'] > 0 ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$db->query( "DELETE FROM emlMembersGrp WHERE emlGroupID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM emlGroups     WHERE emlGroupID = ".(int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

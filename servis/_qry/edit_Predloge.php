@@ -41,7 +41,7 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] !== "" ) {
 			"WHERE PredlogaID = " . (int)$_GET['ID']
 		);
 	} else {
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		$db->query(
 			"INSERT INTO Predloge (".
 			"	Naziv,".
@@ -76,7 +76,7 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] !== "" ) {
 				"VALUES (".(int)$_GET['ID'].", '".$_GET['KategorijaID']."', ".(($Polozaj)? $Polozaj: "1").", ".(int)$_GET['Ekstra'].")"
 			);
 		}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	}
 
 }
@@ -92,10 +92,10 @@ if ( isset( $_FILES['Dodaj'] ) ) {
 
 // delete access control list (ACL)
 if ( isset( $_GET['BrisiACL'] ) && $_GET['BrisiACL'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$db->query( "UPDATE Predloge SET ACLID = NULL WHERE ACLID = " . $_GET['BrisiACL'] );
 	$db->query( "DELETE FROM SMACLr WHERE ACLID = " . $_GET['BrisiACL'] );
 	$db->query( "DELETE FROM SMACL  WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

@@ -141,7 +141,7 @@ if ( isset($_GET['process']) ) {
 		$lines = explode( "\n", $mail['Body'], 4 );
 
 		// insert info into Media table
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		$db->query(
 			"INSERT INTO Besedila (
 				Ime,
@@ -175,7 +175,7 @@ if ( isset($_GET['process']) ) {
 				(SELECT ifnull(max(Polozaj)+1,1) FROM BesedilaOpisi WHERE BesediloID=$ID AND Jezik='". $lng ."')
 			)"
 		);
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 
 		// extract attachments
 		$files = $conn->GetMessageAttachments((int)$_GET['process']);
@@ -207,7 +207,7 @@ if ( isset($_GET['process']) ) {
 	}
 
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( '/\&process=[^&"]+/', '', $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace('/\&process=[^&"]+/', '', $_SERVER['QUERY_STRING']);
 }
 
 // remove mail message
@@ -220,14 +220,14 @@ if ( isset($_GET['remove']) ) {
 		$conn->Disconnect();
 	}
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( '/\&remove=[^&"]+/', '', $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace('/\&remove=[^&"]+/', '', $_SERVER['QUERY_STRING']);
 }
 
 // submenu object
-echo "<div id=\"list\" data-role=\"page\">\n";
+echo "<div id=\"list\" data-role=\"page\" data-title=\"Notifications\">\n";
 
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Čakajoče dat. &amp; spor.</h1>\n";
+echo "<h1>Notifications</h1>\n";
 echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-left\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Home</a>\n";
 echo "</div>\n";
 
@@ -238,7 +238,7 @@ $conn = new POP3;
 
 if ( @$conn->Connect($mailUser, $mailPass, $mailServer, 110, $mailSSL) ) {
 	// get user's email (for filtering)
-	$UserEmail = $db->get_var( "SELECT Email FROM SMUser WHERE UserID = ". (int)$_SESSION['UserID'] );
+	$UserEmail = $db->get_var("SELECT Email FROM SMUser WHERE UserID = ". (int)$_SESSION['UserID']);
 
 	// get list of messages
 	$list = $conn->GetMessageList();

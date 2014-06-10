@@ -33,7 +33,7 @@ if ( isset($_POST['Naslov']) ) {
 	$_POST['Naslov'] = $db->escape(str_replace( "\"", "&quot;", $_POST['Naslov'] ));
 	$_POST['Opis']   = str_replace("\\\"","\"",$db->escape(CleanupTinyMCE($_POST['Opis'])));
 
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_GET['ID'] != "0" ) {
 		$db->query(
 			"UPDATE MediaOpisi ".
@@ -58,7 +58,7 @@ if ( isset($_POST['Naslov']) ) {
 		// update URI
 		//$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 
 	unset($_GET['ID']);
 }
@@ -174,7 +174,7 @@ $All = $db->get_var(
 <?php if ( contains($ACL,"W") ) : ?>
 	<TD ALIGN="right" valign="middle" NOWRAP>
 	<a href="#" onclick="$('#divNames').load('inc.php?Izbor=MediaOpis&MediaID=<?php echo (int)$_GET['MediaID'] ?>');" title=" Zapri "><img src="pic/icon.remove.png"></a>
-	<a href="#" onclick="$('form[name=MediaOpis]').submit();" title=" Shrani "><img src="pic/icon.accept.png"></a>
+	<a href="#" onclick="$('form[name=MediaOpis]').submit();" title=" Save "><img src="pic/icon.accept.png"></a>
 	&nbsp;
 	</TD>
 <?php endif ?>

@@ -26,13 +26,13 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$ACLID = $db->get_var( "SELECT ACLID FROM Ankete WHERE ID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM Ankete WHERE ID = ".(int)$_GET['Brisi'] );
 	if ( $ACLID ) {
 		$db->query( "DELETE FROM SmACLr WHERE ACLID = ".(int)$ACLID );
 		$db->query( "DELETE FROM SmACL  WHERE ACLID = ".(int)$ACLID );
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

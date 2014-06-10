@@ -73,8 +73,8 @@ $(document).ready(function(){
 			iframe: false, // fix for listRefresh
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.T))	{alert("Prosim vnesite dimenzijo!"); fObj.T.focus(); return false;}
-				if (empty(fObj.R))	{alert("Prosim vnesite dimenzijo!"); fObj.R.focus(); return false;}
+				if (empty(fObj.T))	{alert("Please enter a dimension!"); fObj.T.focus(); return false;}
+				if (empty(fObj.R))	{alert("Please enter a dimesion!"); fObj.R.focus(); return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
@@ -104,7 +104,7 @@ if ( isset($_GET['file']) ) {
 <TR>
 <TD VALIGN="top" WIDTH="50%">
 	<FIELDSET ID="fldData" style="min-height:153px;">
-	<LEGEND ID="lgdData">Datoteka</LEGEND>
+	<LEGEND ID="lgdData">File</LEGEND>
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 	<TR>
@@ -116,13 +116,13 @@ if ( isset($_GET['file']) ) {
 		<input type="hidden" name="upload" value="<?php echo $_GET['file'] ?>">
 	</TD>
 	<TR>
-	<TD>Ikona:</TD>
+	<TD>Icon:</TD>
 	<TD>
 		<input name="T" value="<?php echo $DefThumbSize ?>">px<br><span class="f10">(<0 kvadratna)</span>
 	</TD>
 	</TR>
 	<TR>
-	<TD>Dimenzija:</TD>
+	<TD>Dimension:</TD>
 	<TD>
 		<input name="R" value="<?php echo $DefPicSize ?>">px
 	</TD>

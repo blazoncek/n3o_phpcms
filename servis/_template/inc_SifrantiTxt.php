@@ -25,14 +25,14 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 if ( !isset( $_GET['Jezik'] ) ) $_GET['Jezik'] = "Novo";
 
 /* NOTE: moved to edit_Sifranti
 // insert/update text value
 if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 	
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$ID = $db->get_var(
 		"SELECT ID ".
 		"FROM SifrantiTxt ".
@@ -66,7 +66,7 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 			"	SifCVal3 = ".(($_POST['CVal3']!="")? "'".$_POST['CVal3']."'": "NULL")." ".
 			"WHERE ID= " . $ID
 		);
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 */
 
@@ -93,7 +93,7 @@ $(document).ready(function(){
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
 					if (fObj.Jezik.selectedIndex==0)	{alert("Izberite jezik!"); fObj.Jezik.focus(); return false;}
-					if (empty(fObj.Naziv))	{alert("Prosim vnesite naziv!"); fObj.Naziv.focus(); return false;}
+					if (empty(fObj.Naziv))	{alert("Please enter title!"); fObj.Naziv.focus(); return false;}
 					return true;
 				} // pre-submit callback
 			});

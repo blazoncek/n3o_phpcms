@@ -40,19 +40,15 @@ if ( isset($_POST['Who']) ) {
 		"SELECT Name, Nickname, Email
 		FROM frmMembers
 		WHERE $filter"
-	);
+		);
 
 	$Body = $_POST['Body'];
-	$Body = str_replace( "&nbsp;", " ", $Body );
-	$Body = str_replace( "&scaron;", "š", $Body );
-	$Body = str_replace( "&Scaron;", "Š", $Body );
+	$Body = str_replace("&nbsp;", " ", $Body);
+	$Body = str_replace("&scaron;", "š", $Body);
+	$Body = str_replace("&Scaron;", "Š", $Body);
 
 	$AltBody = preg_replace( "/<([\/]*)DIV([^>]*)>/i", "<\1p>", $Body );
-//	$AltBody = str_ireplace( '</p>', "\n", $AltBody );
-//	$AltBody = str_ireplace( '<br>', "\n", $AltBody );
 	$AltBody = str_ireplace( '<li>', "* ", $AltBody );
-//	$AltBody = str_ireplace( '</ol>', "\n", $AltBody );
-//	$AltBody = str_ireplace( '</ul>', "\n", $AltBody );
 	$AltBody = preg_replace( "/<([\/]*)([^>]*)>/i", "", $AltBody );
 	
 	$Body = "<style>" . file_get_contents('./mail.css') . "</style>\n" . $Body;
@@ -94,7 +90,7 @@ $(document).ready(function(){
 				target: '#divEdit',
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
-					if (empty(fObj.Subj))	{alert("Prosim vpišite zadevo!"); fObj.Subj.focus(); return false;}
+					if (empty(fObj.Subj))	{alert("Please enter subject!"); fObj.Subj.focus(); return false;}
 					return true;
 				} // pre-submit callback
 			});
@@ -134,9 +130,9 @@ $(document).ready(function(){
 <TR>
 	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjۡno okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
 <?php if ( isset($_POST['Who']) ) : ?>
-	<TD id="editNote"><B CLASS="red">Sporočilo odposlano!</B></TD>
+	<TD id="editNote"><B CLASS="red">Message sent!</B></TD>
 <?php else : ?>
-	<TD id="editNote" ALIGN="right"><?php echo $_GET['Izbor'] ?> - Pošiljanje sporočil&nbsp;</TD>
+	<TD id="editNote" ALIGN="right"><?php echo $_GET['Izbor'] ?> - Send message&nbsp;</TD>
 <?php endif ?>
 </TR>
 </TABLE>
@@ -155,19 +151,19 @@ $(document).ready(function(){
 		<INPUT TYPE="Hidden" NAME="Who" VALUE="single">
 	<?php else : ?>
 		<TR>
-		    <TD ALIGN="right"><b>Pošlji</b>:&nbsp;</TD>
+		    <TD ALIGN="right"><b>Send to</b>:&nbsp;</TD>
 		    <TD COLSPAN="2" CLASS="a10" VALIGN="top">
-			<INPUT TYPE="Radio" NAME="Who" CHECKED VALUE="naroceni">&nbsp;naročenim&nbsp;&nbsp;
-			<INPUT TYPE="Radio" NAME="Who" value="moderatorji">&nbsp;moderatorjem&nbsp;&nbsp;
-			<INPUT TYPE="Radio" NAME="Who" VALUE="vsi">&nbsp;vsem&nbsp;&nbsp;
-			<INPUT TYPE="Radio" NAME="Who" VALUE="novi">&nbsp;novim članom&nbsp;&nbsp;
+			<INPUT TYPE="Radio" NAME="Who" CHECKED VALUE="naroceni">&nbsp;subscribed&nbsp;&nbsp;
+			<INPUT TYPE="Radio" NAME="Who" value="moderatorji">&nbsp;moderators&nbsp;&nbsp;
+			<INPUT TYPE="Radio" NAME="Who" VALUE="vsi">&nbsp;all&nbsp;&nbsp;
+			<INPUT TYPE="Radio" NAME="Who" VALUE="novi">&nbsp;new members&nbsp;&nbsp;
 			</TD>
 		</TR>
 	<?php endif ?>
 		<TR>
-			<TD ALIGN="right"><b>Zadeva</b>:&nbsp;</TD>
+			<TD ALIGN="right"><b>Subject</b>:&nbsp;</TD>
 			<TD><INPUT NAME="Subj" CLASS="Txt" MAXLENGTH="64" STYLE="width:100%;"></TD>
-			<TD ALIGN="right"><INPUT TYPE="Submit" NAME="what" VALUE="Odpošlji" CLASS="but"></TD>
+			<TD ALIGN="right"><INPUT TYPE="Submit" NAME="what" VALUE=" Send " CLASS="but"></TD>
 		</TR>
 		<TR>
 			<TD ALIGN="center" COLSPAN="3">

@@ -49,7 +49,7 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
 }
 
 if ( isset($_POST['MemberList']) && $_POST['MemberList'] !== "" && isset($_POST['Action']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_POST['Action'] == "Add" )
 		foreach ( explode( ",", $_POST['MemberList'] ) as $UserID ) {
 			$db->query(
@@ -75,7 +75,7 @@ if ( isset($_POST['MemberList']) && $_POST['MemberList'] !== "" && isset($_POST[
 			);
 		}
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 //delete title/description

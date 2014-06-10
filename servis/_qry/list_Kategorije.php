@@ -26,11 +26,11 @@
 */
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset( $_GET['ID'] ) )   $_GET['ID'] = "";
+if ( !isset($_GET['ID']) )   $_GET['ID'] = "";
 if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
 
 if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	
 	// delete image file
 	$Slika = $db->get_var( "SELECT Slika FROM Kategorije WHERE KategorijaID = '". $_GET['Brisi'] ."'" );
@@ -58,7 +58,7 @@ if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
 	if ( strlen( $_GET['Brisi'] ) > 2 )
 		$_GET['ID'] = left( $_GET['Brisi'], strlen( $_GET['Brisi'] )-2 );
 
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
@@ -72,7 +72,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	$Nov = $Prfx . sprintf( "%02d", (int)right($_GET['ID'],2) + (int)$_GET['Smer'] );
 	$Zac = $Prfx . "xx";
 	if ( right( $Nov, 2 ) != "00" ) {
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		if ( SQLType == "MySQL" ) {
 			$db->query( "ALTER TABLE KategorijeNazivi   DROP FOREIGN KEY KTN_FK_KAT" );
 			$db->query( "ALTER TABLE KategorijeVsebina  DROP FOREIGN KEY KTV_FK_KAT" );
@@ -146,7 +146,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 			$db->query( "ALTER TABLE KategorijeBesedila ADD CONSTRAINT KTB_FK_KAT FOREIGN KEY (KategorijaID) REFERENCES Kategorije (KategorijaID)" );
 			$db->query( "ALTER TABLE KategorijeMedia    ADD CONSTRAINT KTM_FK_KAT FOREIGN KEY (KategorijaID) REFERENCES Kategorije (KategorijaID)" );
 		}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	}
 	// prevent opening subcategory
 	if ( $len > 2 )

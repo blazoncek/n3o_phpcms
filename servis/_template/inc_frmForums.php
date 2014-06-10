@@ -26,14 +26,14 @@
 */
 
 if ( isset($_GET['delForum']) ) {
-	$Moderator = $db->get_var( "SELECT Moderator FROM frmForums WHERE ID = ".(int)$_GET['delForum'] );
+	$Moderator = $db->get_var("SELECT Moderator FROM frmForums WHERE ID = ".(int)$_GET['delForum']);
 	if ( $Moderator && $Moderator != (int)$_GET['ID'] )
 		$db->query( 
 			"DELETE FROM frmModerators
 			WHERE
 				ForumID = ".(int)$_GET['delForum']." AND
 				MemberID = ".(int)$_GET['ID']
-		);
+			);
 }
 
 $getForums = $db->get_results(
@@ -45,7 +45,7 @@ $getForums = $db->get_results(
 		frmForums F
 	WHERE
 		F.ID = M.ForumID AND M.MemberID = ".(int)$_GET['ID']
-);
+	);
 
 echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 if ( $getForums ) foreach ( $getForums as $Item ) {
@@ -56,6 +56,6 @@ if ( $getForums ) foreach ( $getForums as $Item ) {
 	echo "</TD>\n";
 	echo "</TR>\n";
 } else
-	echo "<TR><TD ALIGN=\"center\" COLSPAN=\"3\">Ni moderator nobene niti!</TD></TR>\n";
+	echo "<TR><TD ALIGN=\"center\" COLSPAN=\"3\">Not a moderator of any thread!</TD></TR>\n";
 echo "</TABLE>\n";
 ?>

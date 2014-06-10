@@ -27,7 +27,7 @@
 
 // add content template
 if ( isset($_GET['Dodaj']) && $_GET['Dodaj'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$Polozaj = $db->get_var(
 		"SELECT max(Polozaj) FROM KategorijeVsebina ".
 		"WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra = ".(int)$_GET['Ekstra']
@@ -36,7 +36,7 @@ if ( isset($_GET['Dodaj']) && $_GET['Dodaj'] != "" ) {
 		"INSERT INTO KategorijeVsebina (PredlogaID, KategorijaID, Polozaj, Ekstra) ".
 		"VALUES (".(int)$_GET['Dodaj'].", '".$_GET['KategorijaID']."', ".($Polozaj? $Polozaj+1: 1).", ".(int)$_GET['Ekstra'].")"
 	);
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	// update URI
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Dodaj=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
 }
@@ -50,7 +50,7 @@ if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
 
 // move items up/down
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $ItemPos = $db->get_var( "SELECT Polozaj FROM KategorijeVsebina WHERE ID = ". (int)$_GET['Predloga'] ) ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
@@ -59,7 +59,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 		$db->query( "UPDATE KategorijeVsebina SET Polozaj = $ItemNew WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra = ".$_GET['Ekstra']." AND Polozaj = $ItemPos" );
 		$db->query( "UPDATE KategorijeVsebina SET Polozaj = $ItemPos WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra = ".$_GET['Ekstra']." AND Polozaj = 9999" );
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	// update URI
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Smer=[-0-9]+/", "", $_SERVER['QUERY_STRING'] );
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Predloga=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
@@ -67,7 +67,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 
 $ACLID = $db->get_var( "SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$_GET['KategorijaID']."'" );
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 

@@ -26,7 +26,7 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 
 	// delete image
 	$Slika    = $db->get_var("SELECT Slika FROM Media WHERE MediaID = ".(int)$_GET['Brisi']);

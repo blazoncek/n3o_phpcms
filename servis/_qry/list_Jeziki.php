@@ -26,7 +26,7 @@
 */
 
 if ( isset($_GET['Brisi']) && $_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// remove image
 	$Slika = $db->get_var("SELECT Ikona FROM Jeziki WHERE Jezik = '".$_GET['Brisi']."'");
 	if ( $Slika && $Slika != "" ) {

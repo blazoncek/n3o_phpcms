@@ -27,42 +27,43 @@
 
 // add media
 if ( isset($_GET['MediaID']) && $_GET['MediaID'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaMedia WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+	$db->query("START TRANSACTION");
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaMedia WHERE BesediloID = ". (int)$_GET['BesediloID']);
 	$db->query(
-		"INSERT INTO BesedilaMedia (BesediloID, MediaID, Polozaj) ".
-		"VALUES (".(int)$_GET['BesediloID'].", ".(int)$_GET['MediaID'].", ".($Polozaj? $Polozaj+1: 1).")" );
-	$db->query( "COMMIT" );
+		"INSERT INTO BesedilaMedia (BesediloID, MediaID, Polozaj)
+		VALUES (". (int)$_GET['BesediloID'] .", ". (int)$_GET['MediaID'] .", ".( $Polozaj ? $Polozaj+1 : 1) .")"
+		);
+	$db->query("COMMIT");
 }
 
 // delete image from list
-if ( isset( $_GET['BrisiMedia'] ) && $_GET['BrisiMedia'] != "" ) {
-	$db->query( "DELETE FROM BesedilaMedia WHERE ID = ".(int)$_GET['BrisiMedia'] );
+if ( isset($_GET['BrisiMedia']) && $_GET['BrisiMedia'] != "" ) {
+	$db->query("DELETE FROM BesedilaMedia WHERE ID = ". (int)$_GET['BrisiMedia']);
 }
 
 // move items up/down
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	if ( $ItemPos = $db->get_var( "SELECT Polozaj FROM BesedilaMedia WHERE ID = ". (int)$_GET['Media'] ) ) {
+	$db->query("START TRANSACTION");
+	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM BesedilaMedia WHERE ID = ". (int)$_GET['Media']) ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
-		$db->query( "UPDATE BesedilaMedia SET Polozaj = 9999     WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemNew" );
-		$db->query( "UPDATE BesedilaMedia SET Polozaj = $ItemNew WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemPos" );
-		$db->query( "UPDATE BesedilaMedia SET Polozaj = $ItemPos WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = 9999" );
+		$db->query("UPDATE BesedilaMedia SET Polozaj = 9999     WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemNew");
+		$db->query("UPDATE BesedilaMedia SET Polozaj = $ItemNew WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemPos");
+		$db->query("UPDATE BesedilaMedia SET Polozaj = $ItemPos WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = 9999");
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
-$ACLID = $db->get_var( "SELECT ACLID FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+$ACLID = $db->get_var("SELECT ACLID FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 
 echo "<script language=\"JavaScript\" type=\"text/javascript\">\n";
 echo "<!-- //\n";
 echo "function checkMedia(ID, Naziv) {\n";
-echo "\tif (confirm(\"Odstranim ppripeto datoteko '\"+Naziv+\"'?\"))\n";
+echo "\tif (confirm(\"Remove attached file '\"+Naziv+\"'?\"))\n";
 echo "\t\tsetTimeout(\"$('#divMe').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".$_GET['BesediloID']."&BrisiMedia=\"+ID+\"')\",100);\n";
 echo "\treturn false;\n";
 echo "}\n";
@@ -111,27 +112,27 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 	// display list of assigned media
 	$List = $db->get_results(
-		"SELECT".
-		"	BM.ID,".
-		"	BM.MediaID,".
-		"	BM.BesediloID,".
-		"	BM.Polozaj,".
-		"	M.Naziv,".
-		"	M.Datoteka,".
-		"	M.ACLID ".
-		"FROM".
-		"	BesedilaMedia BM".
-		"	LEFT JOIN Media M ON BM.MediaID = M.MediaID ".
-		"WHERE".
-		"	BM.BesediloID = ".(int)$_GET['BesediloID']." ".
-		"ORDER BY".
-		"	BM.Polozaj"
-	);
+		"SELECT
+			BM.ID,
+			BM.MediaID,
+			BM.BesediloID,
+			BM.Polozaj,
+			M.Naziv,
+			M.Datoteka,
+			M.ACLID
+		FROM
+			BesedilaMedia BM
+			LEFT JOIN Media M ON BM.MediaID = M.MediaID
+		WHERE
+			BM.BesediloID = ". (int)$_GET['BesediloID'] ."
+		ORDER BY
+			BM.Polozaj"
+		);
 ?>
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 <!--
 function checkMedia(ID, Naziv) {
-	if (confirm("Odstranim datoteko '"+Naziv+"'?"))
+	if (confirm("Remove file '"+Naziv+"'?"))
 		setTimeout("$('#divMe').load('inc.php?Izbor=<?php echo $_GET['Izbor'] ?>&BesediloID=<?php echo $_GET['BesediloID'] ?>&BrisiMedia="+ID+"')",100);
 	return false;
 }
@@ -139,25 +140,29 @@ function checkMedia(ID, Naziv) {
 </SCRIPT>
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="99%">
 <?php if ( !$List ) : ?>
-<TR><TD ALIGN="center" COLSPAN="3">Ni pripetih datotek!</TD></TR>
+<TR><TD ALIGN="center" COLSPAN="3">No attached files!</TD></TR>
 <?php else : ?>
 	<?php
 	$CurrentRow = 1;
 	$RecordCount = count( $List );
 	foreach ( $List as $Item ) {
 		if ( $Item->ACLID )
-			$rACL = userACL( $$Item->ACLID );
+			$rACL = userACL($$Item->ACLID);
 		else
 			$rACL = "LRWDX";
+
 		echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 		echo "<TD ALIGN=\"right\" WIDTH=\"8%\">$Item->Polozaj.</TD>\n";
 		echo "<TD>";
+
 		if ( contains($rACL,"R") )
 			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=Media&ID=$Item->MediaID');\">";
+
 		if ( contains($rACL,"L") )
 			echo $Item->Naziv;
 		else
-			echo "-- skrita priponka --";
+			echo "-- hidden --";
+
 		if ( contains($rACL,"R") )
 			echo "</A>";
 		echo "</TD>\n";

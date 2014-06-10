@@ -71,7 +71,8 @@ $photo = ImageResize(
 	'large/',    // original image prefix
 	$_GET['s'],  // reduced size
 	$_GET['t'],  // thumbnail size
-	$jpgPct);    // JPEG quality
+	$jpgPct      // JPEG quality
+	);
 
 if ( $photo ) { // successful upload & resize
 
@@ -117,7 +118,7 @@ if ( $photo ) { // successful upload & resize
 	if ( isset($_GET['id']) ) {
 		$db->query("BEGIN TRANSACTION");
 		// remove old image
-		$old = $db->get_var("SELECT Slika FROM Besedila WHERE BesediloID = ".(int)$_GET['id']);
+		$old = $db->get_var("SELECT Slika FROM Besedila WHERE BesediloID = ". (int)$_GET['id']);
 		if ( $old && $old != "" ) {
 			$e = right($old, 4);
 			$b = left($old, strlen($old)-4);
@@ -128,7 +129,7 @@ if ( $photo ) { // successful upload & resize
 			@unlink($uploadpath .'/large/'. $old); // remove large original
 			$db->query("UPDATE Besedila SET Slika = NULL WHERE BesediloID = ".(int)$_GET['id']);
 		}
-		$db->query("UPDATE Besedila SET Slika = '". $photo['name'] ."' WHERE BesediloID = ".(int)$_GET['id']);
+		$db->query("UPDATE Besedila SET Slika = '". $photo['name'] ."' WHERE BesediloID = ". (int)$_GET['id']);
 		$db->query("COMMIT");
 	}
 
@@ -203,4 +204,3 @@ if ( $photo ) { // successful upload & resize
 			'error' => 'Error uploading or resizing image!'
 		)));
 }
-?>

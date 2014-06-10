@@ -53,7 +53,7 @@ $(document).ready(function(){
 				target: '#divEdit',
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
-					if (empty(fObj.Naziv))	{alert("Prosim, vnesi naziv!"); fObj.Naziv.focus(); return false;}
+					if (empty(fObj.Naziv))	{alert("Please enter title!"); fObj.Naziv.focus(); return false;}
 					//if (fObj.Datoteka.selectedIndex==0 && empty(fObj.Dodaj))	{alert("Prosim, izberi datoteko!"); fObj.Datoteka.focus(); return false;}
 					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 					return true;
@@ -85,7 +85,7 @@ $(document).ready(function(){
 
 <FIELDSET ID="fldData">
 <LEGEND ID="lgdData">
-<?php if ( contains( $ACL, "W" ) && $Podatek ) {
+<?php if ( contains($ACL, "W") && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
 		echo "&PredlogaID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
 		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";

@@ -32,7 +32,7 @@ if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
 
 $ACLID = $db->get_var( "SELECT ACLID FROM Predloge WHERE PredlogaID = ".(int)$_GET['PredlogaID'] );
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 

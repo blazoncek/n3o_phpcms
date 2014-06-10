@@ -25,9 +25,9 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "";
 
-$Podatki = $db->get_results( "SELECT * FROM NLSText WHERE NLSToken = '".$_GET['ID']."'" );
+$Podatki = $db->get_results("SELECT * FROM NLSText WHERE NLSToken = '". $db->escape($_GET['ID']) ."'");
 ?>
 <script language="JavaScript" type="text/javascript">
 <!-- //
@@ -44,7 +44,7 @@ $(document).ready(function(){
 				target: '#divEdit',
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
-					if (fObj.NLSToken && empty(fObj.NLSToken))	{alert("Prosim, vnesi token!"); fObj.NLSToken.focus(); return false;}
+					if (fObj.NLSToken && empty(fObj.NLSToken))	{alert("Please enter token!"); fObj.NLSToken.focus(); return false;}
 					return true;
 				} // pre-submit callback
 			});
@@ -66,13 +66,13 @@ $(document).ready(function(){
 		<TD><INPUT TYPE="text" NAME="NLSToken" MAXLENGTH="32" VALUE="" STYLE="width:400px;"></TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right">Jezik:&nbsp;</TD>
+		<TD ALIGN="right">Language:&nbsp;</TD>
 		<TD><SELECT NAME="Jezik" SIZE="1">
-			<!--OPTION VALUE="">- za vse jezike -</OPTION-->
+			<!--OPTION VALUE="">- for all -</OPTION-->
 <?php
 	$Jeziki = $db->get_results( "SELECT Jezik, Opis FROM Jeziki" );
 	if ( $Jeziki ) foreach ( $Jeziki as $Jezik )
-		echo "<OPTION VALUE=\"$Jezik->Jezik\"".(($Jezik->Jezik==$Podatek->Jezik)? " SELECTED": "").">$Jezik->Opis</OPTION>\n";
+		echo "<OPTION VALUE=\"$Jezik->Jezik\"". ($Jezik->Jezik==$Podatek->Jezik ? " SELECTED" : "") .">$Jezik->Opis</OPTION>\n";
 ?>
 		</SELECT>
 		</TD>

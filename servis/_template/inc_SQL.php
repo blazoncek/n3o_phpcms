@@ -129,7 +129,7 @@ if ( isset($_POST['SQL']) && $_POST['SQL'] != "" ) {
 				echo "</TR>\n";
 
 				// get cached results
-				$DoIt = $db->get_results( null, ARRAY_N );
+				$DoIt = $db->get_results(null, ARRAY_N);
 
 				$BgCol = "white";
 				if ( $DoIt ) foreach ( $DoIt as $Row ) {

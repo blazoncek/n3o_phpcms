@@ -25,12 +25,12 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$Podatek = $db->get_row( "SELECT * FROM Media WHERE MediaID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM Media WHERE MediaID = ". (int)$_GET['ID']);
 // get ACL
 if ( $Podatek )
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 else
 	$ACL = $ActionACL;
 
@@ -71,15 +71,15 @@ $('#edit').live('pageinit', function(event){
 		// inside event callbacks 'this' is the DOM element so we first
 		// wrap it in a jQuery object
 		jqObj = $(this);
-		if (empty(jqObj[0].Naziv))	{alert("Vnesite ime!"); jqObj[0].Naziv.focus(); return false;}
-		if (empty(jqObj[0].Dodaj))	{alert("Izberi sliko!"); jqObj[0].Dodaj.focus(); return false;}
+		if (empty(jqObj[0].Naziv))	{alert("Please enter name!"); jqObj[0].Naziv.focus(); return false;}
+		if (empty(jqObj[0].Dodaj))	{alert("Please select image!"); jqObj[0].Dodaj.focus(); return false;}
 		return true;
 	});
 <?php else : ?>
 	// handle field changes
 	$("input[name!='Find']:text, textarea, select").change(function(){
 		var fObj = this;	// form object
-		if (fObj.name=="Naziv" && fObj.value.length==0)	{alert("Prosim vnesite naziv!"); fObj.focus(); return false;}
+		if (fObj.name=="Naziv" && fObj.value.length==0)	{alert("Please enter title!"); fObj.focus(); return false;}
 		URL = '<?php echo dirname($_SERVER['PHP_SELF'])?>/upd.php?<?php echo $_SERVER['QUERY_STRING'] ?>';
 		$.mobile.loadPage(URL, {
 			pageContainer: $("#result"),
@@ -105,7 +105,7 @@ $('#edit').live('pageinit', function(event){
 });
 
 function checkFld(fld, ID, Naziv) {
-	if (confirm("Ali res želite odstraniti '"+Naziv+"'?")) {
+	if (confirm("Do you want to remove '"+Naziv+"'?")) {
 		URL = "<?php echo $_SERVER['PHP_SELF'] ?>?Izbor=<?php echo $_GET['Izbor'] ?>&ID=<?php echo $_GET['ID'] ?>";
 		$.mobile.changePage(URL, {
 			reloadPage: true,
@@ -118,9 +118,9 @@ function checkFld(fld, ID, Naziv) {
 //-->
 </script>
 <?php
-echo "<div id=\"edit\" data-role=\"page\" data-title=\"Datoteke\">\n";
+echo "<div id=\"edit\" data-role=\"page\" data-title=\"Attachments\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Datoteke</h1>\n";
+echo "<h1>Attachments</h1>\n";
 echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
 echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
@@ -131,7 +131,7 @@ if ( (int)$_GET['ID'] == 0 )
 
 if ( isset($Error) ) {
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"padding:1em;text-align:center;\">";
-	echo "<b>Prišlo je do napake!</b><br>Podatki niso vpisani.";
+	echo "<b>Error!</b><br>Data not saved.";
 	echo "</div>\n";
 } else {
 ?>
@@ -148,15 +148,15 @@ if ( isset($Error) ) {
 	</div>
 	<div data-role="fieldcontain">
 <?php if ( $Podatek && $Podatek->Tip == 'PIC' ) : ?>
-		<LABEL FOR="frmMeta">Metapodatki:</LABEL>
+		<LABEL FOR="frmMeta">Metadata:</LABEL>
 		<TEXTAREA ID="frmMeta" NAME="Meta" data-theme="d"><?php if ( $Podatek ) echo $Podatek->Meta ?></TEXTAREA>
 <?php elseif ( (int)$_GET['ID'] == 0 ) : ?>
-		<LABEL FOR="frmImage">Slika:</LABEL>
+		<LABEL FOR="frmImage">Image:</LABEL>
 		<INPUT TYPE="file" ID="frmImage" NAME="Add" data-theme="d">
 <?php endif ?>
 	</div>
 <?php if ( (int)$_GET['ID'] == 0 ) : ?>
-	<p>Velikost in ikona (kvadratna?)</p>
+	<p>Size &amp; thumb (square?)</p>
 	<div data-role="fieldcontain">
 		<div class="ui-grid-b">
 			<div class="ui-block-a">
@@ -205,36 +205,36 @@ if ( (int)$_GET['ID'] != 0 ) {
 
 	// display list of assigned media
 	echo "<fieldset class=\"ui-hide-label\" data-role=\"fieldcontain\" data-theme=\"a\">";
-	echo "<legend>Pripeto v besedila</legend>\n";
+	echo "<legend>Attached to texts</legend>\n";
 	$List = $db->get_results(
-		"SELECT".
-		"	BM.ID,".
-		"	BM.MediaID,".
-		"	BM.BesediloID,".
-		"	BM.Polozaj,".
-		"	B.Ime,".
-		"	B.ACLID ".
-		"FROM".
-		"	BesedilaMedia BM".
-		"	LEFT JOIN Besedila B ON BM.BesediloID = B.BesediloID ".
-		"WHERE".
-		"	BM.MediaID = ".(int)$_GET['ID']." ".
+		"SELECT
+			BM.ID,
+			BM.MediaID,
+			BM.BesediloID,
+			BM.Polozaj,
+			B.Ime,
+			B.ACLID
+		FROM
+			BesedilaMedia BM
+			LEFT JOIN Besedila B ON BM.BesediloID = B.BesediloID
+		WHERE
+			BM.MediaID = ". (int)$_GET['ID'] ." 
 
-		"UNION ".
+		UNION
 
-		"SELECT".
-		"	BS.ID,".
-		"	BS.MediaID,".
-		"	BS.BesediloID,".
-		"	BS.Polozaj,".
-		"	B.Ime,".
-		"	B.ACLID ".
-		"FROM".
-		"	BesedilaSlike BS".
-		"	LEFT JOIN Besedila B ON BS.BesediloID = B.BesediloID ".
-		"WHERE".
-		"	BS.MediaID = ".(int)$_GET['ID']
-	);
+		SELECT
+			BS.ID,
+			BS.MediaID,
+			BS.BesediloID,
+			BS.Polozaj,
+			B.Ime,
+			B.ACLID 
+		FROM
+			BesedilaSlike BS
+			LEFT JOIN Besedila B ON BS.BesediloID = B.BesediloID
+		WHERE
+			BS.MediaID = ". (int)$_GET['ID']
+		);
 
 	echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">\n";
 	echo "<li data-theme=\"c\"><input type=\"text\" name=\"Find\" placeholder=\"Find\"></li>\n";

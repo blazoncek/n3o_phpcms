@@ -64,7 +64,7 @@ if ( isset($_POST['Opis']) && $_POST['Opis'] != "" ) {
 		}
 	}
 
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( isset($_POST['DefLang']) )
 		$db->query("UPDATE Jeziki SET DefLang = 0");
 
@@ -99,6 +99,6 @@ if ( isset($_POST['Opis']) && $_POST['Opis'] != "" ) {
 			")" );
 		$_GET['ID'] = $_POST['Jezik'];
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

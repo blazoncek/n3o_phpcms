@@ -53,7 +53,7 @@ foreach ( explode("&", $_SERVER['QUERY_STRING']) as $Param ) {
 		case "pg":
 			break;
 		default:
-			$FindURL .= $Param . "&";
+			$FindURL .= $Param ."&";
 			break;
 	}
 }
@@ -138,22 +138,22 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		FROM Besedila B
 			LEFT JOIN BesedilaOpisi BO ON B.BesediloID = BO.BesediloID
 		WHERE 1=1 " .
-			(($_GET['Find']=="")? "": "AND (B.Ime LIKE '%".trim($_GET['Find'])."%' OR BO.Naslov LIKE '%".trim($_GET['Find'])."%' OR BO.Povzetek LIKE '%".trim($_GET['Find'])."%')").
-			(($_GET['Tip']=="")? "": "AND B.Tip='".$_GET['Tip']."' ") .
+			($_GET['Find']=="" ? "" : "AND (B.Ime LIKE '%". trim($_GET['Find']) ."%' OR BO.Naslov LIKE '%". trim($_GET['Find']) ."%' OR BO.Povzetek LIKE '%". trim($_GET['Find']) ."%')").
+			($_GET['Tip']=="" ? "" : "AND B.Tip='". $_GET['Tip'] ."' ") .
 		"ORDER BY $Sort"
-	);
+		);
 
 	$RecordCount = count($List);
 	
 	// determine maximum number of rows to display
-	$MaxRows = $db->get_var( "SELECT SifNVal1 FROM Sifranti WHERE SifrCtrl='PARA' AND SifrText='ListMax'" );
+	$MaxRows = $db->get_var("SELECT SifNVal1 FROM Sifranti WHERE SifrCtrl='PARA' AND SifrText='ListMax'");
 	if ( !$MaxRows ) $MaxRows = 25; // default value
 
 	// are we requested do display different page?
 	$Page = !isset($_GET['pg']) ? 1 : (int) $_GET['pg'];
 	
 	// number of possible pages
-	$NuPg = (int) (($RecordCount-1) / $MaxRows) + 1;
+	$NuPg = (int)(($RecordCount-1) / $MaxRows) + 1;
 	
 	// fix page number if out of limits
 	$Page = min(max($Page, 1), $NuPg);
@@ -177,14 +177,14 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 	echo "<TR>\n";
 	echo "<TD>Sort:\n";
 	echo "<SELECT NAME=\"Sort\" SIZE=\"1\" ONCHANGE=\"document.location.href='". preg_replace("/&Sort=[^&]/i","",$FindURL) .($_GET['Find']!='' ? '&Find='.$_GET['Find'] : '') ."&Sort='+this[this.selectedIndex].value;\">\n";
-	echo "<OPTION VALUE=\"id\">Zaporedje vnosa</OPTION>\n";
-	echo "<OPTION VALUE=\"name\"".(($_GET['Sort']=="name")? " SELECTED": "").">Ime</OPTION>\n";
-	echo "<OPTION VALUE=\"date\"".(($_GET['Sort']=="date")? " SELECTED": "").">Datum</OPTION>\n";
+	echo "<OPTION VALUE=\"id\">Entry ID</OPTION>\n";
+	echo "<OPTION VALUE=\"name\"".(($_GET['Sort']=="name")? " SELECTED": "").">Name</OPTION>\n";
+	echo "<OPTION VALUE=\"date\"".(($_GET['Sort']=="date")? " SELECTED": "").">Date</OPTION>\n";
 	echo "</SELECT>\n";
 	echo "</TD>\n";
 	echo "<TD ALIGN=\"right\">Type:\n";
 	echo "<SELECT NAME=\"Tip\" SIZE=\"1\" ONCHANGE=\"document.location.href='". preg_replace("/&Tip=[^&]/i","",$FindURL) .($_GET['Find']!='' ? '&Find='.$_GET['Find'] : '') ."&Tip='+this[this.selectedIndex].value;\">\n";
-	echo "<OPTION VALUE=\"\">- vsi tipi -</OPTION>\n";
+	echo "<OPTION VALUE=\"\">- all types -</OPTION>\n";
 	$Tipi = $db->get_col( "SELECT SifrText FROM Sifranti WHERE SifrCtrl='BESE' ORDER BY SifrCtrl, SifrZapo" );
 	if ( $Tipi ) foreach ( $Tipi as $Tip )
 		echo "<OPTION VALUE=\"$Tip\"".(($_GET['Tip']==$Tip)? " SELECTED": "").">$Tip</OPTION>\n";
@@ -195,10 +195,13 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 
 	if ( $NuPg > 1 ) {
 		echo "<DIV CLASS=\"pg\">\n";
+
 		if ( $StPg > 1 )
 			echo "<A HREF=\"". $FindURL .($_GET['Find']!='' ? '&Find='.$_GET['Find'] : '') ."&pg=".($StPg-1)."\">&laquo;</A>\n";
+
 		if ( $Page > 1 )
 			echo "<A HREF=\"". $FindURL .($_GET['Find']!='' ? '&Find='.$_GET['Find'] : '') ."&pg=$PrPg\">&lt;</A>\n";
+
 		for ( $i = $StPg; $i <= $EdPg; $i++ ) {
 			if ( $i == $Page )
 				echo "<FONT COLOR=\"red\"><B>$i</B></FONT>\n";
@@ -207,8 +210,10 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		}
 		if ( $Page < $EdPg )
 			echo "<A HREF=\"". $FindURL .($_GET['Find']!='' ? '&Find='.$_GET['Find'] : '') ."&pg=$NePg\">&gt;</A>\n";
+
 		if ( $NuPg > $EdPg )
 			echo "<A HREF=\"". $FindURL .($_GET['Find']!='' ? '&Find='.$_GET['Find'] : '') ."&pg=".($EdPg<$NuPg? $EdPg+1: $EdPg)."\">&raquo;</A>\n";
+
 		echo "</DIV>\n";
 	}
 	echo "</DIV>\n";
@@ -226,10 +231,10 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 			// get list item
 			$Item = $List[$i++];
 			// get ACL
-			$ACL = userACL( $Item->ACLID );
+			$ACL = userACL($Item->ACLID);
 			if ( contains($ACL, "L") ) {
 				echo "<tr onmouseover=\"this.style.backgroundColor='white';\" onmouseout=\"this.style.backgroundColor='';\">\n";
-				echo "<td><a href=\"javascript:insertURL('?ID=". $Item->ID ."')\" title=\"$Item->Name ($Item->ID)\">".left($Item->Name,30).(strlen($Item->Name)>30?"...":"")."</a></td>\n";
+				echo "<td><a href=\"javascript:insertURL('?ID=". $Item->ID ."')\" title=\"$Item->Name ($Item->ID)\">". left($Item->Name,30) . (strlen($Item->Name)>30 ? "..." : "") ."</a></td>\n";
 				echo "</tr>\n";
 			}
 		}

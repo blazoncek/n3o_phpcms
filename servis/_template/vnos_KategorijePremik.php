@@ -27,13 +27,13 @@
 
 // PREMIK KATEGORIJE V DRUGO KATEGORIJO
 if ( isset($_GET['Cilj']) && $_GET['Cilj'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// poišèem prosto šifro
 	$List = $db->get_row(
 		"SELECT KategorijaID FROM Kategorije
 		WHERE KategorijaID LIKE '". $_GET['Cilj'] ."__'
 		ORDER BY KategorijaID DESC"
-	);
+		);
 	if ( count($List) == 0 )
 		$CiljID = $_GET['Cilj'] . "01";
 	else {
@@ -78,7 +78,7 @@ if ( isset($_GET['Cilj']) && $_GET['Cilj'] != "" ) {
 		$db->query( "ALTER TABLE KategorijeBesedila ADD CONSTRAINT KTB_FK_KAT FOREIGN KEY (KategorijaID) REFERENCES Kategorije (KategorijaID)" );
 		$db->query( "ALTER TABLE KategorijeMedia    ADD CONSTRAINT KTM_FK_KAT FOREIGN KEY (KategorijaID) REFERENCES Kategorije (KategorijaID)" );
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 
 	echo "<SCRIPT type=\"text/javascript\">\n";
 	echo "<!--\n";
@@ -149,7 +149,7 @@ $(window).resize(fixSize);
 //-->
 </SCRIPT>
 
-<DIV ALIGN="center" CLASS="subtitle"><B>Izbor rubrik</B></DIV>
+<DIV ALIGN="center" CLASS="subtitle"><B>Select category</B></DIV>
 <div id="findRu" class="find" style="margin:5px 0;">
 <form name="findFrmRu" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" method="post">
 <input id="findTxtRu" type="Text" name="Find" maxlength="32" value="<?php echo (isset($_POST['Find'])? $_POST['Find']: " IÅ¡Äi ") ?>" style="color:#aaa;">
@@ -158,7 +158,6 @@ $(window).resize(fixSize);
 </div>
 
 <DIV ID="divList" STYLE="overflow: auto; background: White; padding: 5px; margin-top: 2px; width: 100%;">
-<!--DIV ID="ListDiv" STYLE="overflow-y: scroll; background: White; border-top: inset 1px;"-->
 	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%" CLASS="frame">
 <?php if ( !isset($List) ) : ?>
 	<TR BGCOLOR="white">

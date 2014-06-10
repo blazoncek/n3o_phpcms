@@ -181,7 +181,7 @@ function loop( $Menu="", &$BgCol="white" ) {
 }
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset( $_GET['ID'] ) )   $_GET['ID'] = "";
+if ( !isset($_GET['ID']) )   $_GET['ID'] = "";
 if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
 if ( !isset( $_GET['Tip'] ) )  $_GET['Tip'] = "";
 if ( !isset( $_GET['Sort'] ) ) $_GET['Sort'] = "";

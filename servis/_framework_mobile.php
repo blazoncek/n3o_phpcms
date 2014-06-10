@@ -91,13 +91,13 @@ $Version = $db->get_var( "SELECT ParamValue FROM n3oParameters WHERE ParamName =
 
 /**************************************
 * Menu structure is defined in database table called SmActions like this:
-* 00   "Servis" (submenu)
-* 0001 "Uporabniki" (action)
-* 0002 "Skupine" (action)
+* 00   "System" (submenu)
+* 0001 "Users" (action)
+* 0002 "Grups" (action)
 * 0003 "" (separator)
-* 0004 "Jeziki" (action)
-* 01   "Podatki" (submenu)
-* 0101 "Rubrike" (action)
+* 0004 "Languages" (action)
+* 01   "Content" (submenu)
+* 0101 "Categories" (action)
 * ...
 *--------------------------------------
 * Menu structure created like:
@@ -109,15 +109,15 @@ $Version = $db->get_var( "SELECT ParamValue FROM n3oParameters WHERE ParamName =
 	</div>
 	<div data-role="content">
 		<ul data-role="listview" data-inset="true">
-			<li><a href="#menu00">Servis</a></li>
-			<li><a href="#menu01">Podatki</a></li>
+			<li><a href="#menu00">System</a></li>
+			<li><a href="#menu01">Content</a></li>
 			<li data-role="list-divider"></li>
 			<li><a href="#menu02">....</a></li>
 			....
 		</ul>
 	</div>
 	<div data-role="footer">
-		Copyright &copy; 2012 Blaž Kristan
+		Copyright &copy; 2012-2014 Blaž Kristan
 	</div>
 </div>
 <div data-role="page" id="menu00">
@@ -127,10 +127,10 @@ $Version = $db->get_var( "SELECT ParamValue FROM n3oParameters WHERE ParamName =
 	</div>
 	<div data-role="content">
 		<ul data-role="listview" data-inset="true">
-			<li><a href="users.php">Uporabniki</a></li>
-			<li><a href="groups.php">Skupine</a></li>
+			<li><a href="users.php">Users</a></li>
+			<li><a href="groups.php">Groups</a></li>
 			<li data-role="list-divider"></li>
-			<li><a href="languages.php">Jeziki</a></li>
+			<li><a href="languages.php">Languages</a></li>
 		</ul>
 	</div>
 	<div data-role="footer">
@@ -143,7 +143,7 @@ $Version = $db->get_var( "SELECT ParamValue FROM n3oParameters WHERE ParamName =
 	</div>
 	<div data-role="content">
 		<ul data-role="listview" data-inset="true">
-			<li><a href="rubrike.php">Rubrike</a></li>
+			<li><a href="rubrike.php">Categories</a></li>
 			...
 		</ul>
 	</div>
@@ -186,21 +186,21 @@ function loopXmenu($menuID="00", $Name="")
 		// submenu object
 		echo "<div id=\"menu$menuID\" data-role=\"page\">\n";
 
-		echo "\t<div data-role=\"header\" data-theme=\"b\">\n";
-		echo "\t\t<h1>". $Name ."</h1>\n";
+		echo "<div data-role=\"header\" data-theme=\"b\">\n";
+		echo "<h1>". $Name ."</h1>\n";
 		if ( strlen($menuID)>2 )
-			echo "\t\t<a href=\"./#menu".substr($menuID,strlen($menuID)-2)."\" title=\"Back\" class=\"ui-btn-left\" data-direction=\"reverse\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\">Back</a>\n";
+			echo "<a href=\"./#menu".substr($menuID,strlen($menuID)-2)."\" title=\"Back\" class=\"ui-btn-left\" data-direction=\"reverse\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\">Back</a>\n";
 		else
-			echo "\t\t<a href=\"./\" title=\"Home\" class=\"ui-btn-left\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Home</a>\n";
-		echo "\t</div>\n";
+			echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-left\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Home</a>\n";
+		echo "</div>\n";
 
-		echo "\t<div data-role=\"content\">\n";
-		echo "\t\t<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
+		echo "<div data-role=\"content\">\n";
+		echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
 
 		// build submenu structure from DB
 		foreach ( $Menus as $Menu ) {
 			// get user's ACL (implement security)
-			$ACL = userACL( (int) $Menu->ACLID );
+			$ACL = userACL((int)$Menu->ACLID);
 			// extract menu icon
 			$icon = $Menu->Icon=="" ? "" : "icon." . $Menu->Icon . ".png";
 
@@ -210,12 +210,12 @@ function loopXmenu($menuID="00", $Name="")
 					// Action=="" means: separator or submenu
 					if ( $Menu->Name == "" ) {
 						// add separator
-						//echo "\t\t\t<li data-role=\"list-divider\"></li>\n";
-						echo "\t\t</ul>\n";
-						echo "\t\t<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
+						//echo "<li data-role=\"list-divider\"></li>\n";
+						echo "</ul>\n";
+						echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
 					} else {
 						// link to submenu
-						echo "\t\t\t<li data-role=\"list-divider\">";
+						echo "<li data-role=\"list-divider\">";
 						echo "<a href=\"#menu$Menu->ActionID\">";
 						echo "<img src=\"pic/$icon\" class=\"ui-li-icon\">";
 						echo $Menu->Name;
@@ -223,10 +223,10 @@ function loopXmenu($menuID="00", $Name="")
 					}
 				} else {
 					// action defined
-					if ( contains( $Menu->Action, "." ) )
+					if ( contains($Menu->Action, ".") )
 						// explicitly defined PHP file to call
 						$xURL = "mobile/$Menu->Action";
-					elseif ( contains( $Menu->Action, "javascript" ) )
+					elseif ( contains($Menu->Action, "javascript") )
 						// JavaScript action
 						$xURL = $Menu->Action;
 					else
@@ -235,15 +235,15 @@ function loopXmenu($menuID="00", $Name="")
 					// check if user has eXecute ACL
 					$xURL = contains($ACL,"X")? $xURL: "";
 					
-					echo "\t\t\t<li><a href=\"$xURL\" data-ajax=\"false\">";
+					echo "<li><a href=\"$xURL\" data-ajax=\"false\">";
 					echo "<img src=\"pic/$icon\" class=\"ui-li-icon\">";
 					echo $Menu->Name;
 					echo "</a></li>\n";
 				}
 			}
 		}
-		echo "\t\t</ul>\n";
-		echo "\t</div>\n";
+		echo "</ul>\n";
+		echo "</div>\n";
 
 		echo "</div>\n"; // page
 	}
@@ -323,38 +323,38 @@ if (   substr($Version,0,1) != substr(AppVer,0,1)
 		<h1><?php echo AppName ?></h1>
 		<a href="index.php?logout" title="Logout" class="ui-btn-left" data-ajax="false" data-iconpos="left" data-icon="delete" data-theme="a">Logout</a>
 <?php if ( CheckEmails($mailServer, $mailUser, $mailPass) || CheckUploads($StoreRoot ."/media/upload") ) : ?>
-		<a href="list.php?Izbor=Msg" title="Obvestila" class="ui-btn-right" data-iconpos="notext" data-icon="alert" data-theme="e" data-ajax="false" data-transition="slideup">Obvestila</a>
+		<a href="list.php?Izbor=Msg" title="Notifications" class="ui-btn-right" data-iconpos="notext" data-icon="alert" data-theme="e" data-ajax="false" data-transition="slideup">Notifications</a>
 <?php endif ?>
 	</div>
 	<div data-role="content">
 <?php
 
 	if ($ServisMenus) {
-		echo "\t<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
-		echo "\t\t<li data-role=\"list-divider\">Administracija</li>\n";
+		echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
+		echo "<li data-role=\"list-divider\">Admin</li>\n";
 		// build top level menu structure
 		foreach ( $ServisMenus as $Servis ) {
 			// get user's ACL (implement security)
-			$ACL = userACL( (int) $Servis->ACLID );
+			$ACL = userACL((int)$Servis->ACLID);
 			// if user has Execute access add menu
 			if ( contains($ACL,"X") )
-				echo "\t\t<li><a href=\"#menu$Servis->ActionID\">$Servis->Name</a></li>\n";
+				echo "<li><a href=\"#menu$Servis->ActionID\">$Servis->Name</a></li>\n";
 		}
-		echo "\t</ul>\n";
+		echo "</ul>\n";
 	}
 	
-	echo "\t<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
+	echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"c\" data-dividertheme=\"b\">\n";
 	// enable change password
 	$Password = $db->get_var( "SELECT Password FROM SMUser WHERE UserID = " . $_SESSION['UserID'] );
 	// if not using LDAP logon, allow user to change password
-	if ( $Password != "" AND left($Password,1) != "@" ) {
-		echo "\t\t<li data-role=\"list-divider\">Orodja</li>\n";
-		echo "\t\t<li><a href=\"inc.php?Izbor=Password\">Menjava gesla</a></li>\n";
+	if ( $Password != "" && left($Password, 1) != "@" ) {
+		echo "<li data-role=\"list-divider\">Tools</li>\n";
+		echo "<li><a href=\"inc.php?Izbor=Password\">Change password</a></li>\n";
 	}
 	if ( $_SESSION['UserID'] == 1  ) {
-		echo "\t\t<li><a href=\"inc.php?Izbor=SQL\" data-ajax=\"false\">SQL</a></li>\n";
+		echo "<li><a href=\"inc.php?Izbor=SQL\" data-ajax=\"false\">SQL</a></li>\n";
 	}
-	echo "\t</ul>\n";
+	echo "</ul>\n";
 ?>
 	</div>
 	<div data-role="footer" data-position="fixed" style="text-align:center;">

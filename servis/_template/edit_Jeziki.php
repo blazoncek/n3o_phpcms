@@ -38,8 +38,8 @@ $(document).ready(function(){
 			iframe: false, // fix for listRefresh
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Jezik))	{alert("Prosim vnesite kratico!"); fObj.Jezik.focus(); return false;}
-				if (empty(fObj.Opis))	{alert("Prosim vnesite opis!"); fObj.Opis.focus(); return false;}
+				if (empty(fObj.Jezik))	{alert("Please enter short name!"); fObj.Jezik.focus(); return false;}
+				if (empty(fObj.Opis))	{alert("Please enter long name!"); fObj.Opis.focus(); return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback

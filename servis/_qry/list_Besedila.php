@@ -26,7 +26,7 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 
 	// delete image file
 	$Slika = $db->get_var( "SELECT Slika FROM Besedila WHERE BesediloID = ".(int)$_GET['Brisi'] );
@@ -50,17 +50,17 @@ if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
 	$db->query( "DELETE FROM BesedilaOpisi      WHERE BesediloID = ". (int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM Besedila           WHERE BesediloID = ". (int)$_GET['Brisi'] );
 
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$KatID = $db->get_var( "SELECT KategorijaID FROM KategorijeBesedila WHERE ID = " . (int)$_GET['kbID'] );
 	$Staro = $db->get_var( "SELECT Polozaj      FROM KategorijeBesedila WHERE ID = " . (int)$_GET['kbID'] );
 	$Novo  = $Staro + (int)$_GET['Smer'];
 	@$db->query( "UPDATE KategorijeBesedila SET Polozaj = 9999   WHERE KategorijaID = '$KatID' AND Polozaj = $Novo" );
 	@$db->query( "UPDATE KategorijeBesedila SET Polozaj = $Novo  WHERE KategorijaID = '$KatID' AND Polozaj = $Staro" );
 	@$db->query( "UPDATE KategorijeBesedila SET Polozaj = $Staro WHERE KategorijaID = '$KatID' AND Polozaj = 9999" );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

@@ -26,7 +26,7 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$ACLID    = $db->get_var( "SELECT ACLID    FROM Sifranti WHERE SifrantID = ". $_GET['Brisi'] );
 	$SifrCtrl = $db->get_var( "SELECT SifrCtrl FROM Sifranti WHERE SifrantID = ". $_GET['Brisi'] );
 
@@ -41,12 +41,12 @@ if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
 		$_GET['Tip'] = "";
 	} else
 		$_GET['Tip'] = $SifrCtrl;
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 // move items up/down
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// calculate new position
 	$ItemPos = $db->get_var( "SELECT SifrZapo FROM Sifranti WHERE SifrantID = ". $_GET['Item'] );
 	$ItemNew = $ItemPos + (int)$_GET['Smer'];
@@ -54,6 +54,6 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	$db->query( "UPDATE Sifranti SET SifrZapo=9999     WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=$ItemNew" );
 	$db->query( "UPDATE Sifranti SET SifrZapo=$ItemNew WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=$ItemPos" );
 	$db->query( "UPDATE Sifranti SET SifrZapo=$ItemPos WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=9999" );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

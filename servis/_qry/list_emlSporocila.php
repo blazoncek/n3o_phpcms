@@ -26,7 +26,7 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$Datoteke = $db->get_results( "SELECT Datoteka FROM emlMessagesDoc WHERE emlMessageID = ".(int)$_GET['Brisi'] );
 
 	// BRISANJE DATOTEK
@@ -47,6 +47,6 @@ if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] ) {
 	$db->query( "DELETE FROM emlMessagesGrp WHERE emlMessageID=".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM emlMessagesTxt WHERE emlMessageID=".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM emlMessages    WHERE emlMessageID=".(int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

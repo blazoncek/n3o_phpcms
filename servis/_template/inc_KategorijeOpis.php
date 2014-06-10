@@ -121,7 +121,7 @@ $(document).ready(function(){
 			target: '#divEdit',
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Naziv))	{alert("Prosim vnesite naziv!"); fObj.Naziv.focus(); return false;}
+				if (empty(fObj.Naziv))	{alert("Please enter title!"); fObj.Naziv.focus(); return false;}
 				if (fObj.Jezik.selectedIndex==0)	{alert("Izberite jezik!"); fObj.Jezik.focus(); return false;}
 				return true;
 			} // pre-submit callback

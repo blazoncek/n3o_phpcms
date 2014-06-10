@@ -25,9 +25,9 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$User = $db->get_row( "SELECT * FROM SMUser WHERE UserID = " . (int)$_GET['ID'] );
+$User = $db->get_row("SELECT * FROM SMUser WHERE UserID = ". (int)$_GET['ID']);
 ?>
 <script language="JavaScript" type="text/javascript">
 <!-- //
@@ -35,8 +35,6 @@ $('#edit').live('pageinit', function(event){
 <?php if ( (int)$_GET['ID'] == 0 ) : ?>
 	// bind to the form's submit event
 	$("#frmUser").submit(function(e){
-		// inside event callbacks 'this' is the DOM element so we first
-		// wrap it in a jQuery object
 		jqObj = $(this);
 		if (empty(jqObj[0].Name))		{alert("Vnesite ime in priimek uporabnika!"); jqObj[0].Name.focus(); return false;}
 		if (!emailOK(jqObj[0].Email))	{alert("Nepravilen email naslov!"); jqObj[0].Email.focus(); return false;}
@@ -81,13 +79,11 @@ $('#edit').live('pageinit', function(event){
 </script>
 
 <?php
-echo "<div id=\"edit\" data-role=\"page\" data-title=\"Uporabniki\">\n";
+echo "<div id=\"edit\" data-role=\"page\" data-title=\"Users\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Uporabniki</h1>\n";
+echo "<h1>Users</h1>\n";
 echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
 echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
-//if ( (int)$_GET['ID'] != 0 )
-//	echo "<a href=\"#editGroups\" title=\"Skupine\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"gear\">Skupine</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 
@@ -96,38 +92,23 @@ if ( (int)$_GET['ID'] == 0 )
 
 if ( isset( $Error ) ) {
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"padding:1em;text-align:center;\">";
-	echo "<b>Prišlo je do napake!</b><br>Podatki niso vpisani.";
+	echo "<b>Error!</b><br>Data not saved.";
 	echo "</div>\n";
 } else {
 ?>
 	<fieldset class="ui-hide-label" data-role="fieldcontain"><legend>Basic&nbsp;information:</legend>
-		<LABEL FOR="frmUserName"><B>Ime in priimek:</B></LABEL>
-		<INPUT TYPE="text" ID="frmUserName" NAME="Name" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Name ?>" placeholder="Ime in priimek" data-theme="d"><br />
+		<LABEL FOR="frmUserName"><B>Full name:</B></LABEL>
+		<INPUT TYPE="text" ID="frmUserName" NAME="Name" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Name ?>" placeholder="Full name" data-theme="d"><br />
 		<LABEL FOR="frmUserEmail"><B>Email:</B></LABEL>
 		<INPUT TYPE="email" ID="frmUserEmail" NAME="Email" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Email ?>" placeholder="Email" data-theme="d"><br />
-		<LABEL FOR="frmUserUsername"><B>Uporabniško ime:</B></LABEL>
-		<INPUT TYPE="text" ID="frmUserUsername" NAME="Username" MAXLENGTH="255" VALUE="<?php if ($User) echo $User->Username ?>" placeholder="Uporabniško ime" data-theme="d"><br />
-		<LABEL FOR="frmUserPassword"><B>Geslo:</B></LABEL>
-		<INPUT TYPE="password" ID="frmUserPassword" NAME="Password" MAXLENGTH="255" VALUE="" placeholder="Novo geslo" data-theme="d"><br />
-		<LABEL FOR="frmUserPhone">Telefon:</LABEL>
-		<INPUT TYPE="tel" ID="frmUserPhone" NAME="Phone" SIZE="43" MAXLENGTH="25" VALUE="<?php if ($User) echo $User->Phone ?>" placeholder="Telefon" data-theme="d"><br />
+		<LABEL FOR="frmUserUsername"><B>Username:</B></LABEL>
+		<INPUT TYPE="text" ID="frmUserUsername" NAME="Username" MAXLENGTH="255" VALUE="<?php if ($User) echo $User->Username ?>" placeholder="Username" data-theme="d"><br />
+		<LABEL FOR="frmUserPassword"><B>Password:</B></LABEL>
+		<INPUT TYPE="password" ID="frmUserPassword" NAME="Password" MAXLENGTH="255" VALUE="" placeholder="New password" data-theme="d"><br />
+		<LABEL FOR="frmUserPhone">Phone:</LABEL>
+		<INPUT TYPE="tel" ID="frmUserPhone" NAME="Phone" SIZE="43" MAXLENGTH="25" VALUE="<?php if ($User) echo $User->Phone ?>" placeholder="Phone" data-theme="d"><br />
 		<LABEL FOR="frmUserTwitter">Twitter:</LABEL>
 		<INPUT TYPE="tel" ID="frmUserTwitter" NAME="TwitterName" SIZE="43" MAXLENGTH="32" VALUE="<?php if ($User) echo $User->TwitterName ?>" placeholder="@username" data-theme="d"><br />
-<?php /*
-		<LABEL FOR="frmUserDefGrp">Privzeta skupina:</LABEL>
-		<SELECT ID="frmUserDefGrp" NAME="DefGrp" SIZE="1" data-theme="d">
-			<option value="">
-<?php
-	$Grupe = $db->get_results( "SELECT * FROM SMGroup ORDER BY Name" );
-	foreach( $Grupe as $Grupa ) {
-		echo "\t\t\t<option value=\"$Grupa->GroupID\"";
-		echo (($User && $User->DefGrp == $Grupa->GroupID) || (!$User && $Grupa->GroupID == 1))? " SELECTED" : "";
-		echo ">";
-		echo $Grupa->Name . "</option>\n";
-	}
-?>
-		</SELECT>
-*/ ?>
 	</fieldset>
 <?php
 }
@@ -136,7 +117,7 @@ if ( isset( $Error ) ) {
 if ( (int)$_GET['ID'] != 1 ) {
 ?>
 	<fieldset data-role="fieldcontain">
-		<LABEL FOR="frmUserActive">Aktiven:</LABEL>
+		<LABEL FOR="frmUserActive">Active:</LABEL>
 		<select ID="frmUserActive" NAME="Active" data-role="slider" data-theme="b">
 			<option value="no">No</option>
 			<option value="yes" <?php if ( $User && $User->Active ) echo "SELECTED" ?>>Yes</option>
@@ -150,14 +131,14 @@ if ( (int)$_GET['ID'] != 1 ) {
 if ( (int)$_GET['ID'] != 0 ) {
 ?>
 	<fieldset data-role="fieldcontain">
-		<LABEL FOR="frmUserLastLogon">Prijava:</LABEL>
+		<LABEL FOR="frmUserLastLogon">Last login:</LABEL>
 		<INPUT TYPE="Text" ID="frmUserLastLogon" VALUE="<?php if ( $User && $User->LastLogon != "" ) echo date( "j.n.Y H:i:s", sqldate2time( $User->LastLogon ) ) ?>" DISABLED READONLY data-theme="d" />
 	</fieldset>
 <?php
 } else {
 ?>
 <?php if ( contains($ActionACL,"W") ) : ?>
-	<INPUT TYPE="submit" VALUE="Shrani" data-iconpos="left" data-icon="check" data-theme="a">
+	<INPUT TYPE="submit" VALUE="Save" data-iconpos="left" data-icon="check" data-theme="a">
 <?php endif ?>
 <?php
 }
@@ -176,12 +157,13 @@ if ( (int)$_GET['ID'] > 1 || ($_SESSION['UserID'] == 1 && (int)$_GET['ID'] == 1)
 		FROM
 			SMGroup G
 			LEFT JOIN SMUserGroups UG
-				ON G.GroupID = UG.GroupID AND UG.UserID = " . (int)$_GET['ID'] . "
+				ON G.GroupID = UG.GroupID AND UG.UserID = ". (int)$_GET['ID'] ."
 		WHERE
-			G.GroupID > " . (strpos($ActionACL,"D")!==false ? "0" : "1") . "
-		ORDER BY G.Name" );
+			G.GroupID > ". (strpos($ActionACL,"D")!==false ? "0" : "1") ."
+		ORDER BY G.Name"
+		);
 
-	echo "<fieldset data-role=\"controlgroup\"><legend>Član skupin:</legend>\n";
+	echo "<fieldset data-role=\"controlgroup\"><legend>Member of:</legend>\n";
 	// disable groups 1 (everyone) for anyone and 2 (administrators) for administrator
 	if ( count($Members) > 0 )
 		foreach ( $Members as $Member ) {
@@ -195,48 +177,4 @@ echo "\t</div>\n";
 //echo "\t<div data-role=\"footer\" data-position=\"fixed\" class=\"ui-bar\" style=\"text-align:center;\">\n";
 //echo "\t</div>\n";
 echo "</div>\n"; // page
-
-/*
-if ( (int)$_GET['ID'] != 0 ) {
-	echo "<div id=\"editGroups\" data-role=\"page\" data-title=\"Uporabniki\">\n";
-	echo "<div data-role=\"header\" data-theme=\"b\">\n";
-	echo "<h1>". $User->Name ."</h1>\n";
-	echo "<a href=\"list.php?Izbor=". $_GET['Izbor'] ."\" title=\"Back\" data-role=\"button\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-rel=\"back\" data-transition=\"slide\">Back</a>\n";
-	echo "<a href=\"#edit\" title=\"Podatki\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"info\" data-direction=\"reverse\">Podatki</a>\n";
-	echo "</div>\n";
-	echo "<div data-role=\"content\">\n";
-
-	// only administrator can change groups he belongs to,
-	// for other users anyone with access to this script can
-	if ( (int)$_GET['ID'] > 1 || ($_SESSION['UserID'] == 1 && (int)$_GET['ID'] == 1) ) {
-		$Members = $db->get_results(
-			"SELECT
-				G.GroupID,
-				G.Name,
-				UG.ID
-			FROM
-				SMGroup G
-				LEFT JOIN SMUserGroups UG
-					ON G.GroupID = UG.GroupID AND UG.UserID = " . (int)$_GET['ID'] . "
-			WHERE
-				G.GroupID > " . (strpos($ActionACL,"D")!==false ? "0" : "1") . "
-			ORDER BY G.Name" );
-
-		echo "<fieldset data-role=\"controlgroup\"><legend>Član skupin:</legend>\n";
-		// disable groups 1 (everyone) for anyone and 2 (administrators) for administrator
-		if ( count($Members) > 0 )
-			foreach ( $Members as $Member ) {
-				echo "\t\t<input type=\"checkbox\" name=\"Usr-". (int)$_GET['ID'] ."\" value=\"". $Member->GroupID ."\" id=\"cbx-". $Member->GroupID ."\"" . (($Member->GroupID==1 || ($Member->GroupID==2 && $_GET['ID']==1) || !contains($ActionACL,"W")) ? " DISABLED" : "" ) . (($Member->ID) ? " CHECKED" : "" ) . "  data-theme=\"d\" />\n";
-				echo "\t\t<label for=\"cbx-$Member->GroupID\">$Member->Name</label>\n";
-			}
-		echo "</fieldset>\n";
-	}
-
-	echo "</div>\n";
-	//echo "\t<div data-role=\"footer\" data-position=\"fixed\" class=\"ui-bar\" style=\"text-align:center;\">\n";
-	//echo "\t</div>\n";
-	echo "</div>\n"; // page
-	echo "<div id=\"result\" data-role=\"page\"></div>\n"; // page
-}
-*/
 ?>

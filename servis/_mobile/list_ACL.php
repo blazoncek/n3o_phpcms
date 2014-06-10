@@ -26,12 +26,12 @@
 */
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get all ACLs
-$List = $db->get_results( "SELECT Name, ACLID FROM SMACL ORDER BY Name" );
+$List = $db->get_results("SELECT Name, ACLID FROM SMACL ORDER BY Name");
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 ?>
 <SCRIPT Language="JAVASCRIPT">
 <!--//

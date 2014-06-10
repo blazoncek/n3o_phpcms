@@ -81,7 +81,7 @@ if ( isset($_POST['Ime']) && $_POST['Ime'] != "" ) {
 	$_POST['Ime'] = (left($_POST['Ime'],1)=='.' ? '.' : '') . CleanString($_POST['Ime'], true);
 	$_POST['Ime'] = str_replace(' ','-',$_POST['Ime']);
 
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$KatID  = $db->get_var( "SELECT KategorijaID FROM Kategorije WHERE KategorijaID = '".$_GET['ID']."'" );
 	if ( !$KatID ) {
 		$db->query(
@@ -109,7 +109,7 @@ if ( isset($_POST['Ime']) && $_POST['Ime'] != "" ) {
 			"WHERE KategorijaID = '".$_GET['ID']."'"
 		);
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 //delete title/description

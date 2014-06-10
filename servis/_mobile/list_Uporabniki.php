@@ -26,16 +26,17 @@
 */
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get all users
 $List = $db->get_results(
 	"SELECT UserID, UserName, Name, Active
 	FROM SMUser"
 	.($_GET['Find'] == "" ? " " : " WHERE Name LIKE '%".$_GET['Find']."%' OR Username LIKE '%".$_GET['Find']."%' OR Email LIKE '%".$_GET['Find']."%'" ).
-	"ORDER BY Name" );
+	"ORDER BY Name"
+	);
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 ?>
 <SCRIPT Language="JAVASCRIPT">
 <!--//
@@ -78,11 +79,10 @@ $NePg = $Page + 1; // >$NuPg == no next page
 $StaR = ($Page - 1) * $MaxRows + 1;
 $EndR = min(($Page * $MaxRows), $RecordCount);
 
-echo "<div id=\"list\" data-role=\"page\" data-title=\"Uporabniki\">\n";
+echo "<div id=\"list\" data-role=\"page\" data-title=\"Users\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Uporabniki</h1>\n";
+echo "<h1>Users</h1>\n";
 echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
-//echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=0\" title=\"Add\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"plus\" data-ajax=\"false\">Add</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";

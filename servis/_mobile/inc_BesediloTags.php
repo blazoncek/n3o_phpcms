@@ -28,14 +28,14 @@
 // add category
 if ( isset($_GET['newtag']) && $_GET['newtag'] != "" ) {
 	try {
-		$db->query( "START TRANSACTION" );
-		$ID = $db->get_var( "SELECT TagID FROM Tags WHERE TagName='".$_GET['newtag']."'" );
+		$db->query("START TRANSACTION");
+		$ID = $db->get_var("SELECT TagID FROM Tags WHERE TagName='". $db->escape($_GET['newtag']) ."'" );
 		if ( $ID ) {
-			if ( !$db->get_var( "SELECT ID FROM BesedilaTags ".
-				"WHERE BesediloID=".(int)$_GET['BesediloID']." AND TagID=".$ID ) )
+			if ( !$db->get_var("SELECT ID FROM BesedilaTags WHERE BesediloID=". (int)$_GET['BesediloID'] ." AND TagID=". $ID) )
 				$db->query(
 					"INSERT INTO BesedilaTags (BesediloID, TagID) ".
-					"VALUES (".(int)$_GET['BesediloID'].",".$ID.")" );
+					"VALUES (". (int)$_GET['BesediloID'] .",".$ID.")"
+					);
 		} else {
 			$db->query(
 				"INSERT INTO Tags (TagName) ".
@@ -45,65 +45,36 @@ if ( isset($_GET['newtag']) && $_GET['newtag'] != "" ) {
 				"INSERT INTO BesedilaTags (BesediloID, TagID) ".
 				"VALUES (".(int)$_GET['BesediloID'].",".$ID.")" );
 		}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	} catch (Exception $e) {
-		$db->query( "ROLLBACK TRANSACTION" );
+		$db->query("ROLLBACK TRANSACTION");
 	}
 }
 
 // remove category
 if ( isset($_GET['deltag']) && $_GET['deltag'] != "" ) {
 	try {
-		$db->query( "START TRANSACTION" );
-		$ID = $db->get_var( "SELECT TagID FROM BesedilaTags WHERE ID=".(int)$_GET['deltag'] );
-		$db->query( "DELETE FROM BesedilaTags WHERE ID=".(int)$_GET['deltag'] );
+		$db->query("START TRANSACTION");
+		$ID = $db->get_var("SELECT TagID FROM BesedilaTags WHERE ID=". (int)$_GET['deltag']);
+		$db->query("DELETE FROM BesedilaTags WHERE ID=". (int)$_GET['deltag']);
 		try {
-			@$db->query( "DELETE FROM Tags WHERE TagID=".$ID );
+			@$db->query("DELETE FROM Tags WHERE TagID=". $ID);
 		} catch (Exception $e) {}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	} catch (Exception $e) {
-		$db->query( "ROLLBACK TRANSACTION" );
+		$db->query("ROLLBACK TRANSACTION");
 	}
 }
 
-$ACLID = $db->get_var( "SELECT ACLID FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+$ACLID = $db->get_var("SELECT ACLID FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 
 ?>
 <script language="JavaScript" type="text/javascript">
 <!-- //
-/*
-$("#autocomplete").on("listviewbeforefilter", function(e, data) {
-    var $ul = $(this),
-		$input = $(data.input),
-		value = $input.val(),
-		html = "";
-	$ul.html("");
-	if ( value && value.length > 1 ) {
-		$ul.html( "<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>" );
-		$ul.listview("refresh");
-		$.ajax({
-			url: "<?php echo $_SERVER['PHP_SELF'] ?>?Izbor=<?php echo $_GET['Izbor'] ?>&BesediloID=<?php echo $_GET['BesediloID'] ?>&f=jsonp",
-			dataType: "jsonp",
-			crossDomain: false,
-			data: {
-				Find: $input.val()
-			}
-		})
-		.then(function(response) {
-			$.each(response, function(i, val) {
-				html += "<li>" + val + "</li>";
-			});
-			$ul.html(html);
-			$ul.listview("refresh");
-			$ul.trigger("updatelayout");
-		});
-	}
-});
-*/
 $('#edit').live('pageinit', function(event){
 	// handle field changes
 	$("input[name='Find']").change(function(e){
@@ -178,7 +149,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			BesedilaTags BT
 			LEFT JOIN Tags T ON BT.TagID = T.TagID
 		WHERE
-			BT.BesediloID = ".(int)$_GET['BesediloID']."
+			BT.BesediloID = ". (int)$_GET['BesediloID'] ."
 		ORDER
 			BY T.TagName"
 	);

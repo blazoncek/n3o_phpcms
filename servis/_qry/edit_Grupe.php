@@ -26,7 +26,7 @@
 */
 
 if ( isset( $_POST['Name'] ) && $_POST['Name'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// only allow inserting new groups and changing custom groups
 	if ( $_GET['ID'] > 4 )
 		$db->query( "UPDATE SMGroup SET Name = '".$db->escape($_POST['Name'])."' WHERE GroupID = ".$_GET['ID'] );
@@ -37,11 +37,11 @@ if ( isset( $_POST['Name'] ) && $_POST['Name'] != "" ) {
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset( $_POST['UserList'] ) && $_POST['UserList'] !== "" && isset( $_POST['Action'] ) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_POST['Action'] == "Add" )
 		foreach ( explode( ",", $_POST['UserList'] ) as $UserID ) {
 			$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES (".(int)$_POST['GroupID'].",$UserID)" );
@@ -54,6 +54,6 @@ if ( isset( $_POST['UserList'] ) && $_POST['UserList'] !== "" && isset( $_POST['
 			$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES (".(int)$_POST['GroupID'].",$UserID)" );
 		}
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

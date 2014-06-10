@@ -59,13 +59,14 @@ if ( isset($_FILE['file']) ) {
 
 	// upload & resize image
 	$photo = ImageResize(
-		'file',     // $_FILE field
+		'file',      // $_FILE field
 		$UPLOADpath, // upload path
 		'thumbs/',   // thumbnail prefix
 		'large/',    // original image prefix
 		abs((int)$_POST['maxsize']),    // reduced size
 		$_POST['thumbnail'], // thumbnail
-		$jpgPct);    // JPEG quality
+		$jpgPct      // JPEG quality
+		);
 
 	if ( $photo ) { // successful upload & resize
 		$message = "<div class=\"red\">Slika naložena!</div>\n";
@@ -89,7 +90,7 @@ if ( isset($_FILE['file']) ) {
 			if ( is_file($UPLOADpath.'/large/'.$b.$e) )        rename($UPLOADpath.'/large/'.$b.$e, $UPLOADpath.'/large/'.$n.$e);
 		}
 	} else { // error during upload or resize
-		$message = "<div class=\"red\">Napaka pri nalaganju slike!</div>\n";
+		$message = "<div class=\"red\">Error uploading image!</div>\n";
 	}
 }
 
@@ -105,7 +106,7 @@ if ( isset($_GET['delete']) && $_GET['delete'] != "" ) {
 	@unlink($UPLOADpath ."/large/". $Slika);
 
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&delete=[a-zA-Z0-9\.\-\_]+/", "", $_SERVER['QUERY_STRING'] );
-	$message = "<div class=\"red\">Slika zbrisana!</div>\n";
+	$message = "<div class=\"red\">Image deleted!</div>\n";
 }
 
 if ( !isset($_GET['sort']) ) $_GET['sort'] = "date";
@@ -211,7 +212,7 @@ function insertURL(url) {
 }
 
 function deleteimg(img_name) {
-	if (confirm("Brišem '"+img_name+"'\n\nTo lahko vpliva na ostale galerije!\nAli si prepričan?"))
+	if (confirm("Delete '"+img_name+"'\n\nThis can affect other texts/galleries!\nAre you sure?"))
 		document.location.href="<?php echo $FindURL; ?>&delete="+img_name;
 }
 
@@ -249,20 +250,20 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 <form name="frm_upload" action="<?php echo $FindURL ?>" onsubmit="return loading(this);" enctype="multipart/form-data" method="post">
 <table border="0" cellspacing="0" cellpadding="1" width="100%">
 <tr>
-	<td colspan="3" class="f10">Slika:<input type="Hidden" name="bid" value="<?php echo isset($_GET['ID'])? (int)$_GET['ID']: "0" ?>">
+	<td colspan="3" class="f10">Image:<input type="Hidden" name="bid" value="<?php echo isset($_GET['ID'])? (int)$_GET['ID']: "0" ?>">
 	<input id="fileupload" type="file" name="file" style="border:none;" onchange="checkImg(this.value);"></td>
 </tr>
 <tr>
-	<td colspan="3" class="f10">Velikost ikone
+	<td colspan="3" class="f10">Thumb size
 	<input type="Text" name="thumbnail" size="3" maxlength="3" value="<?php echo isset($_GET['T'])? abs((int)$_GET['T']): "64" ?>" class="text">
-	pik (0=brez);
-	<input name="square" type="checkbox" <?php echo (isset($_GET['T']) && (int)$_GET['T'] < 0) ? "checked" : "" ?> style="border:none;padding:0px;margin:0px;"> kvadratna ikona
+	px (0=none);
+	<input name="square" type="checkbox" <?php echo (isset($_GET['T']) && (int)$_GET['T'] < 0) ? "checked" : "" ?> style="border:none;padding:0px;margin:0px;"> square thumb
 	</td>
 </tr>
 <tr>
-	<td colspan="2" class="f10"><input name="large" type="checkbox" checked class="check"> Ohrani sliko &gt; 
+	<td colspan="2" class="f10"><input name="large" type="checkbox" checked class="check"> Retain image &gt; 
 	<input name="maxsize" type="text" size="4" maxlength="4" value="<?php echo isset($_GET['S'])? $_GET['S']: "512" ?>" class="text" onchange="checkImg(this.form.file.value);">
-	pik.</td>
+	px.</td>
 	<td align="right" class="f10" width="30%"><input type="submit" value=" Add &raquo; " class="but" style="font-weight:bold;">&nbsp;</td>
 </tr>
 </table>
@@ -288,8 +289,9 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 	$folder = scandir($UPLOADpath);
 
 	//custom function for sorting files
-	function compare( $aa, $bb ){
-		switch ($_GET['sort']) {
+	function compare( $aa, $bb )
+	{
+		switch ( $_GET['sort'] ) {
 			case "name": $a = $aa[0]; $b = $bb[0]; $order = 1; break;
 			case "size": $a = $aa[1]; $b = $bb[1]; $order = 1; break;
 			case "date": $a = $aa[2]; $b = $bb[2]; $order = -1; break;
@@ -395,10 +397,10 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		$file = $files[$i]; // get list item
 		//$file[0] = strtolower($file[0]);
 		echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='#edf3fe';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
-		echo "<TD VALIGN=\"middle\"".((isset($_POST['photo']) && $file[0]==$photo)? " class=\"red\">": ">");
+		echo "<TD VALIGN=\"middle\"". ((isset($_POST['photo']) && $file[0]==$photo) ? " class=\"red\">" : ">");
 		echo "&nbsp;<a href=\"javascript:insertURL('". $URLpath . $file[0] ."')\">";
-		echo left($file[0],33).((strlen($file[0])>33)? "...": "")."</a></TD>\n";
-		echo "<TD ALIGN=\"right\"".((isset($_POST['photo']) && $file[0]==$photo)? " class=\"red\">": "").">".date("j.n.y",$file[2])."&nbsp;</TD>\n";
+		echo left($file[0],33) . (strlen($file[0])>33 ? "..." : "") ."</a></TD>\n";
+		echo "<TD ALIGN=\"right\"".((isset($_POST['photo']) && $file[0]==$photo)? " class=\"red\">": "").">". date("j.n.y",$file[2]) ."&nbsp;</TD>\n";
 		echo "<TD ALIGN=\"right\"><a href=\"javascript:deleteimg('$file[0]');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a></td>\n";
 		echo "</TR>\n";
 	}

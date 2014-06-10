@@ -33,14 +33,14 @@ if ( !$BaseModerator )
 
 // add users to permissions list
 if ( isset( $_POST['UserList'] ) && $_POST['UserList'] !== "" && isset( $_POST['Action'] ) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_POST['Action'] == "Add" )
 		foreach ( explode( ",", $_POST['UserList'] ) as $UserID ) {
 			$db->query( "INSERT INTO frmModerators (ForumID, MemberID, Permissions) VALUES (".(int)$_GET['ForumID'].", $UserID, 1)" );
 		}
 	if ( $_POST['Action'] == "Remove" )
 		$db->query( "DELETE FROM frmModerators WHERE ACLID = ".(int)$_GET['ForumID']." AND MemberID IN (".$_POST['UserList'].")" );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset($_POST['UserID']) ) {

@@ -27,7 +27,7 @@
 
 // attach selected image to text
 if ( isset($_POST['MediaID']) && $_POST['MediaID'] != "" ) {
-	$polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSlike WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+	$polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaSlike WHERE BesediloID = ". (int)$_GET['BesediloID']);
 	$db->query(
 		"INSERT INTO BesedilaSlike (
 			BesediloID,
@@ -44,7 +44,7 @@ if ( isset($_POST['MediaID']) && $_POST['MediaID'] != "" ) {
 
 // remove image
 if ( isset($_GET['BrisiSliko']) && $_GET['BrisiSliko'] != "" ) {
-	$db->query( "DELETE FROM BesedilaSlike WHERE ID = ".(int)$_GET['BrisiSliko'] );
+	$db->query("DELETE FROM BesedilaSlike WHERE ID = ". (int)$_GET['BrisiSliko']);
 	$Changed = true;
 }
 
@@ -70,7 +70,7 @@ $List = $db->get_results(
 ?>
 <table bgcolor="white" border="0" cellpadding="10" cellspacing="0" width="100%" class="frame">
 <?php if ( !$List ) : ?>
-<TR><TD ALIGN="center">Ni dodanih slik!</TD></TR>
+<TR><TD ALIGN="center">No added images!</TD></TR>
 <?php else : ?>
 	<?php
 	$MaxCols = 3;
@@ -101,9 +101,9 @@ $List = $db->get_results(
 			echo "<tr>\n";
 		echo "<td align=\"center\" valign=\"middle\" width=\"33%\" onmouseover=\"this.style.backgroundColor='whitesmoke';\" onmouseout=\"this.style.backgroundColor='';\">";
 		echo "<div style=\"position:relative;display:inline-block;\">";
-		echo "<img src=\"../" . (is_file($sPath)? $sDir."/thumbs/".$sFile: "pic/nislike.png") ."\" alt=\"Odstrani\" border=0 hspace=0 vspace=0 style=\"border:none;max-width:128px;\">";
-		echo "<a href=\"javascript:removeimg($Item->ID,'$Item->Datoteka','$Item->Naziv')\" title=\"Odstrani\">";
-		echo "<img src=\"pic/list.delete.gif\" alt=\"Odstrani\" border=0 style=\"position:absolute;top:1px;right:1px;\"></a>";
+		echo "<img src=\"../" . (is_file($sPath)? $sDir."/thumbs/".$sFile: "pic/nislike.png") ."\" alt=\"Remove\" border=0 hspace=0 vspace=0 style=\"border:none;max-width:128px;\">";
+		echo "<a href=\"javascript:removeimg($Item->ID,'$Item->Datoteka','$Item->Naziv')\" title=\"Remove\">";
+		echo "<img src=\"pic/list.delete.gif\" alt=\"Remove\" border=0 style=\"position:absolute;top:1px;right:1px;\"></a>";
 		echo "</div>";
 		echo "</td>\n";
 		if ( $CurrentRow == $RecordCount || $CurrentRow % $MaxCols == 0 )

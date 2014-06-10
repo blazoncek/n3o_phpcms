@@ -27,27 +27,28 @@
 
 // add category
 if ( isset($_GET['KategorijaID']) && $_GET['KategorijaID'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '".$_GET['KategorijaID']."'" );
+	$db->query("START TRANSACTION");
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '". $_GET['KategorijaID'] ."'");
 	$db->query(
 		"INSERT INTO KategorijeBesedila (BesediloID, KategorijaID, Polozaj) ".
-		"VALUES (".(int)$_GET['BesediloID'].", '".$_GET['KategorijaID']."', ".($Polozaj? $Polozaj+1: 1).")" );
-	$db->query( "COMMIT" );
+		"VALUES (". (int)$_GET['BesediloID'] .", '". $_GET['KategorijaID'] ."', ". ($Polozaj ? $Polozaj+1 : 1) .")"
+		);
+	$db->query("COMMIT");
 }
 
 // remove category
 if ( isset( $_GET['BrisiKategorijo'] ) && $_GET['BrisiKategorijo'] != "" ) {
-	$db->query( "DELETE FROM KategorijeBesedila WHERE ID = ".(int)$_GET['BrisiKategorijo'] );
+	$db->query("DELETE FROM KategorijeBesedila WHERE ID = ". (int)$_GET['BrisiKategorijo']);
 }
 
 // display list of assigned categories
 if ( !isset($_GET['Find']) ) {
 	$List = $db->get_results(
-		"SELECT KB.ID, KB.KategorijaID, K.Ime, K.ACLID ".
-		"FROM KategorijeBesedila KB ".
-		"	LEFT JOIN Kategorije K ON KB.KategorijaID = K.KategorijaID ".
-		"WHERE BesediloID = ".(int)$_GET['BesediloID']
-	);
+		"SELECT KB.ID, KB.KategorijaID, K.Ime, K.ACLID
+		FROM KategorijeBesedila KB
+			LEFT JOIN Kategorije K ON KB.KategorijaID = K.KategorijaID
+		WHERE BesediloID = ". (int)$_GET['BesediloID']
+		);
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	echo "<TR>\n";
 	echo "<TD CLASS=\"novo\" COLSPAN=\"2\" STYLE=\"border-bottom:darkgray solid 1px;\">\n";
@@ -55,7 +56,7 @@ if ( !isset($_GET['Find']) ) {
 	echo "</TD>\n";
 	echo "</TR>\n";
 	if ( !$List ) 
-		echo "<TR><TD ALIGN=\"center\">Ni dodeljenih rubrik!</TD></TR>\n";
+		echo "<TR><TD ALIGN=\"center\">No assigned categories!</TD></TR>\n";
 	else {
 		$CurrentRow = 1;
 		$RecordCount = count( $List );
@@ -88,7 +89,7 @@ if ( !isset($_GET['Find']) ) {
 				ON K.KategorijaID = KB.KategorijaID AND KB.BesediloID = ".(int)$_GET['BesediloID']." ".
 		($_GET['Find']!=""? "WHERE Ime LIKE '%".$_GET['Find']."%'": "").
 		"ORDER BY K.KategorijaID"
-	);
+		);
 
 	echo "<script language=\"JavaScript\" type=\"text/javascript\">\n";
 	echo "<!-- //\n";
@@ -117,10 +118,10 @@ if ( !isset($_GET['Find']) ) {
 		echo "<TR><TD ALIGN=\"center\"><br><br>No data!<br><br></TD></TR>\n";
 	else {
 		$CurrentRow = 1;
-		$RecordCount = count( $List );
+		$RecordCount = count($List);
 		foreach ( $List as $Item ) {
 			echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
-			echo "<TD>".str_repeat("&nbsp;",(strlen($Item->KategorijaID)-1)*2);
+			echo "<TD>". str_repeat("&nbsp;",(strlen($Item->KategorijaID)-1)*2);
 			if ( !$Item->ID )
 				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#rubrike').load('inc.php?Izbor=BesediloKategorije&BesediloID=".(int)$_GET['BesediloID']."&KategorijaID=$Item->KategorijaID');\">";
 			echo "<b>$Item->Ime</b>";

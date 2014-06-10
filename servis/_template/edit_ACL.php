@@ -166,22 +166,8 @@ $(document).ready(function(){
 //-->
 </script>
 
-<?php if ( $_GET['ID'] != "0" ) : ?>
-<!--
-<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
-<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="430">
-<TR>
-	<TD ALIGN="right" WIDTH="25%"><B>Ime ACL:</B>&nbsp;</TD>
-	<TD><INPUT TYPE="text" NAME="Name" SIZE="43" MAXLENGTH="50" VALUE="<?php echo (($Podatek)? $Podatek->Name: "") ?>"></TD>
-	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE="Vpis" CLASS="but"></TD>
-</TR>
-</TABLE>
-</FORM>
--->
-<?php endif ?>
-
 <?php if ( $_GET['ID'] == "0" ) : ?>
-<DIV ALIGN="center"><BR><BR><BR><B>ACL entry is not possible (from this link)!</B></DIV>
+<DIV ALIGN="center"><BR><BR><BR><B>ACL creation is not possible from this link!</B></DIV>
 <?php else : ?>
 <DIV STYLE="width:430px;margin-top:10px;padding-left:10px;"><B>ACL name:</B>&nbsp;<SPAN CLASS="red"><?php echo (($Podatek) ? $Podatek->Name : "") ?></SPAN></DIV>
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" width="100%">

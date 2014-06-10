@@ -146,7 +146,6 @@ $(document).ready(function(){
 	<TD VALIGN="top">
 
 <?php if ( (int)$_GET['ID'] ) : ?>
-	<!-- rezultati -->
 	<FIELDSET ID="fldData" style="width:240px;">
 	<LEGEND ID="lgdData">Results</LEGEND>
 	<TABLE ID="results" BORDER="0" CELLPADDING="2" CELLSPACING="1" WIDTH="100%">

@@ -27,53 +27,55 @@
 
 // add additional text
 if ( isset($_GET['DodatniID']) && $_GET['DodatniID'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ".(int)$_GET['BesediloID'] );
 	$db->query(
 		"INSERT INTO BesedilaSkupine (BesediloID, DodatniID, Polozaj) ".
-		"VALUES (".(int)$_GET['BesediloID'].", ".(int)$_GET['DodatniID'].", ".($Polozaj? $Polozaj+1: 1).")" );
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ".(int)$_GET['DodatniID'] );
+		"VALUES (".(int)$_GET['BesediloID'].", ".(int)$_GET['DodatniID'].", ".($Polozaj? $Polozaj+1: 1).")"
+		);
+	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ".(int)$_GET['DodatniID']);
 	$db->query(
 		"INSERT INTO BesedilaSkupine (BesediloID, DodatniID, Polozaj) ".
-		"VALUES (".(int)$_GET['DodatniID'].", ".(int)$_GET['BesediloID'].", ".($Polozaj? $Polozaj+1: 1).")" );
-	$db->query( "COMMIT" );
+		"VALUES (".(int)$_GET['DodatniID'].", ".(int)$_GET['BesediloID'].", ".($Polozaj? $Polozaj+1: 1).")"
+		);
+	$db->query("COMMIT");
 }
 
 // delete additional text from list
 if ( isset( $_GET['BrisiDodatni'] ) && $_GET['BrisiDodatni'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	$x = $db->get_row( "SELECT BesediloID, DodatniID FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni'] );
-	if ( $x ) $db->query( "DELETE FROM BesedilaSkupine WHERE BesediloID  = $x->DodatniID AND DodatniID = $x->BesediloID" );
-	$db->query( "DELETE FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni'] );
-	$db->query( "COMMIT" );
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT BesediloID, DodatniID FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni']);
+	if ( $x ) $db->query("DELETE FROM BesedilaSkupine WHERE BesediloID  = $x->DodatniID AND DodatniID = $x->BesediloID");
+	$db->query("DELETE FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni']);
+	$db->query("COMMIT");
 }
 
 // move items up/down
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
-	$db->query( "START TRANSACTION" );
-	if ( $ItemPos = $db->get_var( "SELECT Polozaj FROM BesedilaSkupine WHERE ID = ". (int)$_GET['Dodatni'] ) ) {
+	$db->query("START TRANSACTION");
+	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM BesedilaSkupine WHERE ID = ". (int)$_GET['Dodatni'])) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
-		$db->query( "UPDATE BesedilaSkupine SET Polozaj = 9999     WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemNew" );
-		$db->query( "UPDATE BesedilaSkupine SET Polozaj = $ItemNew WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemPos" );
-		$db->query( "UPDATE BesedilaSkupine SET Polozaj = $ItemPos WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = 9999" );
+		$db->query("UPDATE BesedilaSkupine SET Polozaj = 9999     WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemNew");
+		$db->query("UPDATE BesedilaSkupine SET Polozaj = $ItemNew WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = $ItemPos");
+		$db->query("UPDATE BesedilaSkupine SET Polozaj = $ItemPos WHERE BesediloID = ".(int)$_GET['BesediloID']." AND Polozaj = 9999");
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
-$Tip = $db->get_var( "SELECT Tip FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+$Tip = $db->get_var("SELECT Tip FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 
-$ACLID = $db->get_var( "SELECT ACLID FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+$ACLID = $db->get_var("SELECT ACLID FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 
 echo "<script language=\"JavaScript\" type=\"text/javascript\">\n";
 echo "<!-- //\n";
 echo "function checkDodatno(ID, Naziv) {\n";
-echo "\tif (confirm(\"Odstranim povezano besedilo '\"+Naziv+\"'?\"))\n";
+echo "\tif (confirm(\"Remove related text '\"+Naziv+\"'?\"))\n";
 echo "\t\tsetTimeout(\"$('#divSk').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".$_GET['BesediloID']."&BrisiDodatni=\"+ID+\"')\",100);\n";
 echo "\treturn false;\n";
 echo "}\n";
@@ -85,7 +87,11 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 	if ( $_GET['Find'] == "*" ) $_GET['Find'] = "";
 	$List = $db->get_results(
-		"SELECT DISTINCT B.BesediloID, B.Tip, B.Ime, B.ACLID
+		"SELECT DISTINCT
+			B.BesediloID,
+			B.Tip,
+			B.Ime,
+			B.ACLID
 		FROM Besedila B
 			LEFT JOIN BesedilaOpisi BO
 				ON B.BesediloID = BO.BesediloID
@@ -124,38 +130,47 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 } else {
 
-	// seznam dodatnih besedil
+	// list of related texts
 	$List = $db->get_results(
-		"SELECT BS.ID, BS.DodatniID, BS.Polozaj, B.Ime, B.ACLID ".
-		"FROM BesedilaSkupine BS ".
-		"	LEFT JOIN Besedila B ON BS.DodatniID = B.BesediloID ".
-		"WHERE BS.BesediloID = ".(int)$_GET['BesediloID']." ".
-		"ORDER BY BS.BesediloID, BS.Polozaj"
-	);
+		"SELECT
+			BS.ID,
+			BS.DodatniID,
+			BS.Polozaj,
+			B.Ime,
+			B.ACLID
+		FROM BesedilaSkupine BS
+			LEFT JOIN Besedila B ON BS.DodatniID = B.BesediloID
+		WHERE BS.BesediloID = ". (int)$_GET['BesediloID'] ."
+		ORDER BY BS.BesediloID, BS.Polozaj"
+		);
 ?>
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="99%">
 <?php if ( !$List ) : ?>
-<TR><TD ALIGN="center" COLSPAN="3">Ni povezanih besedil!</TD></TR>
+<TR><TD ALIGN="center" COLSPAN="3">No related texts!</TD></TR>
 <?php else : ?>
 	<?php
 	$CurrentRow = 1;
 	$RecordCount = count( $List );
 	foreach ( $List as $Item ) {
 		if ( $Item->ACLID )
-			$rACL = userACL( $Item->ACLID );
+			$rACL = userACL($Item->ACLID);
 		else
 			$rACL = "LRWDX";
 		echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 		echo "<TD ALIGN=\"right\" WIDTH=\"8%\">$Item->Polozaj.</TD>\n";
 		echo "<TD>";
+
 		if ( contains($rACL,"R") )
 			echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=Besedila&ID=$Item->DodatniID');\">";
+
 		if ( contains($rACL,"L") )
 			echo $Item->Ime;
 		else
 			echo "-- skrito besedilo --";
+
 		if ( contains($rACL,"R") )
 			echo "</A>";
+
 		echo "</TD>\n";
 		echo "<TD ALIGN=\"right\" NOWRAP>\n";
 		// move items up/down

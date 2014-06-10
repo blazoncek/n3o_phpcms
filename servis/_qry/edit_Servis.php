@@ -26,7 +26,7 @@
 */
 
 // get first available top level menu ID
-if ( !isset( $_GET['ID'] ) || $_GET['ID'] == "" || $_GET['ID'] === "0" ) {
+if ( !isset($_GET['ID']) || $_GET['ID'] == "" || $_GET['ID'] === "0" ) {
 	$ActionID = $db->get_var( "SELECT max(ActionID) FROM SMActions WHERE ActionID LIKE '__'" );
 
 	$_GET['ID'] = sprintf( "%0".strlen($ActionID)."d", (int)$ActionID + 1 );

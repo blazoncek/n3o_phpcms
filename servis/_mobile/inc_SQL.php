@@ -42,17 +42,17 @@ $('#edit').live('pageinit', function(event){
 //-->
 </script>
 <?php
-echo "<div id=\"edit\" data-role=\"page\">\n";
+echo "<div id=\"edit\" data-role=\"page\" data-title=\"SQL\">\n";
 echo "\t<div data-role=\"header\" data-theme=\"b\">\n";
 echo "\t\t<h1>SQL</h1>\n";
 echo "\t\t<a href=\"./\" title=\"Home\" class=\"ui-btn-left\" data-direction=\"reverse\" data-iconpos=\"notext\" data-icon=\"home\" data-ajax=\"false\">Home</a>\n";
 echo "\t</div>\n";
 echo "\t<div data-role=\"content\">\n";
 
-if ( isset( $_POST['SQL'] ) ) {
+if ( isset($_POST['SQL']) ) {
 	// read SQL file from disk
-	if ( isset( $_POST['SQLfile'] ) && $_POST['SQLfile'] != "" ) {
-		$SQLdata = file_get_contents( $StoreRoot ."/servis/qry/" . $_POST['SQLfile'], "r" );
+	if ( isset($_POST['SQLfile']) && $_POST['SQLfile'] != "" ) {
+		$SQLdata = file_get_contents($StoreRoot ."/servis/qry/". $_POST['SQLfile'], "r");
 		$_POST['SQL'] = $SQLdata;
 	} else 
 		$SQLdata = $_POST['SQL'];
@@ -60,8 +60,8 @@ if ( isset( $_POST['SQL'] ) ) {
 	echo "<div class=\"ui-body ui-body-d ui-corner-all\" style=\"padding:1em;text-align:center;\">\n";
 
 	// parse SQL string into statements
-	$_POST['SQL'] = str_replace(";\r\n", "#,:.#", $_POST['SQL']); // statement endings (preserve ';' in content)
-	$SQLcmds      = explode("#,:.#", $_POST['SQL']);
+	$_POST['SQL'] = str_replace("\r\n", "\n", $_POST['SQL']); // remove CR
+	$SQLcmds      = explode(";\n", $_POST['SQL']);
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"0\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 
@@ -125,9 +125,9 @@ if ( isset( $_POST['SQL'] ) ) {
 ?>
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post" ENCTYPE="multipart/form-data">
 <fieldset class="ui-hide-label" data-role="fieldcontain">
-	<LABEL FOR="SQLfile" class="ui-hidden-accessible">SQL datoteka</LABEL>
+	<LABEL FOR="SQLfile" class="ui-hidden-accessible">SQL file</LABEL>
 	<SELECT ID="SQLfile" NAME="SQLfile" SIZE="1">
-	<OPTION VALUE="">- izberi -</OPTION>
+	<OPTION VALUE="">- select -</OPTION>
 <?php
 	$SQLfiles = scandir($StoreRoot ."/servis/qry/");
 	foreach ( $SQLfiles as $SQLfile )
@@ -135,7 +135,7 @@ if ( isset( $_POST['SQL'] ) ) {
 			echo "\t<OPTION VALUE=\"$SQLfile\">$SQLfile</OPTION>\n";
 ?>
 	</SELECT>
-	<label for="SQL" class="ui-hidden-accessible">SQL ukaz</LABEL>
+	<label for="SQL" class="ui-hidden-accessible">SQL statement(s)</LABEL>
 	<TEXTAREA ID="SQL" NAME="SQL" ROWS="6" data-theme="d"><?php if (isset( $SQLdata )) echo $SQLdata; ?></TEXTAREA>
 </fieldset>
 <INPUT TYPE="submit" VALUE="Izvedi" data-iconpos="left" data-icon="gear" data-theme="a">

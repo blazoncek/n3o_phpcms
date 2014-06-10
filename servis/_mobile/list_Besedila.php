@@ -54,7 +54,7 @@ $List = $db->get_results(
 		(($_GET['Tip']=="")? "": "AND B.Tip='".$_GET['Tip']."' ") .
 	"ORDER BY $Sort" );
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 ?>
 <SCRIPT Language="JAVASCRIPT">
 <!--//
@@ -97,12 +97,11 @@ $NePg = $Page + 1; // >$NuPg == no next page
 $StaR = ($Page - 1) * $MaxRows + 1;
 $EndR = min(($Page * $MaxRows), $RecordCount);
 
-echo "<div id=\"list\" data-role=\"page\">\n";
+echo "<div id=\"list\" data-role=\"page\" data-title=\"Texts\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Besedila</h1>\n";
+echo "<h1>Texts</h1>\n";
 echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
 echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
-//echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=0\" title=\"Add\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"plus\" data-ajax=\"false\">Add</a>\n";
 
 echo "<div data-role=\"navbar\">\n";
 echo "<ul>";
@@ -116,9 +115,9 @@ echo "</li>\n";
 echo "<li>";
 echo "<SELECT NAME=\"Tip\" SIZE=\"1\">";
 echo "<OPTION VALUE=\"\">- vsi tipi -</OPTION>";
-$Tipi = $db->get_col( "SELECT SifrText FROM Sifranti WHERE SifrCtrl='BESE' ORDER BY SifrCtrl, SifrZapo" );
+$Tipi = $db->get_col("SELECT SifrText FROM Sifranti WHERE SifrCtrl='BESE' ORDER BY SifrCtrl, SifrZapo");
 if ( $Tipi ) foreach ( $Tipi as $Tip )
-	echo "<OPTION VALUE=\"$Tip\"".(($_GET['Tip']==$Tip)? " SELECTED": "").">$Tip</OPTION>";
+	echo "<OPTION VALUE=\"$Tip\"". ($_GET['Tip']==$Tip ? " SELECTED" : "").">$Tip</OPTION>";
 echo "</SELECT>";
 echo "</li>\n";
 echo "</ul>\n";
@@ -150,7 +149,7 @@ if ( $RecordCount == 0 ) {
 			echo "<h3>". $Item->Name ."</h3>";
 			echo "<p>". $Item->Tip ."</p>";
 			if ( !$Item->Izpis )
-				echo "<span class=\"ui-li-count\">skrito</span>";
+				echo "<span class=\"ui-li-count\">hidden</span>";
 			echo "</a>";
 			if ( contains($ActionACL,"D") )
 				echo "<a href=\"#\" onclick=\"check('$Item->ID','$Item->Name');\">Delete</a>";
@@ -158,7 +157,7 @@ if ( $RecordCount == 0 ) {
 		}
 	}
 	if ( $_GET['Find']=="" && $RecordCount == 25 )
-		echo "<li style=\"text-align:center;\">... za več podatkov išči ...</li>\n";
+		echo "<li style=\"text-align:center;\">... 'search' for more results ...</li>\n";
 	echo "</ul>\n";
 }
 echo "</div>\n";

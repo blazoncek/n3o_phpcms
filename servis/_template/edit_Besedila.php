@@ -127,11 +127,11 @@ $(document).ready(function(){
 			iframe: false, // fix for listRefresh
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (fObj.Tip.selectedIndex && fObj.Tip.selectedIndex==0)	{alert("Izberite tip besedila!"); fObj.Tip.focus(); return false;}
-				if (empty(fObj.Ime) && empty(fObj.Naslov))	{alert("Vpišite ime ali naslov besedila!"); fObj.Ime.focus(); return false;}
+				if (fObj.Tip.selectedIndex && fObj.Tip.selectedIndex==0)	{alert("Select text type!"); fObj.Tip.focus(); return false;}
+				if (empty(fObj.Ime) && empty(fObj.Naslov))	{alert("Enter name or title!"); fObj.Ime.focus(); return false;}
 				if (empty(fObj.Ime))	{fObj.Ime.value = fObj.Naslov.value.substring(0,128); fObj.Ime.focus(); fObj.Ime.select(); return false;}
 				if (fObj.Naslov && empty(fObj.Naslov))	{fObj.Naslov.value = fObj.Ime.value; fObj.Naslov.focus(); fObj.Naslov.select(); return false;}
-				if (fObj.ForumTopicID && !empty(fObj.ForumTopicID) && !IsNumeric(fObj.ForumTopicID)) {alert("Neveljaven vpis téme iz foruma!"); fObj.ForumTopicID.value=""; fObj.ForumTopicID.focus();return false;}
+				if (fObj.ForumTopicID && !empty(fObj.ForumTopicID) && !IsNumeric(fObj.ForumTopicID)) {alert("Invalid topic!"); fObj.ForumTopicID.value=""; fObj.ForumTopicID.focus();return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
@@ -344,7 +344,7 @@ $(document).ready(function(){
 	<TD><SELECT NAME="KategorijaID" SIZE="1" TABINDEX="5">
 	<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
-	$Kategorije = $db->get_results( "SELECT KategorijaID AS ID, Ime, Izpis FROM Kategorije ORDER BY KategorijaID" );
+	$Kategorije = $db->get_results("SELECT KategorijaID AS ID, Ime, Izpis FROM Kategorije ORDER BY KategorijaID");
 	if ( $Kategorije ) foreach ( $Kategorije as $Kat ) {
 		echo "<OPTION VALUE=\"$Kat->ID\"".( isset($_GET['KategorijaID']) && $_GET['KategorijaID']==$Kat->ID? " SELECTED": "" ).">";
 		echo str_repeat("&nbsp;", strlen($Kat->ID)-2) . $Kat->Ime;
@@ -433,7 +433,7 @@ $(document).ready(function(){
 		// if text can have comments (SifLVal1=1)
 		$Comments = $db->get_var("SELECT SifLVal1 FROM Sifranti WHERE SifrCtrl = 'BESE' AND SifrText = '".$Podatek->Tip."'");
 		?>
-		<TD ALIGN="right" nowrap>Forum:
+		<TD ALIGN="right" nowrap>Topic:
 		<INPUT NAME="ForumTopicID" TYPE="Text" VALUE="<?php if ( $Podatek ) echo $Podatek->ForumTopicID ?>" SIZE="3" MAXLENGTH="4" READONLY>
 		<?php if ( $Comments && $Podatek->ForumTopicID == "" ) : ?><A HREF="javascript:void(0);" ONCLICK="window.open('vnos.php?Izbor=BesediloForum&ID=<?php echo $_GET['ID'] ?>&New=<?php echo urlencode($Podatek->Ime) ?>','listscreen','scrollbars=no,status=no,menubar=no,toolbar=no,resizable=no,width=400,height=400')" TITLE="Add"><IMG SRC="pic/control.plus.gif" HEIGHT="14" WIDTH="14" BORDER=0 ALT="Add" ALIGN="absmiddle"></A><?php endif ?>
 		</TD>
@@ -449,7 +449,7 @@ $(document).ready(function(){
 <?php if ( $Podatek && contains($ACL,"W") ) : ?>
 	<TR>
 		<TD ALIGN="right" STYLE="margin-top:3px;padding-top:5px;border-top:silver solid 1px;">
-		<?php if ( $Podatek && $Podatek->Slika!="" ) : ?><SPAN class="red">Delete ikono:</SPAN><?php endif ?>
+		<?php if ( $Podatek && $Podatek->Slika!="" ) : ?><SPAN class="red">Delete icon:</SPAN><?php endif ?>
 		</TD>
 		<TD STYLE="margin-top:3px;padding-top:5px;border-top:silver solid 1px;">
 		<?php if ( $Podatek && $Podatek->Slika!="" ) : ?><INPUT TYPE="Checkbox" NAME="BrisiSliko" STYLE="border:solid 1px red;background-color:red;"><?php endif ?>
@@ -492,8 +492,8 @@ $(document).ready(function(){
 	<DIV ID="tabs" style="margin-top:5px;">
 		<ul>
 <?php
-		$Kategorija = $db->get_var("SELECT KategorijaID FROM KategorijeBesedila WHERE BesediloID=".(int)$_GET['ID']." LIMIT 1");
-		$Jeziki = $db->get_results( "SELECT Jezik, Opis FROM Jeziki WHERE Enabled=1" );
+		$Kategorija = $db->get_var("SELECT KategorijaID FROM KategorijeBesedila WHERE BesediloID=". (int)$_GET['ID'] ." LIMIT 1");
+		$Jeziki = $db->get_results("SELECT Jezik, Opis FROM Jeziki WHERE Enabled=1");
 		
 		if ( count($Jeziki) > 1 )
 			echo "\t\t\t<li><a href=\"#vsi\">All</a></li>\n";

@@ -31,7 +31,7 @@ if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 if ( count($_POST) > 0 ) {
 
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_GET['ID'] != "0" ) {
 		// update a forum (mobile & classic)
 		if ( count($_POST) > 1 )
@@ -193,6 +193,6 @@ if ( count($_POST) > 0 ) {
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

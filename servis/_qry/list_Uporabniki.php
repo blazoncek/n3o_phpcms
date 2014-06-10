@@ -26,11 +26,11 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] > 1 ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// never delete administrator (UserID==1)
 	$db->query( "DELETE FROM SMACLr WHERE UserID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM SMUserGroups WHERE UserID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM SMUser WHERE UserID = ".(int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

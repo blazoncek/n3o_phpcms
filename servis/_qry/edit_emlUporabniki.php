@@ -29,7 +29,7 @@ if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 if ( $_GET['ID'] == "0" ) {
 	if ( isset($_POST['Naziv']) ) {
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		$db->query( "INSERT INTO emlMembers (Naziv, Podjetje, Naslov, Posta, Telefon, Fax, GSM, Email, Jezik, Aktiven, Datum)
 			VALUES ('".$db->escape($_POST['Naziv'])."',
 				'".$db->escape($_POST['Podjetje'])."',
@@ -44,13 +44,13 @@ if ( $_GET['ID'] == "0" ) {
 				'".date("Y-n-j H:m:s") ."')" );
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
 	}
 } else {
 	if ( count($_POST) && !isset($_POST['GroupList']) ) {
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		foreach ( $_POST as $name => $value ) {
 			switch ( $name ) {
 				case "Aktiven":
@@ -68,11 +68,11 @@ if ( $_GET['ID'] == "0" ) {
 		// fix for standard checkbox (undefined if not checked)
 		if ( isset($_POST['Naziv']) && !isset($_POST['Aktiven']) )
 			$db->query( "UPDATE emlMembers SET Aktiven = 0 WHERE emlMemberID = ".(int)$_GET['ID'] );
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 
 	} else if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset($_POST['Action']) ) {
 
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		if ( $_POST['Action'] == "Add" )
 			foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
 				$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
@@ -85,7 +85,7 @@ if ( $_GET['ID'] == "0" ) {
 				$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
 			}
 		}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	}
 }
 ?>

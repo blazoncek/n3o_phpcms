@@ -26,7 +26,7 @@
 */
 
 if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// only allow inserting new groups and changing custom groups
 	if ( $_GET['ID'] > 0 ) {
 		$db->query(
@@ -45,11 +45,11 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) ."&ID=". $_GET['ID'];
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset($_POST['MemberList']) && $_POST['MemberList'] !== "" && isset($_POST['Action']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_POST['Action'] == "Add" )
 		foreach ( explode( ",", $_POST['MemberList'] ) as $UserID ) {
 			$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES (".(int)$_POST['GroupID'].",$UserID)" );
@@ -62,6 +62,6 @@ if ( isset($_POST['MemberList']) && $_POST['MemberList'] !== "" && isset($_POST[
 			$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES (".(int)$_POST['GroupID'].",$UserID)" );
 		}
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

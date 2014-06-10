@@ -36,7 +36,7 @@ include_once("_userACL.php");
 
 // check if session still active
 if ( !(isset($_SESSION['Authenticated']) && $_SESSION['Authenticated']) ) {
-	$Error = "<B>Session expired!</b> Please login again.";
+	$Error = "<B>Session expired!</b><br>Please login again.";
 } else
 
 // get action & ACL
@@ -48,7 +48,7 @@ elseif ( isset($_GET['Action']) )
 if ( isset($Action) && $Action ) {
 	$_GET['Izbor']  = $Action->Action;
 	$_GET['Action'] = $Action->ActionID;
-	$ActionACL      = userACL( $Action->ACLID );
+	$ActionACL      = userACL($Action->ACLID);
 } else if ( isset($_GET['Izbor']) &&
 	(is_file("qry/edit_". $_GET['Izbor'] .".php") ||
 	 is_file("_qry/edit_". $_GET['Izbor'] .".php")) ) {
@@ -56,7 +56,7 @@ if ( isset($Action) && $Action ) {
 	$ActionACL      = "RWDX";
 } else {
 	$_GET['Izbor']  = "";
-	$Error = "Akcija ni implementirana!";
+	$Error = "Not implemented!";
 }
 
 // include a template (template contains all data manipulation & formatting)
@@ -68,8 +68,8 @@ if ( !isset($Error) && $_GET['Izbor'] != "" ) {
 		// load system template
 		include("_qry/edit_". $_GET['Izbor'] .".php");
 	} else {
-		$Error = "Akcija ni implementirana!";
+		$Error = "Not implemented!";
 	}
 }
-echo "<div data-role=\"page\">". (isset($Error)? $Error: "OK") ."</div>\n"; // page
+echo "<div data-role=\"page\">". (isset($Error) ? $Error : "OK") ."</div>\n"; // page
 ?>

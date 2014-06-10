@@ -60,10 +60,10 @@ require_once( "../inc/pop3.php" );
 require_once( "../inc/thumb/PhpThumb.inc.php" );
 
 if ( isset($_GET['file']) ) {
-	echo "<div data-role=\"page\">\n";
+	echo "<div data-role=\"page\" data-title=\"File\">\n";
 
 	echo "<div data-role=\"header\" data-theme=\"a\">\n";
-	echo "<h1>Datoteka</h1>\n";
+	echo "<h1>File</h1>\n";
 	echo "</div>\n";
 
 	echo "<div data-role=\"content\">\n";
@@ -82,8 +82,8 @@ if ( isset($_GET['file']) ) {
 	echo "<input type=\"hidden\" name=\"upload\" value=\"". $_GET['file'] ."\">";
 	echo "<input name=\"T\" value=\"". $DefThumbSize ."\" placeholder=\"Thumbnail size (px; <0 square)\">";
 	echo "<input name=\"R\" value=\"". $DefPicSize ."\" placeholder=\"Resized dimension (px)\">";
-	echo "<input type=\"submit\" value=\"Naloži\" data-iconpos=\"left\" data-icon=\"check\" data-theme=\"b\">";
-	//echo "<a href=\"list.php?Izbor=Msg&upload=". $_GET['file'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"b\">Naloži</a>\n";
+	echo "<input type=\"submit\" value=\"Upload\" data-iconpos=\"left\" data-icon=\"check\" data-theme=\"b\">";
+	//echo "<a href=\"list.php?Izbor=Msg&upload=". $_GET['file'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"b\">Upload</a>\n";
 	echo "<a href=\"list.php?Izbor=Msg&delete=". $_GET['file'] ."\" data-role=\"button\" data-icon=\"minus\" data-ajax=\"false\" data-theme=\"e\">Delete</a>\n";
 	echo "</form>\n";
 	echo "</div>\n";
@@ -91,7 +91,7 @@ if ( isset($_GET['file']) ) {
 	echo "</div>\n";
 
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( '/\&file=[^&]+/i', '', $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace('/\&file=[^&]+/i', '', $_SERVER['QUERY_STRING']);
 }
 
 if ( isset($_GET['message']) ) {
@@ -133,10 +133,10 @@ if ( isset($_GET['message']) ) {
 		$conn->Disconnect();
 	}
 
-	echo "<div data-role=\"page\">\n";
+	echo "<div data-role=\"page\" data-title=\"Message\">\n";
 
 	echo "<div data-role=\"header\" data-theme=\"a\">\n";
-	echo "<h1>Sporočilo</h1>\n";
+	echo "<h1>Message</h1>\n";
 	echo "</div>\n";
 
 	echo "<div data-role=\"content\">\n";
@@ -151,6 +151,6 @@ if ( isset($_GET['message']) ) {
 	echo "</div>\n";
 
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( '/\&message=[^&]+/i', '', $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace('/\&message=[^&]+/i', '', $_SERVER['QUERY_STRING']);
 }
 ?>

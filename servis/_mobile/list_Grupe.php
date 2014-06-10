@@ -26,16 +26,12 @@
 */
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get all groups
-$List = $db->get_results(
-	"SELECT GroupID, Name
-	FROM SMGroup
-	WHERE GroupID > 1
-	ORDER BY Name" );
+$List = $db->get_results("SELECT GroupID, Name FROM SMGroup WHERE GroupID > 1 ORDER BY Name");
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 ?>
 <SCRIPT Language="JAVASCRIPT">
 <!--//
@@ -80,9 +76,8 @@ $EndR = min(($Page * $MaxRows), $RecordCount);
 
 echo "<div id=\"list\" data-role=\"page\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Skupine</h1>\n";
+echo "<h1>Groups</h1>\n";
 echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
-//echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=0\" title=\"Dodaj\" class=\"ui-btn-right\" data-iconpos=\"notext\" data-icon=\"plus\" data-ajax=\"false\">Dodaj</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
@@ -104,11 +99,9 @@ if ( $RecordCount == 0 ) {
 		$Item = $List[$i++];
 		if ( $Item->GroupID != 1 || contains($ActionACL,"D") ) {
 			echo "<li>";
-//			if ( $Item->GroupID != 1 )
-				echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=$Item->GroupID\" data-ajax=\"false\">";
+			echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=$Item->GroupID\" data-ajax=\"false\">";
 			echo "<b>". $Item->Name ."</b>";
-//			if ( $Item->GroupID != 1 )
-				echo "</a>";
+			echo "</a>";
 			if ( $Item->GroupID > 4 && contains($ActionACL,"D") )
 				echo "<a href=\"#\" onclick=\"check('$Item->GroupID','$Item->Name');\">Delete</a>";
 			echo "</li>\n";

@@ -48,7 +48,7 @@ if ( !isset($_GET['T']) )    $_GET['T']    = ($x ? (int)$x->DefThumbSize : 128);
 <script type="text/javascript">
 <!--
 function deleteimg(img_id, img_name) {
-	if (confirm("Brišem '"+img_name+"'\n\nTo lahko vpliva na ostale galerije!\nAli si prepričan?")) {
+	if (confirm("Delete '"+img_name+"'\n\nThis can affect other texts/galleries!\nAre you sure?")) {
 		$('#VnosSlikeD').load("inc.php?Izbor=SlikeRight&delete="+img_id);
 		$('#frm_image').resetForm();
 		setTimeout("$('#ListSlike').load('inc.php?Izbor=SlikeList&BesediloID=<?php echo $_GET['BesediloID'] ?>');",250);
@@ -88,8 +88,8 @@ $(document).ready(function(){
 			target: '#VnosSlikeD',
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (fObj.photo_file.value=='') {alert("Izberite datoteko!"); fObj.photo_file.focus(); return false;}
-				if (fObj.maxsize.value=='')    {alert("Izberite velikost!"); fObj.maxsize.focus(); return false;}
+				if (fObj.photo_file.value=='') {alert("Please select image!"); fObj.photo_file.focus(); return false;}
+				if (fObj.maxsize.value=='')    {alert("Please enter size!"); fObj.maxsize.focus(); return false;}
 				$('#VnosSlikeD').html('<div align="center" class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 				return true;
 			} // pre-submit callback
@@ -102,7 +102,7 @@ $(document).ready(function(){
 			target: '#ListSlike',
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (fObj.Datoteka.value=='') {alert("Izberite datoteko na desni strani!"); fObj.Datoteka.focus(); return false;}
+				if (fObj.Datoteka.value=='') {alert("Please select image on the right side!"); fObj.Datoteka.focus(); return false;}
 				$('#ListSlike').html('<div align="center" class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 				return true;
 			} // pre-submit callback
@@ -126,13 +126,13 @@ $(window).unload(function(){
 <tr>
 	<td width="55%" height="96" valign="top" rowspan="1"><div id="VnosSlikeL" style="padding:5px;">
 		<form id="frm_upload" name="frm_upload" action="inc.php?Izbor=SlikeRight" method="post" enctype="multipart/form-data">
-		<div><font color="red"><B>1.</B></font> Poišči sliko,
+		<div><font color="red"><B>1.</B></font> Find image,
 			<input type="file" name="photo_file">
-			<input name="large" type="checkbox" checked style="border:none;padding:0px;margin:0px;"> Ohrani sliko
-			&gt;<input name="maxsize" type="text" size="4" maxlength="4" value="<?php echo $_GET['S'] ?>"> pik,
-			izberi velikost ikone: <input type="Text" name="thumbnail" size="3" maxlength="3" VALUE="<?php echo abs($_GET['T']) ?>"> pik
-			(0=brez ikone) ter obliko: <input name="square" type="checkbox" <?php echo (int)$_GET['T']<0 ? "checked" : "" ?> style="border:none;padding:0px;margin:0px;"> kvadratna</div>
-		<div align="right"><SPAN CLASS="f10">... in klikni <B>Dodaj &raquo;</B>.</SPAN>
+			<input name="large" type="checkbox" checked style="border:none;padding:0px;margin:0px;"> Retain image
+			&gt;<input name="maxsize" type="text" size="4" maxlength="4" value="<?php echo $_GET['S'] ?>"> px,
+			thumbnail size: <input type="Text" name="thumbnail" size="3" maxlength="3" VALUE="<?php echo abs($_GET['T']) ?>"> px
+			(0=none), <input name="square" type="checkbox" <?php echo (int)$_GET['T']<0 ? "checked" : "" ?> style="border:none;padding:0px;margin:0px;"> kvadratna</div>
+		<div align="right"><SPAN CLASS="f10">... and click <B>Add &raquo;</B>.</SPAN>
 			<input type="submit" value=" Add &raquo; " class="but"></div>
 		</form>
 
@@ -141,7 +141,7 @@ $(window).unload(function(){
 		<input type="hidden" name="ID" value="">
 		<input type="hidden" name="MediaID" value="">
 		</form>
-		<div><font color="red"><B>2.</B></font> Klikni na sliko iz seznama na desni strani.</div>
+		<div><font color="red"><B>2.</B></font> Click an image on the right.</div>
 	</div></td>
 	<td width="45%" valign="top" rowspan="2"><div id="VnosSlikeD" style="overflow-y:auto;"></div></td>
 </tr>

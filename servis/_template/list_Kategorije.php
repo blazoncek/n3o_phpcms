@@ -32,7 +32,8 @@
 *   $Menu - start level
 *   $BgCol - by ref: background color of table (for recursive call)
 **************************************/
-function loop( $Menu="", &$BgCol="white" ) {
+function loop($Menu="", &$BgCol="white")
+{
 	global $db;
 
 	$Kat = $db->get_results(

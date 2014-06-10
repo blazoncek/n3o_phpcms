@@ -111,7 +111,7 @@ if ( isset($_FILES['photo_file']) ) {
 
 // delete media (remove reference and file)
 if ( isset($_GET['delete']) && (int)$_GET['delete'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$Slika    = $db->get_var( "SELECT Slika FROM Media WHERE MediaID = ".(int)$_GET['delete'] );
 	$Datoteka = $db->get_var( "SELECT Datoteka FROM Media WHERE MediaID = ".(int)$_GET['delete'] );
 
@@ -146,7 +146,7 @@ if ( isset($_GET['delete']) && (int)$_GET['delete'] != "" ) {
 	$db->query( "DELETE FROM KategorijeMedia WHERE MediaID = ".(int)$_GET['delete'] );
 	$db->query( "DELETE FROM MediaOpisi      WHERE MediaID = ".(int)$_GET['delete'] );
 	$db->query( "DELETE FROM Media           WHERE MediaID = ".(int)$_GET['delete'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	echo "<div class=\"red\">Slika zbrisana!</div>\n";
 }
 

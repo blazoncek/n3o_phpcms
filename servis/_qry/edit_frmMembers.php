@@ -25,7 +25,7 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 if ( isset($_POST['AccessLevel']) && $_GET['ID'] != "0" ) {
 	if ( isset($_POST['NewPwd']) ) {

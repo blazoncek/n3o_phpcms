@@ -36,7 +36,7 @@ $(document).ready(function(){
 			target: '#divEdit', // target element(s) to be updated with server response
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (!empty(fObj.NewName) && empty(fObj.NewValue))	{alert("Prosim vnesite vrednost!"); fObj.NewValue.focus(); return false;}
+				if (!empty(fObj.NewName) && empty(fObj.NewValue))	{alert("Please enter a value!"); fObj.NewValue.focus(); return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			}
@@ -56,7 +56,7 @@ $(document).ready(function(){
 	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 	<TR>
 		<TD><B>Parameter</B></TD>
-		<TD><B>Vrednost</B></TD>
+		<TD><B>Value</B></TD>
 	</TR>
 	<TR>
 		<TD COLSPAN="2"><HR SIZE="1"></TD>

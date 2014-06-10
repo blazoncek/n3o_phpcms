@@ -33,7 +33,7 @@ if ( isset($_GET['ACL']) && $_GET['ACL'] != "" ) {
 	// ACL does not exist: create a new entry
 	if ( $_GET['ID'] == "0" ) {
 
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	
 		$ACLName = "XXX-";
 		switch ( $_GET['ACL'] ) {
@@ -77,7 +77,7 @@ if ( isset($_GET['ACL']) && $_GET['ACL'] != "" ) {
 			case "emlSporocila": $db->query( "UPDATE emlMessages SET ACLID = ".$_GET['ID']." WHERE emlMessageID = ".$_GET['emlMessageID'] ); break;
 		}
 	
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	}
 }
 
@@ -92,7 +92,7 @@ if ( isset($_POST['Name']) && $_POST['Name'] != "" ) {
 
 // add users to permissions list
 if ( isset($_POST['UserList']) && $_POST['UserList'] !== "" && isset($_POST['Action']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_POST['Action'] == "Add" )
 		foreach ( explode( ",", $_POST['UserList'] ) as $UserID ) {
 			$db->query( "INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '     ')" );
@@ -105,12 +105,12 @@ if ( isset($_POST['UserList']) && $_POST['UserList'] !== "" && isset($_POST['Act
 			@$db->query( "INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '". ($UserID==1? "LRWDX":"     ") ."')" );
 		}
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 // add groups to permissions list
 if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset($_POST['Action']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_POST['Action'] == "Add" )
 		foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
 			$db->query( "INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (". (int)$_GET['ID'] .", $GroupID, '     ')" );
@@ -123,12 +123,12 @@ if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset($_POST['A
 			@$db->query( "INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (". (int)$_GET['ID'] .", $GroupID, '". ($GroupID==2? "LRWDX":"     ") ."')" );
 		}
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 // update user's or group's permissions
 if ( isset( $_POST['GroupID'] ) || isset( $_POST['UserID'] ) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$ACL = $db->get_var(
 		"SELECT MemberACL ".
 		"FROM SMACLr ".
@@ -157,6 +157,6 @@ if ( isset( $_POST['GroupID'] ) || isset( $_POST['UserID'] ) ) {
 		"	".((isset($_POST['GroupID']) && $_POST['GroupID']!="0")? "GroupID = ".$_POST['GroupID']: "").
 		")"
 	);
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

@@ -25,9 +25,9 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$User = $db->get_row( "SELECT * FROM emlMembers WHERE emlMemberID = ". (int)$_GET['ID'] );
+$User = $db->get_row("SELECT * FROM emlMembers WHERE emlMemberID = ". (int)$_GET['ID']);
 
 ?>
 <script language="JavaScript" type="text/javascript">
@@ -118,57 +118,57 @@ if ( isset( $Error ) )
 else {
 ?>
 		<TR>
-			<TD ALIGN="right"><B>Priimek in ime</B></TD>
+			<TD ALIGN="right"><B>Full name:</B></TD>
 			<TD><INPUT TYPE="text" NAME="Naziv" SIZE="30" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Naziv ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right"><B>E-pošta</B></TD>
+			<TD ALIGN="right"><B>Email:</B></TD>
 			<TD><INPUT TYPE="text" NAME="Email" SIZE="30" MAXLENGTH="255" VALUE="<?php if ($User) echo $User->Email ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">Privzeti jezik:</TD>
+			<TD ALIGN="right">Language:</TD>
 			<TD>
 			<SELECT NAME="Jezik" SIZE="1">
 <?php
-		$Jeziki = $db->get_results( "SELECT J.Jezik, J.Opis FROM Jeziki J" );
-		echo "\t\t\t<OPTION VALUE=\"\">- vsi -</OPTION>\n";
+		$Jeziki = $db->get_results("SELECT J.Jezik, J.Opis FROM Jeziki J");
+		echo "\t\t\t<OPTION VALUE=\"\">- all -</OPTION>\n";
 		if ( $Jeziki ) foreach ( $Jeziki as $Jezik )
-			echo "\t\t\t<OPTION VALUE=\"$Jezik->Jezik\"".($User && $User->Jezik == $Jezik->Jezik? " SELECTED": "").">$Jezik->Opis</OPTION>\n";
+			echo "\t\t\t<OPTION VALUE=\"$Jezik->Jezik\"".($User && $User->Jezik == $Jezik->Jezik ? " SELECTED" : "").">$Jezik->Opis</OPTION>\n";
 ?>
 			</SELECT>
 			</TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">Podjetje</TD>
+			<TD ALIGN="right">Company</TD>
 			<TD><INPUT TYPE="text" NAME="Podjetje" SIZE="30" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Podjetje ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">Naslov</TD>
+			<TD ALIGN="right">Address:</TD>
 			<TD><INPUT TYPE="text" NAME="Naslov" SIZE="30" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Naslov ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">Pošta in kraj</TD>
+			<TD ALIGN="right">Postal code/Town:</TD>
 			<TD><INPUT TYPE="text" NAME="Posta" SIZE="30" MAXLENGTH="50" VALUE="<?php if ($User) echo $User->Posta ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">Telefon</TD>
+			<TD ALIGN="right">Phone:</TD>
 			<TD><INPUT TYPE="text" NAME="Telefon" SIZE="15" MAXLENGTH="20" VALUE="<?php if ($User) echo $User->Telefon ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">Fax</TD>
+			<TD ALIGN="right">Fax:</TD>
 			<TD><INPUT TYPE="text" NAME="Fax" SIZE="15" MAXLENGTH="20" VALUE="<?php if ($User) echo $User->Fax ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">GSM</TD>
+			<TD ALIGN="right">Mobile</TD>
 			<TD><INPUT TYPE="text" NAME="GSM" SIZE="15" MAXLENGTH="20" VALUE="<?php if ($User) echo $User->GSM ?>"></TD>
 		</TR>
 		<TR>
-			<TD ALIGN="right">Aktiven:&nbsp;</TD>
+			<TD ALIGN="right">Active:&nbsp;</TD>
 			<TD><INPUT TYPE="CheckBox" NAME="Aktiven" VALUE="yes" <?php if ( $User && $User->Aktiven ) echo "CHECKED " ?>/></TD>
 		</TR>
 <?php if ( contains($ActionACL,"W") ) : ?>
 		<TR>
-			<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Shrani " CLASS="but"></TD>
+			<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 		</TR>
 <?php endif ?>
 <?php
@@ -207,16 +207,16 @@ if ( (int)$_GET['ID'] > 0 && contains($ActionACL,"W") ) {
 	);
 ?>
 	<FIELDSET ID="fldGroups">
-		<LEGEND ID="lgdGroups">Skupine</LEGEND>
+		<LEGEND ID="lgdGroups">Groups</LEGEND>
 		<FORM NAME="Grupe" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 			<INPUT Name="UserID" Type="HIDDEN" VALUE="<?php echo $User->emlMemberID ?>">
 			<INPUT Name="GroupList" Type="HIDDEN" VALUE="">
 			<INPUT Name="Action" Type="HIDDEN" VALUE="">
 		<TABLE ALIGN="center" BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 		<TR>
-			<TD ALIGN="right" WIDTH="45%">Ni član:</TD>
+			<TD ALIGN="right" WIDTH="45%">Not a member:</TD>
 			<TD ALIGN="center" WIDTH="10%"></TD>
-			<TD ALIGN="right" WIDTH="45%">Je član:</TD>
+			<TD ALIGN="right" WIDTH="45%">Member:</TD>
 		</TR>
 		<TR>
 			<TD ALIGN="left">
@@ -251,4 +251,3 @@ if ( (int)$_GET['ID'] > 0 && contains($ActionACL,"W") ) {
 	</TD>
 </TR>
 </TABLE>
-<!-- /VSEBINA -->

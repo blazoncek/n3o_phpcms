@@ -27,7 +27,7 @@
 
 if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$Podatek = $db->get_row( "SELECT * FROM frmForums WHERE ID = ".(int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM frmForums WHERE ID = ". (int)$_GET['ID']);
 ?>
 
 <script language="JavaScript" type="text/javascript">
@@ -52,7 +52,7 @@ $(document).ready(function(){
 				target: '#divEdit',
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
-					if ( empty(fObj.ForumName) ) { alert("Prosim vnesite ime."); fObj.ForumName.focus(); return false; }
+					if ( empty(fObj.ForumName) ) { alert("Please enter title!"); fObj.ForumName.focus(); return false; }
 					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 					return true;
 				} // pre-submit callback
@@ -89,19 +89,19 @@ $(document).ready(function(){
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="2" WIDTH="100%">
 	<TR>
-		<TD><B>Skupina:</B>&nbsp;</TD>
+		<TD><B>Category:</B>&nbsp;</TD>
 		<TD COLSPAN="3">
 		<SELECT NAME="CategoryID" SIZE="1">
 	<?php 
-		$Categories = $db->get_results( "SELECT ID, CategoryName FROM frmCategories ORDER BY CategoryOrder" );
+		$Categories = $db->get_results("SELECT ID, CategoryName FROM frmCategories ORDER BY CategoryOrder");
 		if ( $Categories ) foreach ( $Categories as $Category )
-			echo "<OPTION VALUE=\"$Category->ID\"".(($Podatek && $Podatek->CategoryID == $Category->ID)? " SELECTED STYLE=\"background-color: #99CCFF;\"": "").">$Category->CategoryName</OPTION>\n";
+			echo "<OPTION VALUE=\"$Category->ID\"". ($Podatek && $Podatek->CategoryID == $Category->ID ? " SELECTED STYLE=\"background-color: #99CCFF;\"" : "") .">$Category->CategoryName</OPTION>\n";
 	?>
 		</SELECT>
 		</TD>
 	</TR>
 	<TR>
-		<TD><B>Ime:</B><BR><span class="f10">Opis:</span></TD>
+		<TD><B>Title:</B><BR><span class="f10">Description:</span></TD>
 		<TD COLSPAN="3"><INPUT NAME="ForumName" TYPE="Text" MAXLENGTH="50" VALUE="<?php if ( $Podatek ) echo $Podatek->ForumName ?>" CLASS="txt" STYLE="width:100%;"></TD>
 	</TR>
 	<TR>
@@ -109,49 +109,49 @@ $(document).ready(function(){
 		<TEXTAREA NAME="Description" ROWS="4" CLASS="txt" STYLE="width:100%;"><?php if ( $Podatek ) echo $Podatek->Description ?></TEXTAREA></TD>
 	</TR>
 	<TR>
-		<TD>Geslo:&nbsp;</TD>
+		<TD>Password:&nbsp;</TD>
 		<TD COLSPAN="3"><INPUT NAME="Password" TYPE="Password" MAXLENGTH="16" VALUE="<?php if ( $Podatek ) echo $Podatek->Password ?>" CLASS="txt" STYLE="width:100%;"></TD>
 	</TR>
 	<TR>
 		<TD VALIGN="baseline" ROWSPAN="2">Moderator:&nbsp;</TD>
 		<TD COLSPAN="1"><SELECT NAME="Moderator" SIZE="1">
 	<?php 
-		$Moderators = $db->get_results( "SELECT ID, Name, Nickname FROM frmMembers WHERE AccessLevel > 1 ORDER BY AccessLevel DESC, Nickname" );
+		$Moderators = $db->get_results("SELECT ID, Name, Nickname FROM frmMembers WHERE AccessLevel > 1 ORDER BY AccessLevel DESC, Nickname");
 		if ( $Moderators ) foreach ( $Moderators as $Moderator )
-			echo "<OPTION VALUE=\"$Moderator->ID\"".(($Podatek && $Podatek->ModeratorID == $Moderator->ID)? " SELECTED STYLE=\"background-color: #99CCFF;\"": "").">$Moderator->Name</OPTION>\n";
+			echo "<OPTION VALUE=\"$Moderator->ID\"". ($Podatek && $Podatek->ModeratorID == $Moderator->ID ? " SELECTED STYLE=\"background-color: #99CCFF;\"" : "") .">$Moderator->Name</OPTION>\n";
 	?>
 		</SELECT><BR>
 		</TD>
-		<TD ALIGN="right" VALIGN="baseline">Čiščenje:</TD>
+		<TD ALIGN="right" VALIGN="baseline">Cleanup:</TD>
 		<TD VALIGN="baseline"><SELECT NAME="PurgeDays" SIZE="1">
-			<OPTION VALUE="0">brez</OPTION>
-			<OPTION VALUE="30" <?php if ( $Podatek && $Podatek->PurgeDays==30 ) echo "SELECTED" ?>>30 dni</OPTION>
-			<OPTION VALUE="90" <?php if ( $Podatek && $Podatek->PurgeDays==90 ) echo "SELECTED" ?>>90 dni</OPTION>
-			<OPTION VALUE="180" <?php if ( $Podatek && $Podatek->PurgeDays==180 ) echo "SELECTED" ?>>180 dni</OPTION>
-			<OPTION VALUE="365" <?php if ( $Podatek && $Podatek->PurgeDays==365 ) echo "SELECTED" ?>>1 leto</OPTION>
+			<OPTION VALUE="0">none</OPTION>
+			<OPTION VALUE="30" <?php if ( $Podatek && $Podatek->PurgeDays==30 ) echo "SELECTED" ?>>30 days</OPTION>
+			<OPTION VALUE="90" <?php if ( $Podatek && $Podatek->PurgeDays==90 ) echo "SELECTED" ?>>90 days</OPTION>
+			<OPTION VALUE="180" <?php if ( $Podatek && $Podatek->PurgeDays==180 ) echo "SELECTED" ?>>180 days</OPTION>
+			<OPTION VALUE="365" <?php if ( $Podatek && $Podatek->PurgeDays==365 ) echo "SELECTED" ?>>1 year</OPTION>
 		</SELECT></TD>
 	</TR>
 	<TR>
-		<TD><INPUT NAME="NotifyModerator" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->NotifyModerator ) echo "CHECKED VALUE=\"yes\""; else echo "VALUE=\"no\""; ?>> obveščaj</TD>
-		<TD ALIGN="right">Privatna:&nbsp;</TD>
+		<TD><INPUT NAME="NotifyModerator" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->NotifyModerator ) echo "CHECKED VALUE=\"yes\""; else echo "VALUE=\"no\""; ?>> notify</TD>
+		<TD ALIGN="right">Private:&nbsp;</TD>
 		<TD><INPUT NAME="Private" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->Private ) echo "CHECKED VALUE=\"yes\""; else echo "VALUE=\"no\""; ?>></TD>
 	</TR>
 	<TR>
-		<TD>Odobritev:&nbsp;</TD>
+		<TD>Approval:&nbsp;</TD>
 		<TD><INPUT NAME="ApprovalRequired" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->ApprovalRequired ) echo "CHECKED VALUE=\"yes\""; else echo "VALUE=\"no\""; ?>></TD>
-		<TD ALIGN="right">Skrita:&nbsp;</TD>
+		<TD ALIGN="right">Hidden:&nbsp;</TD>
 		<TD><INPUT NAME="Hidden" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->Hidden ) echo "CHECKED VALUE=\"Yes\""; else echo "VALUE=\"no\""; ?>></TD>
 	</TR>
 	<TR>
-		<TD>Samo prikaz:&nbsp;</TD>
+		<TD>Display-only:&nbsp;</TD>
 		<TD><INPUT NAME="ViewOnly" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->ViewOnly ) echo "CHECKED VALUE=\"yes\""; else echo "VALUE=\"no\""; ?>></TD>
-		<TD ALIGN="right">Ankete&nbsp;</TD>
+		<TD ALIGN="right">Polls&nbsp;</TD>
 		<TD><INPUT NAME="PollEnabled" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->PollEnabled ) echo "CHECKED VALUE=\"yes\""; else echo "VALUE=\"no\""; ?>></TD>
 	</TR>
 	<TR>
 		<TD VALIGN="top">Upload:&nbsp;</TD>
 		<TD VALIGN="top" COLSPAN="3" NOWRAP><INPUT NAME="AllowFileUploads" TYPE="Checkbox" <?php if ( $Podatek && $Podatek->AllowFileUploads ) echo "CHECKED VALUE=\"ys\""; else echo "VALUE=\"no\""; ?>>
-		<FONT COLOR="Gray" CLASS="f10">(.txt,.jpg,...)</FONT> <INPUT NAME="UploadType" TYPE="Text" MAXLENGTH="64" VALUE="<?php if ( $Podatek ) echo $Podatek->UploadType ?>" CLASS="txt" STYLE="width:130px;"><!BR>
+		<FONT COLOR="Gray" CLASS="f10">(.txt,.jpg,...)</FONT> <INPUT NAME="UploadType" TYPE="Text" MAXLENGTH="64" VALUE="<?php if ( $Podatek ) echo $Podatek->UploadType ?>" CLASS="txt" STYLE="width:130px;">
 		max <INPUT NAME="MaxUploadSize" TYPE="Text" SIZE="3" MAXLENGTH="3" VALUE="<?php if ( $Podatek ) echo $Podatek->MaxUploadSize ?>" CLASS="txt"> kB&nbsp;</TD>
 	</TR>
 	<TR>
@@ -164,7 +164,7 @@ $(document).ready(function(){
 
 	<TD VALIGN="top" WIDTH="280">
 	<FIELDSET ID="fldModeratorji">
-		<LEGEND>Dodatni moderatorji</LEGEND>
+		<LEGEND>Moderators</LEGEND>
 		<DIV ID="divModeratorji" STYLE="overflow:auto;"><img src="pic/control.spinner.gif" alt="Loading" border="0"> Loading ...</DIV>
 	</FIELDSET>
 	</TD>

@@ -44,7 +44,7 @@ function userACL($ACLID=1)
 		FROM
 			SMACLr
 		WHERE
-			ACLID = ". (int) $ACLID ."
+			ACLID = ". (int)$ACLID ."
 			AND
 			(UserID = ". $_SESSION['UserID'] ." OR GroupID IN (". $_SESSION['Groups'] ."))
 		ORDER BY
@@ -68,10 +68,9 @@ function userACL($ACLID=1)
 			if ( contains($mACL->MemberACL,"X") )
 				$ACL = left($ACL,4) . "X";
 		}
-	} else if ( $ACLID )
+	} elseif ( $ACLID )
 		$ACL = "     ";
 	else
 		$ACL = "LRXWD";
 	return $ACL;
 }
-?>

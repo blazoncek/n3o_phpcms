@@ -69,10 +69,10 @@ $(document).ready(function(){
 			target: '#divEdit', // target element(s) to be updated with server response
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Name))		{alert("Vnesite ime in priimek uporabnika!"); fObj.Name.focus(); return false;}
-				if (!emailOK(fObj.Email))	{alert("Nepravilen email naslov!"); fObj.Email.focus(); return false;}
-				if (empty(fObj.Username))	{alert("Vnesite uporabniĹˇko ime!"); fObj.Username.focus(); return false;}
-				<?php if ( (int)$_GET['ID'] == 0 ) { ?>if (empty(fObj.Password))	{alert("Vnesite geslo!"); fObj.Password.focus(); return false;}<?php } ?>
+				if (empty(fObj.Name))		{alert("Please enter full name!"); fObj.Name.focus(); return false;}
+				if (!emailOK(fObj.Email))	{alert("Inavlid email!"); fObj.Email.focus(); return false;}
+				if (empty(fObj.Username))	{alert("Please enter username!"); fObj.Username.focus(); return false;}
+				<?php if ( (int)$_GET['ID'] == 0 ) { ?>if (empty(fObj.Password))	{alert("Please enter password!"); fObj.Password.focus(); return false;}<?php } ?>
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			}

@@ -30,9 +30,9 @@ if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
 if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get categories
-$List = $db->get_results( "SELECT ID, CategoryName FROM frmCategories ORDER BY CategoryOrder" );
+$List = $db->get_results("SELECT ID, CategoryName FROM frmCategories ORDER BY CategoryOrder");
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 ?>
 <SCRIPT Language="JAVASCRIPT">
 <!--//
@@ -59,14 +59,13 @@ $('#list').live('pageinit', function(event){
 </SCRIPT>
 <?php
 
-echo "<div id=\"list\" data-role=\"page\">\n";
+echo "<div id=\"list\" data-role=\"page\" data-title=\"Forums\">\n";
 echo "<div data-role=\"header\" data-theme=\"b\">\n";
-echo "<h1>Forumi</h1>\n";
+echo "<h1>Forums</h1>\n";
 echo "<a href=\"./#menu". left($_GET['Action'],2) ."\" title=\"Back\" class=\"ui-btn-left\" data-iconpos=\"left\" data-icon=\"arrow-l\" data-ajax=\"false\" data-transition=\"slide\">Back</a>\n";
 echo "<a href=\"./\" title=\"Home\" class=\"ui-btn-right\" data-ajax=\"false\" data-iconpos=\"notext\" data-icon=\"home\">Home</a>\n";
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
-//echo "<div style=\"margin-bottom:30px;\"><input type=\"search\" name=\"Find\" id=\"search\" value=\"". ($_GET['Find']!=""? $_GET['Find']: "") ."\" data-theme=\"d\" /></div>\n";
 
 // display results
 if ( count( $List ) == 0 ) {
@@ -77,11 +76,12 @@ if ( count( $List ) == 0 ) {
 	echo "<ul data-role=\"listview\" data-filter-test=\"true\" data-theme=\"d\" data-divider-theme=\"d\" data-split-icon=\"delete\" data-split-theme=\"e\">\n";
 	foreach ( $List as $Item ) {
 		$Forums = $db->get_results(
-			" SELECT ID, ForumName, NotifyModerator, ApprovalRequired, AllowFileUploads, ViewOnly, Hidden, PollEnabled, Private,".
-			"	(SELECT count(*) FROM frmTopics WHERE ForumID = f.ID) AS MaxTopics".
-			" FROM frmForums f".
-			" WHERE CategoryID = " . (int)$Item->ID .
-			" ORDER BY ForumOrder, ForumName" );
+			"SELECT ID, ForumName, NotifyModerator, ApprovalRequired, AllowFileUploads, ViewOnly, Hidden, PollEnabled, Private,
+				(SELECT count(*) FROM frmTopics WHERE ForumID = f.ID) AS MaxTopics
+			FROM frmForums f
+			WHERE CategoryID = " . (int)$Item->ID ."
+			ORDER BY ForumOrder, ForumName"
+			);
 
 		echo "<li data-role=\"list-divider\">";
 		//echo "<a href=\"edit.php?Izbor=".$_GET['Izbor']."&ID=$Item->ID\" data-ajax=\"false\">";

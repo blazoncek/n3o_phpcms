@@ -85,13 +85,13 @@ echo "<td>";
 echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','inc.php?Action=".$_GET['Action']."&Izbor=frmEmail&Who=".$_GET['Kdo']."');\">Sporočilo</A>";
 echo "</td>\n";
 echo "<td align=\"right\">\n";
-echo "Uporabniki:";
+echo "Users:";
 echo "<SELECT NAME=\"Kdo\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=".$_GET['Action']."&Kdo='+this[this.selectedIndex].value);\">\n";
-echo "<OPTION VALUE=\"vsi\"".(($_GET['Kdo']=="vsi")? " SELECTED": "").">vsi</OPTION>\n";
-echo "<OPTION VALUE=\"novi\"".(($_GET['Kdo']=="novi")? " SELECTED": "").">novi</OPTION>\n";
-echo "<OPTION VALUE=\"neaktivni\"".(($_GET['Kdo']=="neaktivni")? " SELECTED": "").">neaktivni</OPTION>\n";
-echo "<OPTION VALUE=\"donatorji\"".(($_GET['Kdo']=="donatorji")? " SELECTED": "").">donatorji</OPTION>\n";
-echo "<OPTION VALUE=\"moderatorji\"".(($_GET['Kdo']=="moderatorji")? " SELECTED": "").">moderatorji</OPTION>\n";
+echo "<OPTION VALUE=\"vsi\"".(($_GET['Kdo']=="vsi")? " SELECTED": "").">all</OPTION>\n";
+echo "<OPTION VALUE=\"novi\"".(($_GET['Kdo']=="novi")? " SELECTED": "").">new</OPTION>\n";
+echo "<OPTION VALUE=\"neaktivni\"".(($_GET['Kdo']=="neaktivni")? " SELECTED": "").">inactive</OPTION>\n";
+echo "<OPTION VALUE=\"donatorji\"".(($_GET['Kdo']=="donatorji")? " SELECTED": "").">donators</OPTION>\n";
+echo "<OPTION VALUE=\"moderatorji\"".(($_GET['Kdo']=="moderatorji")? " SELECTED": "").">moderators</OPTION>\n";
 echo "</SELECT>\n";
 echo "</td>\n";
 echo "</tr>\n";
@@ -130,39 +130,49 @@ if ( count( $List ) == 0 ) {
 		// get list item
 		$Item = $List[$i++];
 		$Title = $Item->Ime;
+
 		if ( $Item->Ime == "")
 			$Title = $Item->Name;
+
 		// row background color
 		if ( $BgCol == "white" )
 			$BgCol="#edf3fe";
 		else
 			$BgCol = "white";
+
 		echo "<tr bgcolor=\"$BgCol\">\n";
 		echo "<td>";
+
 		if ( contains($ActionACL,"W") )
 			echo "<a href=\"javascript:void(0);\" onclick=\"loadTo('Edit','edit.php?Izbor=".$_GET['Izbor']."&Action=".$_GET['Action']."&ID=$Item->ID');\">$Title</a>" . (!$Item->Enabled? '*': '');
 		else
 			echo $Title . (!$Item->Enabled? '*': '');
+
 		echo "</td>\n";
 		echo "<td align=\"right\">".(int)$Item->Posts."</td>\n";
 		echo "<td align=\"center\">";
+
 		if ( $Item->Patron )
 			echo "<B CLASS=\"blu\">P</B>";
 		else
 			echo "&nbsp;";
+
 		if ( $Item->AccessLevel >= 5 )
 			echo "<B CLASS=\"red\">A</B>";
 		elseif ( $Item->AccessLevel >= 3 )
 			echo "<B COLOR=\"grn\">M</B>";
 		else
 			echo "&nbsp;";
+
 		echo "</td>\n";
 		echo "<td align=\"right\">".($Item->LastVisit? date('j.n.y',sqldate2time($Item->LastVisit)): '')."</td>\n";
 		echo "<td align=\"right\" valign=\"top\" width=\"20\">";
+
 		if ( contains($ActionACL,"D") && $Item->ID > 1 )
 			echo "<a href=\"javascript:void(0);\" onclick=\"javascript:check('$Item->ID','$Item->Name');\"><img src=\"pic/list.delete.gif\" width=11 height=11 alt=\"Delete\" border=\"0\" align=\"absmiddle\" class=\"icon\"></a>";
 		else
 			echo "<img src=\"pic/trans.gif\" width=11 height=11 border=\"0\" align=\"absmiddle\" class=\"icon\">";
+
 		echo "</td>\n";
 		echo "</tr>\n";
 	}

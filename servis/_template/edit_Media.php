@@ -99,8 +99,8 @@ $(document).ready(function(){
 			iframe: false, // fix for listRefresh
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Naziv))					{alert("Prosim vnesite naziv!"); fObj.Naziv.focus(); return false;}
-				if (fObj.Dodaj && empty(fObj.Dodaj))	{alert("Prosim, izberite ali dodajte datoteko!"); fObj.Dodaj.focus(); return false;}
+				if (empty(fObj.Naziv))					{alert("Please enter title!"); fObj.Naziv.focus(); return false;}
+				if (fObj.Dodaj && empty(fObj.Dodaj))	{alert("Please select or add a file!"); fObj.Dodaj.focus(); return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
@@ -230,7 +230,7 @@ $(document).ready(function(){
 	<LEGEND ID="lgdData">
 <?php if ( contains($ACL, "W") && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
-		echo "&MediaID=" . $_GET['ID'] . (($Podatek && $Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
+		echo "&MediaID=" . $_GET['ID'] . ($Podatek && $Podatek->ACLID!="" ? "&ID=". $Podatek->ACLID : "") . "')\" TITLE=\"Edit permissions\">";
 		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 } ?>
 		Basic&nbsp;information</LEGEND>

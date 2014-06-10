@@ -39,7 +39,7 @@ function setFields( f, l, u, p, m, t )
 </script>
 
 <FIELDSET style="width:270px;height:230px;">
-<LEGEND>Iskanje uporabnika</LEGEND>
+<LEGEND>User lookup</LEGEND>
 <DIV STYLE="overflow-y: auto; width:270px;height:215px;">
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <?php

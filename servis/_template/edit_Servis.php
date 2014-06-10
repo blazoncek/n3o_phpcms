@@ -77,7 +77,7 @@ $(document).ready(function(){
 	sort($files = scandir($StoreRoot ."/servis/template/"));
 	foreach ( $files as $file ) {
 		$name = substr($file, 5, strlen($file)-9);
-		if ( is_file( $StoreRoot."/servis/template/".$file ) && left($file, 5) == "edit_" && right($file, 4) == ".php" )
+		if ( is_file($StoreRoot."/servis/template/".$file) && left($file, 5) == "edit_" && right($file, 4) == ".php" )
 			echo "<OPTION VALUE=\"$name\"" . (( $Podatek && $Podatek->Action == $name )? " SELECTED": "") . ">$name</OPTION>\n";
 	}
 ?>
@@ -86,7 +86,7 @@ $(document).ready(function(){
 	<TD><INPUT TYPE="Text" NAME="Action" MAXLENGTH="64" STYLE="width:100%;" VALUE="<?php if ( $Podatek ) echo $Podatek->Action; ?>"></TD>
 </TR>
 <TR>
-	<TD ALIGN="right"><B>Ikona:</B>&nbsp;</TD>
+	<TD ALIGN="right"><B>Icon:</B>&nbsp;</TD>
 	<TD COLSPAN="2"><SELECT NAME="Icon" SIZE="1" ONCHANGE="document.images['Ikona'].src=(this.selectedIndex==0?'./pic/trans.gif':'./pic/icon.'+this[selectedIndex].value+'.png');">
 		<OPTION VALUE="">--- no icon ---</OPTION>
 <?php

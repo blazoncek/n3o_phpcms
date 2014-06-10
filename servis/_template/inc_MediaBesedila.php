@@ -30,7 +30,7 @@ $Tip = $db->get_var( "SELECT Tip FROM Media WHERE MediaID = ".(int)$_GET['MediaI
 
 // add media
 if ( isset($_GET['BesediloID']) && $_GET['BesediloID'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $Tip == 'PIC' ) {
 		$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSlike WHERE BesediloID = ".(int)$_GET['BesediloID'] );
 		$db->query(
@@ -42,23 +42,23 @@ if ( isset($_GET['BesediloID']) && $_GET['BesediloID'] != "" ) {
 			"INSERT INTO BesedilaMedia (BesediloID, MediaID, Polozaj) ".
 			"VALUES (".(int)$_GET['BesediloID'].", ".(int)$_GET['MediaID'].", ".($Polozaj? $Polozaj+1: 1).")" );
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 // delete media from text
 if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $Tip == 'PIC' ) {
 		$db->query( "DELETE FROM BesedilaSlike WHERE ID = ".(int)$_GET['Odstrani'] );
 	} else {
 		$db->query( "DELETE FROM BesedilaMedia WHERE ID = ".(int)$_GET['Odstrani'] );
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 $ACLID = $db->get_var( "SELECT ACLID FROM Media WHERE MediaID = ".(int)$_GET['MediaID'] );
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 

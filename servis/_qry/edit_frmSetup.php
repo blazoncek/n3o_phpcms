@@ -26,7 +26,7 @@
 */
 
 if ( isset($_POST['NewName']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( trim($_POST['NewName'])!='' )
 		$db->query( "INSERT INTO frmParameters (ParamName, ParamValue) VALUES ('".$_POST['NewName']."', '".$_POST['NewValue']."')" );
 
@@ -37,6 +37,6 @@ if ( isset($_POST['NewName']) ) {
 			else
 				$db->query( "UPDATE frmParameters SET ParamValue='$Param' WHERE ParamName='$Key'" );
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

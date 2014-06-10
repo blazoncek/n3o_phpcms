@@ -60,7 +60,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 
 $ACLID = $db->get_var("SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$_GET['KategorijaID']."'");
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 

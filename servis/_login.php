@@ -36,7 +36,7 @@ function md5bin($target)
     return $ret;
 }
 
-if ( isset( $_GET["login"] ) && isset( $_POST["Usr"] ) ) {
+if ( isset($_GET["login"]) && isset($_POST["Usr"]) ) {
 
 	$_SESSION['Authenticated'] = false;
 	$Error = "";
@@ -51,7 +51,8 @@ if ( isset( $_GET["login"] ) && isset( $_POST["Usr"] ) ) {
 		FROM
 			SMUser
 		WHERE
-			Username = '". $_POST["Usr"] ."'");
+			Username = '". $_POST["Usr"] ."'"
+		);
 
 	if ( $User && $User->Active == 1 ) {
 		// authenticate user from LDAP (higher priority)
@@ -69,7 +70,7 @@ if ( isset( $_GET["login"] ) && isset( $_POST["Usr"] ) ) {
 			}
 		} else
 		// authenticate user from DB
-		echo "<!-- ". crypt(PWSALT . $_POST['Pwd'], $User->Password) ." -->\n";
+		//echo "<!-- ". crypt(PWSALT . $_POST['Pwd'], $User->Password) ." -->\n"; // for debugging password issues
 		if ( crypt(PWSALT . $_POST['Pwd'], $User->Password) == $User->Password ) {
 			$_SESSION['Authenticated'] = true;
 		} else {
@@ -93,12 +94,12 @@ if ( isset( $_GET["login"] ) && isset( $_POST["Usr"] ) ) {
 				FROM
 					SMUserGroups
 				WHERE
-					UserID = " . (int) $_SESSION['UserID'] . "
+					UserID = ". (int)$_SESSION['UserID'] ."
 				ORDER BY
 					GroupID" ) ) {
 				// everyone group not found
-				if ( !in_array( "0", $UserGroups ) )
-					$_SESSION['Groups'] = "0," . implode(",", $UserGroups);
+				if ( !in_array("0", $UserGroups) )
+					$_SESSION['Groups'] = "0,". implode(",", $UserGroups);
 				else
 					$_SESSION['Groups'] = implode(",", $UserGroups);
 			} else {
@@ -109,9 +110,10 @@ if ( isset( $_GET["login"] ) && isset( $_POST["Usr"] ) ) {
 				"UPDATE
 					SMUser
 				SET
-					LastLogon = '" . date("Y-m-d H:i:s") . "'
+					LastLogon = '". date("Y-m-d H:i:s") ."'
 				WHERE
-					UserID = " . (int) $_SESSION['UserID'] );
+					UserID = ". (int) $_SESSION['UserID']
+				);
 		}
 	} else {
 		$Error = "NoUser";
@@ -145,7 +147,7 @@ function testCookie() {
 }
 
 if (!testCookie()) {
-	alert("Piškotki niso vklopljeni!\nServisna aplikacija ne bo delovala!");
+	alert("Cookies are not enabled!\nSystem management not possible!");
 	document.location.href="../";
 }
 //-->
@@ -303,7 +305,7 @@ if ( isset( $_SESSION['Authenticated'] ) && $_SESSION['Authenticated'] ) {
 	echo "<B>Login successful!</B>\n";
 	echo "</div>\n";
 } else {
-	if ( isset( $_POST['Usr'] ) && isset( $_POST['Pwd'] ) ) {
+	if ( isset($_POST['Usr']) && isset($_POST['Pwd']) ) {
 		switch ( $Error ){
 			case "NoUser"   : echo "<SPAN STYLE=\"color: red;\"><B>No such user!</B></SPAN>\n"; break;
 			case "Password" : echo "<SPAN STYLE=\"color: red;\"><B>Incorrect username/password!</B></SPAN><!-- ". crypt(PWSALT . $_POST['Pwd']) ." -->\n"; break;

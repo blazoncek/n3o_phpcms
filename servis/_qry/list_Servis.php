@@ -25,11 +25,11 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) )   $_GET['ID'] = "";
+if ( !isset($_GET['ID']) )   $_GET['ID'] = "";
 if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
 
 if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// delete subtree of ACLs 
 	$List = $db->get_col(
 		"SELECT ACLID
@@ -42,7 +42,7 @@ if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
 		}
 
 	$db->query( "DELETE FROM SMActions WHERE ActionID LIKE '". $_GET['Brisi'] ."%'" );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	
 	// change URL parameter to reflect deletions
 	if ( strlen( $_GET['Brisi'] ) > 2 )
@@ -60,7 +60,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	$Nov = $Prfx . sprintf( "%02d", (int)right($_GET['ID'],2) + (int)$_GET['Smer'] );
 	$Zac = $Prfx . "xx";
 	if ( right( $Nov, 2 ) != "00" ) {
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		if ( SQLType == "MySQL" ) {
 			// NOTE: update ACL names (not mandatory)
 			$db->query( "UPDATE SMACL SET Name=CONCAT('SRV-".$Zac."',substring(Name,".($Start+4).",99))        WHERE Name LIKE 'SRV-".$_GET['ID']."%'" );
@@ -80,7 +80,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 			$db->query( "UPDATE SMActions SET ActionID='".$_GET['ID']."' + substring(ActionID,".$Start.",99) WHERE left(ActionID,".$len.")='".$Nov."'" );
 			$db->query( "UPDATE SMActions SET ActionID='".$Nov."' + substring(ActionID,".$Start.",99)        WHERE left(ActionID,".$len.")='".$Zac."'" );
 		}
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	}
 	// prevent opening subcategory
 	if ( $len > 2 )

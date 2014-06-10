@@ -37,15 +37,15 @@ require_once("../_application.php");
 include_once("_userACL.php");
 
 // check if session still active
-if ( !isset( $_SESSION['Authenticated'] ) || !$_SESSION['Authenticated'] ) {
-	header( "Refresh:1; URL=./" ); // no, login
+if ( !isset($_SESSION['Authenticated']) || !$_SESSION['Authenticated'] ) {
+	header("Refresh:1; URL=./"); // no, login
 	die();
 }
 
 // get ACL
 $Action = $db->get_row("SELECT Action, ACLID FROM SMActions WHERE Action = '". $_GET['Izbor'] ."'");
 if ( $Action )
-	$ActionACL = userACL( $Action->ACLID );
+	$ActionACL = userACL($Action->ACLID);
 else
 	$ActionACL = "LRWDX";
 
@@ -70,11 +70,11 @@ if ( $_GET['Izbor'] != "" ) {
 	if ( is_file("template/vnos_". $_GET['Izbor'] .".php") )
 		// load user template
 		include("template/vnos_". $_GET['Izbor'] .".php");
-	elseif ( is_file("_template/vnos_" . $_GET['Izbor'] .".php") )
+	elseif ( is_file("_template/vnos_". $_GET['Izbor'] .".php") )
 		// load system template
 		include("_template/vnos_". $_GET['Izbor'] .".php");
 	else
-		echo "<br><br><br><br><p align=\"center\" style=\"color:red;\"><B>Template not found!</b></p>\n";
+		echo "<br><br><br><br><p align=\"center\" style=\"color:red;\"><B>Not implemented!</b></p>\n";
 }
 ?>
 </div>

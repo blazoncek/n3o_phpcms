@@ -25,13 +25,9 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$Group = $db->get_row(
-	"SELECT GroupID, Name
-	FROM SMGroup
-	WHERE GroupID = " . (int)$_GET['ID']
-	);
+$Group = $db->get_row("SELECT GroupID, Name FROM SMGroup WHERE GroupID = ". (int)$_GET['ID']);
 
 ?>
 <SCRIPT Language="JAVASCRIPT">
@@ -40,7 +36,7 @@ $('#edit').live('pageinit', function(event){
 	// add change events for Name
 	$("input[name=Name]").bind("change", function(event,ui){
 		var options = {};
-		if (this.value=="")	{alert("Prosim vnesite ime grupe!"); this.focus(); return false;}
+		if (this.value=="")	{alert("Please enter group name!"); this.focus(); return false;}
 		options.Name = this.value;
 		URL = '<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>';
 		$.mobile.changePage(URL, {
@@ -80,14 +76,14 @@ echo "<div data-role=\"content\">\n";
 
 if ( isset( $Error ) ) {
 	echo "\t<div class=\"ui-body ui-body-d ui-corner-all\" style=\"padding:1em;text-align:center;\">";
-	echo "<b>Prišlo je do napake!</b><br>Podatki niso vpisani.";
+	echo "<b>Error!</b><br>Data not saved.";
 	echo "</div>\n";
 } else {
 
 ?>
 	<fieldset class="ui-hide-label" data-role="fieldcontain"><legend>Basic&nbsp;information:</legend>
-		<LABEL FOR="frmGroupName"><B>Ime skupine</B></LABEL>
-		<INPUT TYPE="text" NAME="Name" ID="frmGroupName" MAXLENGTH="50" VALUE="<?php echo ($Group? $Group->Name: "") ?>" <?php echo ((int)$_GET['ID'] <= 4 && (int)$_GET['ID'] > 0) ? "READONLY" : "" ?> placeholder="Ime skupine" data-theme="d"><br />
+		<LABEL FOR="frmGroupName"><B>Name</B></LABEL>
+		<INPUT TYPE="text" NAME="Name" ID="frmGroupName" MAXLENGTH="50" VALUE="<?php echo ($Group ? $Group->Name : "") ?>" <?php echo ((int)$_GET['ID'] <= 4 && (int)$_GET['ID'] > 0) ? "READONLY" : "" ?> placeholder="Name" data-theme="d"><br />
 	</fieldset>
 <?php
 	if ( (int)$_GET['ID'] > 0 ) {
@@ -102,9 +98,10 @@ if ( isset( $Error ) ) {
 				LEFT JOIN SMUserGroups UG
 					ON U.UserID = UG.UserID AND UG.GroupID = ". (int)$_GET['ID'] ."
 			ORDER BY
-				U.UserName" );
+				U.UserName"
+			);
 
-		echo "\t<fieldset data-role=\"controlgroup\"><legend>Člani skupine</legend>\n";
+		echo "\t<fieldset data-role=\"controlgroup\"><legend>Members</legend>\n";
 		// disable groups 1 (everyone) for anyone and 2 (administrators) for administrator
 		if ( count($Members) > 0 )
 			foreach ( $Members as $Member ) {

@@ -25,9 +25,9 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-$Podatek = $db->get_row("SELECT * FROM frmForums WHERE ID = ".(int)$_GET['ID']);
+$Podatek = $db->get_row("SELECT * FROM frmForums WHERE ID = ". (int)$_GET['ID']);
 ?>
 
 <script language="JavaScript" type="text/javascript">
@@ -39,7 +39,7 @@ $('#edit').live('pageinit', function(event){
 //		var arr_unchecked_values = "".concat($('input[type=checkbox]:not(:checked)').map(function(){return this.name+'='+(this.checked?"yes":"no");}).get());
 //		alert(arr_unchecked_values);
 		if ( this.type == "checkbox" ) this.value = this.checked ? "yes" : "no";
-		if ( this.name=="ForumName" && this.value.length==0 )	{alert("Prosim vnesite naziv!"); fObj.focus(); return false;}
+		if ( this.name=="ForumName" && this.value.length==0 )	{alert("Please enter title!"); fObj.focus(); return false;}
 		URL = '<?php echo dirname($_SERVER['PHP_SELF'])?>/upd.php?<?php echo $_SERVER['QUERY_STRING'] ?>';
 //return false;
 		$.mobile.loadPage(URL, {
@@ -66,26 +66,26 @@ echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 ?>
 	<fieldset class="ui-hide-label" data-role="fieldcontain">
-		<LABEL FOR="frmCategory"><B>Skupina:</B></LABEL>
+		<LABEL FOR="frmCategory"><B>Category:</B></LABEL>
 		<SELECT NAME="CategoryID" ID="frmCategory" SIZE="1" data-theme="a">
 	<?php 
-		$Categories = $db->get_results( "SELECT ID, CategoryName FROM frmCategories ORDER BY CategoryOrder" );
+		$Categories = $db->get_results("SELECT ID, CategoryName FROM frmCategories ORDER BY CategoryOrder");
 		if ( $Categories ) foreach ( $Categories as $Category )
 			echo "<OPTION VALUE=\"$Category->ID\"".(($Podatek && $Podatek->CategoryID == $Category->ID)? " SELECTED": "").">$Category->CategoryName</OPTION>\n";
 	?>
 		</SELECT>
 
-		<LABEL FOR="frmNaziv"><B>Naziv</B></LABEL>
+		<LABEL FOR="frmNaziv"><B>Title</B></LABEL>
 		<INPUT NAME="ForumName" ID="frmNaziv" TYPE="Text" MAXLENGTH="50" VALUE="<?php if ( $Podatek ) echo $Podatek->ForumName ?>" placeholder="Naziv" data-theme="d"><br />
 
-		<LABEL FOR="frmOpis">Opis</LABEL>
+		<LABEL FOR="frmOpis">Description</LABEL>
 		<TEXTAREA ID="frmOpis" NAME="Description" data-theme="d"><?php if ( $Podatek ) echo $Podatek->Description ?></TEXTAREA>
-<!--
+<!-- NOT IMPLEMENTED
 		<LABEL FOR="frmPassword">Geslo</LABEL>
 		<INPUT NAME="Password" ID="frmPassword" TYPE="Password" MAXLENGTH="16" VALUE="<?php if ( $Podatek ) echo $Podatek->Password ?>" placeholder="Geslo" data-theme="d"><br />
 -->
 	</fieldset>
-<!--
+<!-- NOT IMPLEMENTED
 	<fieldset data-role="fieldcontain">
 		<LABEL FOR="frmModerator">Moderator</LABEL>
 		<SELECT NAME="Moderator" ID="frmModerator" SIZE="1" data-theme="d">
@@ -174,7 +174,7 @@ $List = $db->get_results(
 		frmTopics T
 		LEFT JOIN frmPoll P ON T.ID = P.TopicID
 	WHERE
-		ForumID = ".(int)$_GET['ID']."
+		ForumID = ". (int)$_GET['ID'] ."
 	HAVING
 		TotalMessageCount > 0
 	ORDER BY
@@ -182,7 +182,7 @@ $List = $db->get_results(
 		T.LastMessageDate DESC,
 		TotalMessageCount DESC,
 		T.TopicName"
-);
+	);
 
 echo "<fieldset class=\"ui-hide-label\" data-role=\"fieldcontain\" data-theme=\"a\">";
 echo "<legend>Teme z vsebino</legend>\n";
@@ -191,7 +191,7 @@ if ( count($List) ) {
 	echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\" data-count-theme=\"e\">\n";
 	foreach ( $List as $Item ) {
 		$Title = $Item->TopicName;
-		if ( $Title=="" ) $Title = "(brez naziva)";
+		if ( $Title=="" ) $Title = "(no title)";
 		echo "<li>";
 		echo "<A HREF=\"inc.php?Izbor=frmMessages&Action=". $_GET['Action'] ."&ID=". $_GET['ID'] ."&TopicID=". $Item->ID ."\">";
 		echo "<h3>". $Title ."</h3>";

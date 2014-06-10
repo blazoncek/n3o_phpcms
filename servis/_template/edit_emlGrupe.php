@@ -25,7 +25,7 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 $Group = $db->get_row(
 	"SELECT emlGroupID, Naziv, KtgID
@@ -106,7 +106,6 @@ $(document).ready(function(){
 });
 //-->
 </SCRIPT>
-<!-- VSEBINA -->
 <FIELDSET ID="fldData" style="width:430px;">
 <LEGEND ID="lgdData">
 	Basic&nbsp;information</LEGEND>
@@ -114,15 +113,15 @@ $(document).ready(function(){
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <TR><TD COLSPAN="2" HEIGHT="10"></TD></TR>
 <TR>
-	<TD ALIGN="right" WIDTH="25%"><B>Naziv skupine:</B>&nbsp;</TD>
-	<TD><INPUT TYPE="text" NAME="Naziv" SIZE="43" MAXLENGTH="50" VALUE="<?php echo ($Group? $Group->Naziv : "") ?>" STYLE="width:100%;"></TD>
+	<TD ALIGN="right" WIDTH="25%"><B>Group:</B>&nbsp;</TD>
+	<TD><INPUT TYPE="text" NAME="Naziv" SIZE="43" MAXLENGTH="50" VALUE="<?php echo ($Group ? $Group->Naziv : "") ?>" STYLE="width:100%;"></TD>
 </TR>
 <TR>
-	<TD ALIGN="right" WIDTH="35%">Rubrika:&nbsp;</TD>
+	<TD ALIGN="right" WIDTH="35%">Category:&nbsp;</TD>
 	<TD><SELECT NAME="KtgID" SIZE="1" STYLE="width:100%;">
-		<option value="">--- ni izbrana ---</option>
+		<option value="">--- unspecified ---</option>
 <?php
-$List = $db->get_results( "SELECT KategorijaID, Ime, ACLID FROM Kategorije WHERE Izpis <> 0 ORDER BY KategorijaID" );
+$List = $db->get_results("SELECT KategorijaID, Ime, ACLID FROM Kategorije WHERE Izpis <> 0 ORDER BY KategorijaID");
 foreach( $List as $Item ) {
 	$ACL = userACL( $Item->ACLID );
 	if ( contains($ACL,"L") ) {
@@ -138,7 +137,7 @@ foreach( $List as $Item ) {
 	</TD>
 </TR>
 <TR>
-	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Shrani " CLASS="but"></TD>
+	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>
 </TR>
 </TABLE>
 </FORM>
@@ -165,13 +164,13 @@ if ( (int)$_GET['ID'] > 0 ) {
 		);
 ?>
 <FIELDSET ID="fldUser" style="width:430px;">
-<LEGEND ID="lgdUser">Uporabniki</LEGEND>
+<LEGEND ID="lgdUser">Users</LEGEND>
 <FORM NAME="Grupe" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <TABLE ID="results" BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD ALIGN="right" WIDTH="45%">Niso člani:</TD>
+	<TD ALIGN="right" WIDTH="45%">Not members:</TD>
 	<TD ALIGN="center" WIDTH="10%"></TD>
-	<TD ALIGN="right" WIDTH="45%">So člani:</TD>
+	<TD ALIGN="right" WIDTH="45%">Members:</TD>
 </TR>
 <TR>
 	<TD ALIGN="left">
@@ -210,4 +209,3 @@ if ( count( $Members ) > 0 )
 <?php
 }
 ?>
-<!-- /VSEBINA -->

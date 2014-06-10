@@ -29,13 +29,13 @@
 * requires: xmenu.css and xmenu.js
 *--------------------------------------
 * Menu structure is defined in database table called SmActions like this:
-* 00   "Servis" (submenu)
-* 0001 "Uporabniki" (action)
-* 0002 "Skupine" (action)
+* 00   "System" (submenu)
+* 0001 "Users" (action)
+* 0002 "Groups" (action)
 * 0003 "" (separator)
-* 0004 "Jeziki" (action)
-* 01   "Podatki" (submenu)
-* 0101 "Rubrike" (action)
+* 0004 "Languages" (action)
+* 01   "Content" (submenu)
+* 0101 "Categories" (action)
 * ...
 **************************************/
 
@@ -60,11 +60,12 @@ function loopXmenu($menuID="00")
 		FROM
 			SMActions
 		WHERE
-			ActionID LIKE '" . $menuID . "__'
+			ActionID LIKE '". $menuID ."__'
 			AND
 			Enabled <> 0
 		ORDER BY
-			ActionID" );
+			ActionID"
+		);
 
 	// submenu object
 	echo "var Menu$menuID = new WebFXMenu;\n";
@@ -76,7 +77,7 @@ function loopXmenu($menuID="00")
 		$ACL = userACL((int)$Menu->ACLID);
 
 		// extract menu icon
-		$icon = $Menu->Icon=="" ? "" : "icon." . $Menu->Icon . ".png";
+		$icon = $Menu->Icon=="" ? "" : "icon.". $Menu->Icon .".png";
 
 		if ( contains($ACL,"X") ) {
 			// user has Execute access
@@ -105,7 +106,7 @@ function loopXmenu($menuID="00")
 					$xURL = "javascript:loadTo('List','list.php?Action=$Menu->ActionID')";
 				
 				// check if user has eXecute ACL
-				$xURL = contains($ACL,"X")? $xURL: "";
+				$xURL = contains($ACL,"X") ? $xURL : "";
 				
 				// write JS code
 				echo "Menu$menuID.add(new WebFXMenuItem(\"$Menu->Name\", \"$xURL\", null, \"$icon\"));\n";
@@ -124,7 +125,7 @@ if ( $vDBInfo[0] != $vAPInfo[0] || $vDBInfo[1] != $vAPInfo[1] ) {
 <script type="text/javascript">
 <!-- //
 webfxMenuImagePath = "./pic/";
-webfxMenuDefaultWidth     = 155;
+webfxMenuDefaultWidth = 155;
 
 // Menu bar
 var myBar = new WebFXMenuBar;
@@ -147,7 +148,7 @@ document.write(myBar);
 ?>
 <script type="text/javascript">
 <!--
-webfxMenuImagePath    = "./pic/";
+webfxMenuImagePath = "./pic/";
 webfxMenuDefaultWidth = 155;
 
 // Menu bar
@@ -167,7 +168,8 @@ var myBar = new WebFXMenuBar;
 			AND
 			ActionID LIKE '__'
 		ORDER BY
-			ActionID" );
+			ActionID"
+		);
 
 	// build top level Xmenu structure
 	foreach ( $ServisMenus as $Servis ) {
@@ -200,14 +202,14 @@ var myBar = new WebFXMenuBar;
 	}
 ?>
 var sysMenu = new WebFXMenu;
-sysMenu.add(new WebFXMenuItem("Odjavi", "./?logout", null, "icon.shut_down.png"));
-sysMenu.add(new WebFXMenuItem("Ogled strani", "../", "_blank", "icon.home.png"));
+sysMenu.add(new WebFXMenuItem("Logout", "./?logout", null, "icon.shut_down.png"));
+sysMenu.add(new WebFXMenuItem("View page", "../", "_blank", "icon.home.png"));
 <?php
 	$Password = $db->get_var("SELECT Password FROM SMUser WHERE UserID = ". $_SESSION['UserID']);
 	
 	// if not using LDAP logon, allow user to change password
-	if ( $Password != "" AND left($Password,1) != "@" )
-		echo "sysMenu.add(new WebFXMenuItem(\"Menjava gesla\", \"javascript:loadTo('Edit','inc.php?Izbor=Password')\", null, \"icon.lock.png\"));\n";
+	if ( $Password != "" && left($Password,1) != "@" )
+		echo "sysMenu.add(new WebFXMenuItem(\"Change password\", \"javascript:loadTo('Edit','inc.php?Izbor=Password')\", null, \"icon.lock.png\"));\n";
 ?>
 //sysMenu.add(new WebFXMenuItem("SQL", "javascript:loadTo('Edit','vnos.php?Izbor=SQL')", null, "icon.process.png"));
 sysMenu.add(new WebFXMenuSeparator());

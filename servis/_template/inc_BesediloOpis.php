@@ -34,7 +34,7 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 	$_POST['Povzetek']  = $db->escape(left($_POST['Povzetek'],512));
 	$_POST['Opis']      = str_replace("\\\"","\"",$db->escape(CleanupTinyMCE($_POST['Opis'])));
 
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	if ( $_GET['ID'] != "0" ) {
 		$db->query(
 			"UPDATE BesedilaOpisi ".
@@ -68,8 +68,8 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 			"	".(($_POST['Opis']!="")? "'".$_POST['Opis']."'": "NULL")." )"
 		);
 	}
-	$db->query( "UPDATE Besedila SET DatumSpremembe = '".date('Y-m-d H:i:s')."' WHERE BesediloID = ".(int)$_GET['BesediloID'] );
-	$db->query( "COMMIT" );
+	$db->query("UPDATE Besedila SET DatumSpremembe = '". date('Y-m-d H:i:s') ."' WHERE BesediloID = ". (int)$_GET['BesediloID']);
+	$db->query("COMMIT");
 	
 	echo "<SCRIPT LANGUAGE=JAVASCRIPT>\n";
 	echo "<!--\n";
@@ -90,12 +90,12 @@ $Podatek = $db->get_row(
 		BO.Opis
 	FROM BesedilaOpisi BO
 	WHERE BO.ID = ".(int)$_GET['ID']
-);
+	);
 
-$Besedilo = $db->get_row( "SELECT Tip, ACLID FROM Besedila WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+$Besedilo = $db->get_row("SELECT Tip, ACLID FROM Besedila WHERE BesediloID = ". (int)$_GET['BesediloID']);
 // get ACL
 if ( $Besedilo ) {
-	$ACL = userACL( $Besedilo->ACLID );
+	$ACL = userACL($Besedilo->ACLID);
 } else
 	$ACL = "LRWDX";
 
@@ -181,8 +181,8 @@ $(document).ready(function(){
 			target: '#divEdit',
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Naslov))	{alert("Prosim vnesite naslov!"); fObj.Naslov.focus(); return false;}
-				if (fObj.Jezik.selectedIndex==0)	{alert("Izberite jezik!"); fObj.Jezik.focus(); return false;}
+				if (empty(fObj.Naslov))	{alert("Please enter title!"); fObj.Naslov.focus(); return false;}
+				if (fObj.Jezik.selectedIndex==0)	{alert("Please select language!"); fObj.Jezik.focus(); return false;}
 				return true;
 			} // pre-submit callback
 		});
@@ -223,7 +223,7 @@ $(document).ready(function(){
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanjšano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
-	<td id="editNote" align="right"><B>Vnos besedila</B>&nbsp;&nbsp;</td>
+	<td id="editNote" align="right"><B>Text entry</B>&nbsp;&nbsp;</td>
 </tr>
 </table>
 </DIV>
@@ -235,26 +235,26 @@ $(document).ready(function(){
 <?php endif ?>
 <TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD NOWRAP><B>Naslov:</B>&nbsp;</TD>
+	<TD NOWRAP><B>Title:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="Naslov" MAXLENGTH="128" VALUE="<?php echo ($Podatek? $Podatek->Naslov: "") ?>" STYLE="width:100%" TABINDEX="7"></TD>
 	<TD>
-	&nbsp;Jezik: <B class="red"><?php echo ($_GET['Jezik']==""? "vsi": $_GET['Jezik']) ?></B>
+	&nbsp;Language: <B class="red"><?php echo ($_GET['Jezik']==""? "vsi": $_GET['Jezik']) ?></B>
 	<INPUT TYPE="Hidden" NAME="Jezik" VALUE="<?php echo $_GET['Jezik'] ?>">
 	</TD>
 	<TD ALIGN="right">
-	<INPUT TYPE="Button" VALUE=" Zapri " ONCLICK="loadTo('Edit','edit.php?Izbor=Besedila&ID=<?php echo (int)$_GET['BesediloID'] ?>')" CLASS="but">
+	<INPUT TYPE="Button" VALUE=" Close " ONCLICK="loadTo('Edit','edit.php?Izbor=Besedila&ID=<?php echo (int)$_GET['BesediloID'] ?>')" CLASS="but">
 	<INPUT TYPE="submit" VALUE=" Save " CLASS="but">
 	</TD>
 </TR>
 <TR>
-	<TD NOWRAP><SPAN CLASS="f10">Podnaslov:&nbsp;<BR>Povzetek:</SPAN></TD>
-	<TD colspan="4"><INPUT TYPE="text" NAME="Podnaslov" MAXLENGTH="128" VALUE="<?php echo ($Podatek? $Podatek->Podnaslov: "") ?>" STYLE="width:100%;" TABINDEX="8"></TD>
+	<TD NOWRAP><SPAN CLASS="f10">Subtitle:&nbsp;<BR>Abstract:</SPAN></TD>
+	<TD colspan="4"><INPUT TYPE="text" NAME="Podnaslov" MAXLENGTH="128" VALUE="<?php echo ($Podatek ? $Podatek->Podnaslov : "") ?>" STYLE="width:100%;" TABINDEX="8"></TD>
 </TR>
 <TR>
-	<TD COLSPAN="4" VALIGN="top"><TEXTAREA NAME="Povzetek" ROWS="3" STYLE="width:100%;" TABINDEX="9"><?php echo ($Podatek? $Podatek->Povzetek: "") ?></TEXTAREA></TD>
+	<TD COLSPAN="4" VALIGN="top"><TEXTAREA NAME="Povzetek" ROWS="3" STYLE="width:100%;" TABINDEX="9"><?php echo ($Podatek ? $Podatek->Povzetek : "") ?></TEXTAREA></TD>
 </TR>
 <TR>
-	<TD COLSPAN="4" VALIGN="top"><B>Opis:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
+	<TD COLSPAN="4" VALIGN="top"><B>Content:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
 </TR>
 <?php
 	$Opis = $Podatek ? str_replace("\\\"","\"",$Podatek->Opis) : ""; // strip escaped quotes
@@ -263,7 +263,7 @@ $(document).ready(function(){
 	$Opis = preg_replace( "/(<img\s+src=\")(?!(?:http|data|\/))/i", '$1../', $Opis ); // adjust path for images
 ?>
 <TR>
-	<TD COLSPAN="4" VALIGN="top"><TEXTAREA NAME="Opis" ID="HTMLeditor" STYLE="width:100%;height:100%;"><?php echo ($Podatek? $Opis: "") ?></TEXTAREA></TD>
+	<TD COLSPAN="4" VALIGN="top"><TEXTAREA NAME="Opis" ID="HTMLeditor" STYLE="width:100%;height:100%;"><?php echo ($Podatek ? $Opis : "") ?></TEXTAREA></TD>
 </TR>	
 </TABLE>
 </FORM>

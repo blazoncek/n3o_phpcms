@@ -74,7 +74,7 @@ $(document).ready(function(){
 			target: '#divEdit', // target element(s) to be updated with server response
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Name))	{alert("Prosim vnesite ime grupe!"); fObj.Name.focus(); return false;}
+				if (empty(fObj.Name))	{alert("Please enter group name!"); fObj.Name.focus(); return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
@@ -113,7 +113,7 @@ $(document).ready(function(){
 <TR><TD COLSPAN="2" HEIGHT="10"></TD></TR>
 <TR>
 	<TD ALIGN="right" WIDTH="25%"><B>Name:</B>&nbsp;</TD>
-	<TD><INPUT TYPE="text" NAME="Name" SIZE="43" MAXLENGTH="50" VALUE="<?php echo ($Group? $Group->Name: "") ?>" STYLE="width:100%;"></TD>
+	<TD><INPUT TYPE="text" NAME="Name" SIZE="43" MAXLENGTH="50" VALUE="<?php echo ($Group ? $Group->Name : "") ?>" STYLE="width:100%;"></TD>
 </TR>
 <?php
 // disable update for Everyone and Administrators groups
@@ -165,7 +165,7 @@ if ( (int)$_GET['ID'] > 0 ) {
 <FORM NAME="Grupe" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <TABLE ID="results" BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD ALIGN="right" WIDTH="45%">Not members:</TD>
+	<TD ALIGN="right" WIDTH="45%">Non members:</TD>
 	<TD ALIGN="center" WIDTH="10%"></TD>
 	<TD ALIGN="right" WIDTH="45%">Members:</TD>
 </TR>
@@ -185,10 +185,6 @@ if ( count( $NonMembers ) > 0 )
 	<TD ALIGN="center">
 	<IMG ID="Add" SRC="pic/icon.arrow_right.png" WIDTH=16 HEIGHT=16 ALT="" ALIGN="absmiddle" CLASS="icon"><BR><BR>
 	<IMG ID="Remove" SRC="pic/icon.arrow_left.png" WIDTH=16 HEIGHT=16 ALT="" ALIGN="absmiddle" CLASS="icon">
-<!--
-	<INPUT TYPE="Submit" NAME="Add" VALUE="&nbsp;---&gt;&nbsp;" ONCLICK="setList(UserList,NonGroup),setAction(this.form,'Add');" CLASS="but"><BR><BR>
-	<INPUT TYPE="Submit" NAME="Remove" VALUE="&nbsp;&lt;---&nbsp;" ONCLICK="setList(UserList,Group),setAction(this.form,'Remove');" CLASS="but">
--->
 	</TD>
 	<TD ALIGN="right">
 	<SELECT NAME="Group" MULTIPLE SIZE="15" STYLE="width:100%;">

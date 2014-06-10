@@ -32,7 +32,7 @@ if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
 
 $ACLID = $db->get_var( "SELECT ACLID FROM Media WHERE MediaID = ".(int)$_GET['MediaID'] );
 if ( $ACLID )
-	$ACL = userACL( $ACLID );
+	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 

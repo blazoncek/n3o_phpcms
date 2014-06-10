@@ -26,8 +26,8 @@
 */
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset( $_GET['ID'] ) )   $_GET['ID'] = "0";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get all users
 $List = $db->get_results(

@@ -58,7 +58,7 @@ if ( !(isset($_SESSION['Authenticated']) && $_SESSION['Authenticated']) ) {
 		$_GET['Izbor']  = $Action->Action;
 		$_GET['Action'] = $Action->ActionID;
 		$ActionACL      = userACL( $Action->ACLID );
-	} else if ( isset($_GET['Izbor']) &&
+	} elseif ( isset($_GET['Izbor']) &&
 		(is_file(($Mobile ? "mobile": "template") ."/inc_". $_GET['Izbor'] .".php") ||
 		 is_file(($Mobile ? "_mobile": "_template") ."/inc_". $_GET['Izbor'] . ".php")) ) {
 		$ActionACL      = "RWDX";
@@ -68,7 +68,7 @@ if ( !(isset($_SESSION['Authenticated']) && $_SESSION['Authenticated']) ) {
 	}
 }
 
-if ( isset($Error) ) header( "Refresh:1; URL=./" ); // no, login
+if ( isset($Error) ) header("Refresh:1; URL=./"); // no, login
 
 if ( $Mobile ) {
 	echo "<html>\n";

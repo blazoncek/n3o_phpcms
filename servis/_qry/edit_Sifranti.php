@@ -52,7 +52,7 @@ if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 		if ($_POST['DVal3Desc']==" field description") $_POST['DVal3Desc']="";
 		if ($_POST['LVal1Desc']==" field description") $_POST['LVal1Desc']="";
 		if ($_POST['LVal2Desc']==" field description") $_POST['LVal2Desc']="";
-		$db->query( "START TRANSACTION" );
+		$db->query("START TRANSACTION");
 		$ACL  = $db->get_var( "SELECT min(ACLID) FROM Sifranti WHERE SifrCtrl='".$_POST['Ctrl']."'" );
 		$Zapo = $db->get_var( "SELECT max(SifrZapo)+1 FROM Sifranti WHERE SifrCtrl='".$_POST['Ctrl']."'" );
 		$db->query(
@@ -104,7 +104,7 @@ if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 		$_GET['ID'] = $db->insert_id;
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
-		$db->query( "COMMIT" );
+		$db->query("COMMIT");
 	}
 }
 
@@ -115,7 +115,7 @@ if ( isset( $_GET['BrisiTxt'] ) && $_GET['BrisiTxt'] != "" ) {
 // insert/update text value
 if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 	
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$ID = $db->get_var(
 		"SELECT ID ".
 		"FROM SifrantiTxt ".
@@ -161,17 +161,17 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 			"	SifCVal3 = ".(($_POST['CVal3']!="")? "'".$db->escape($_POST['CVal3'])."'": "NULL")." ".
 			"WHERE ID= " . $ID
 		);
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 /* note: no longer supported
 // delete access control list (ACL)
 if ( isset( $_GET['BrisiACL'] ) && $_GET['BrisiACL'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$db->query( "UPDATE Sifranti SET ACLID = NULL WHERE ACLID = " . $_GET['BrisiACL'] );
 	$db->query( "DELETE FROM SMACLr WHERE ACLID = " . $_GET['BrisiACL'] );
 	$db->query( "DELETE FROM SMACL  WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 */
 ?>

@@ -25,7 +25,7 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 $Podatek = $db->get_row(
 	"SELECT
@@ -40,7 +40,7 @@ $Podatek = $db->get_row(
 	WHERE MT.emlMessageTxtID = ".(int)$_GET['ID']
 );
 if ( $Podatek )
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 else
 	$ACL = "LRWDX";
 
@@ -75,7 +75,7 @@ $(document).ready(function(){
 			target: '#divEdit',
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Subject))	{alert("Prosim vnesite predmet sporočila!"); fObj.Subject.focus(); return false;}
+				if (empty(fObj.Subject))	{alert("Please enter message subject!"); fObj.Subject.focus(); return false;}
 				if (fObj.Jezik.selectedIndex==0)	{alert("Izberite jezik!"); fObj.Jezik.focus(); return false;}
 				return true;
 			} // pre-submit callback
@@ -116,7 +116,7 @@ $(document).ready(function(){
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanj�ano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
-	<td id="editNote" align="right">emlSporocilaTxt - <B>Vnos sporočila</B>&nbsp;&nbsp;</td>
+	<td id="editNote" align="right">emlSporocilaTxt - <B>Message entry</B>&nbsp;&nbsp;</td>
 </tr>
 </table>
 </DIV>
@@ -127,9 +127,9 @@ $(document).ready(function(){
 <?php endif ?>
 <TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" WIDTH="100%">
 <TR>
-	<TD NOWRAP><B>Predmet:</B>&nbsp;</TD>
+	<TD NOWRAP><B>Subject:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="Subject" MAXLENGTH="128" VALUE="<?php echo ($Podatek? $Podatek->Naziv : "") ?>" STYLE="width:100%" TABINDEX="7"></TD>
-	<TD>&nbsp;Jezik: 
+	<TD>&nbsp;Language: 
 	<SELECT NAME="Jezik" SIZE="1" <?php echo (($Podatek)? "DISABLED": "") ?>>
 		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
@@ -152,18 +152,18 @@ $All = $db->get_var(
 	</SELECT>
 	</TD>
 	<TD ALIGN="right">
-	<INPUT TYPE="Button" VALUE=" Zapri " ONCLICK="loadTo('Edit','edit.php?Izbor=emlSporocila&ID=<?php echo (int)$_GET['emlMessageID'] ?>')" CLASS="but">
+	<INPUT TYPE="Button" VALUE=" Close " ONCLICK="loadTo('Edit','edit.php?Izbor=emlSporocila&ID=<?php echo (int)$_GET['emlMessageID'] ?>')" CLASS="but">
 	<INPUT TYPE="submit" VALUE=" Save " CLASS="but">
 	</TD>
 </TR>
 <!--TR>
-	<TD COLSPAN="4" VALIGN="top"><B>Vsebina:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
+	<TD COLSPAN="4" VALIGN="top"><B>Content:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
 </TR-->
 <?php
 	if ( $Podatek ) {
 		$Opis = $Podatek->Opis;
-		$Opis = preg_replace( "/(src=\")(?!(?:http|data))/i", '$1../', $Opis );
-		//$Opis = str_replace( "&", "&amp;", $Opis );
+		$Opis = preg_replace("/(src=\")(?!(?:http|data))/i", '$1../', $Opis);
+		//$Opis = str_replace("&", "&amp;", $Opis);
 	} else
 		$Opis = "";
 ?>

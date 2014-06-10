@@ -26,7 +26,7 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// delete custom avatars
 	$tFile  = $StoreRoot . "/diskusije/px/face/custom/" . (int)$_GET['Brisi'];
 	if ( is_file($tFile . '.gif') ) @unlink($tFile);
@@ -39,6 +39,6 @@ if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
 	$db->query( "UPDATE frmMessages SET ChangeMemberID = NULL WHERE ChangeMemberID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM frmNotify  WHERE MemberID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM frmMembers WHERE ID = ".(int)$_GET['Brisi'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 ?>

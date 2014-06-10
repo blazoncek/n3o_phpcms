@@ -40,7 +40,7 @@ if ( isset($_POST['MessageBody']) ) {
 	$_POST['MessageBody'] = preg_replace("/[[:space:]]+/", " ", $_POST['MessageBody']);
 	$_POST['MessageBody'] = substr($_POST['MessageBody'], 0, 512); // shorten the text
 
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	// get forum details (comments are stored in forum data)
 	$getTopics = $db->get_row( "SELECT T.ForumID, T.TopicName FROM frmTopics T WHERE T.ID = ". (int)$_GET['TopicID'] );
 
@@ -71,11 +71,11 @@ if ( isset($_POST['MessageBody']) ) {
 			);
 		$db->query( "UPDATE frmTopics SET MessageCount = MessageCount + 1 WHERE ID = ".(int)$_GET['TopicID'] );
 	}
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 }
 
 if ( isset($_GET['DelMessage']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$AttachedFile = $db->get_var( "SELECT AttachedFile FROM frmMessages WHERE ID = ".(int)$_GET['DelMessage'] );
 	$TopicID = $db->get_var( "SELECT TopicID FROM frmMessages WHERE ID = ".(int)$_GET['DelMessage'] );
 	if ( $AttachedFile )
@@ -83,19 +83,19 @@ if ( isset($_GET['DelMessage']) ) {
 
 	$db->query( "DELETE FROM frmMessages WHERE ID = ".(int)$_GET['DelMessage'] );
 	$db->query( "UPDATE frmTopics SET MessageCount = MessageCount - 1 WHERE ID = ".(int)$TopicID );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	// update URI
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&DelMessage=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
 }
 
 if ( isset($_GET['DelAttachment']) ) {
-	$db->query( "START TRANSACTION" );
+	$db->query("START TRANSACTION");
 	$AttachedFile = $db->get_var( "SELECT AttachedFile FROM frmMessages WHERE ID = ".(int)$_GET['DelAttachment'] );
 	if ( $AttachedFile )
 		@unlink( $StoreRoot . '/diskusije/datoteke/' . $AttachedFile );
 
 	$db->query( "UPDATE frmMessages SET AttachedFile = NULL WHERE ID = ".(int)$_GET['DelAttachment'] );
-	$db->query( "COMMIT" );
+	$db->query("COMMIT");
 	// update URI
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&DelAttachment=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
 }
@@ -106,7 +106,7 @@ if ( isset($_GET['Approve']) ) {
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Approve=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
 }
 
-$db->query( "START TRANSACTION" );
+$db->query("START TRANSACTION");
 $getMaxMsgDate = $db->get_row(
 	"SELECT
 		max(ID) AS LastMsg,
@@ -128,7 +128,7 @@ if ( $getMaxMsgDate ) $db->query(
 	WHERE
 		ID = ".(int)$_GET['TopicID']
 );
-$db->query( "COMMIT" );
+$db->query("COMMIT");
 
 $getMessages = $db->get_results( "SELECT * FROM frmMessages WHERE TopicID = ".(int)$_GET['TopicID'] );
 ?>

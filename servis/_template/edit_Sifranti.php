@@ -42,7 +42,7 @@ $(document).ready(function(){
 				target: '#divEdit',
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
-					if (empty(fObj.Ctrl))	{alert("Prosim, vnesi tip!"); fObj.Ctrl.focus(); return false;}
+					if (empty(fObj.Ctrl))	{alert("Please enter type!"); fObj.Ctrl.focus(); return false;}
 					$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 					return true;
 				} // pre-submit callback
@@ -57,9 +57,9 @@ $(document).ready(function(){
 		firstDay: 1,
 		//changeMonth: true,
 		//changeYear: true,
-		dayNamesMin: ['Ne','Po','To','Sr','Če','Pe','So'],
-		monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Avg','Sep','Okt','Nov','Dec'],
-		monthNames: ['Januar','Februar','Marec','April','Maj','Junij','Julij','Avgust','September','Oktober','November','December'],
+		//dayNamesMin: ['Ne','Po','To','Sr','Če','Pe','So'],
+		//monthNamesShort: ['Jan','Feb','Mar','Apr','Maj','Jun','Jul','Avg','Sep','Okt','Nov','Dec'],
+		//monthNames: ['Januar','Februar','Marec','April','Maj','Junij','Julij','Avgust','September','Oktober','November','December'],
 		duration: ''
 	};
 	$("input[name='DVal1']").datepicker(options);
@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 <FIELDSET ID="fldData" style="width:260px;">
 <LEGEND ID="lgdData">
-<?php if ( contains( $ACL, "W" ) && $Podatek ) {
+<?php if ( contains($ACL, "W") && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
 		echo "&SifrantID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ACLID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
 		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";

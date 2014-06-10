@@ -64,7 +64,7 @@ $(document).ready(function(){
 			iframe: false, // fix for listRefresh
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Ime) && empty(fObj.Naslov))	{alert("Vpišite ime rubrike!"); fObj.Ime.focus(); return false;}
+				if (empty(fObj.Ime) && empty(fObj.Naslov))	{alert("Please enter name!"); fObj.Ime.focus(); return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback
@@ -202,7 +202,7 @@ $(document).ready(function(){
 		<LEGEND ID="lgdData">
 <?php if ( contains($ACL,"W") && $Podatek ) {
 		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
-		echo "&KategorijaID=" . $_GET['ID'] . (($Podatek->ACLID!="")? "&ID=".$Podatek->ACLID: "") . "')\" TITLE=\"Edit permissions\">";
+		echo "&KategorijaID=". $_GET['ID'] . ($Podatek->ACLID!="" ? "&ID=".$Podatek->ACLID: "") ."')\" TITLE=\"Edit permissions\">";
 		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 } ?>
 			Basic&nbsp;information
@@ -278,7 +278,7 @@ $(document).ready(function(){
 <?php if ( contains($ACL,"W") ) : ?>
 		<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Izbor=KategorijeOpis&Action=<?php echo $Action->ActionID ?>&KategorijaID=<?php echo $_GET['ID'] ?>')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 <?php endif ?>
-		Titles and descriptions</LEGEND>
+		Titles &amp; descriptions</LEGEND>
 <?php
 		$List = $db->get_results("SELECT ID, Naziv, Jezik FROM KategorijeNazivi WHERE KategorijaID='". $_GET['ID'] ."' ORDER BY Jezik");
 		echo "<TABLE BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";

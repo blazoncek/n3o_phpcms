@@ -27,9 +27,9 @@
 
 if ( isset($_GET['New']) && $_GET['New'] != "" ) {
 	// get text type (defines comments forum name)
-	$Tip = $db->get_var( "SELECT Tip FROM Besedila WHERE BesediloID = ". (int)$_GET['ID'] );
+	$Tip = $db->get_var("SELECT Tip FROM Besedila WHERE BesediloID = ". (int)$_GET['ID']);
 	// get forum ID
-	$id = $db->get_var( "SELECT ID FROM frmForums WHERE ForumName = '".$Tip."'" );
+	$id = $db->get_var("SELECT ID FROM frmForums WHERE ForumName = '". $Tip ."'");
 	if ( $id ) {
 		$db->query(
 			"INSERT INTO frmTopics (".
@@ -106,7 +106,7 @@ $(window).resize(fixSize);
 //-->
 </SCRIPT>
 
-<DIV ALIGN="center" CLASS="subtitle"><B>Izbor teme iz forumov</B></DIV>
+<DIV ALIGN="center" CLASS="subtitle"><B>Select topic</B></DIV>
 <div id="divFind" class="find">
 <form name="ListFind" action="<?php echo $FindURL ?>" method="get">
 <input type="Hidden" name="ID" value="<?php echo $_GET['ID']; ?>">

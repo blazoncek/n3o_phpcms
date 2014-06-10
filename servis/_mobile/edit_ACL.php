@@ -25,10 +25,10 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 // get data
-$Podatek = $db->get_row( "SELECT * FROM SMACL WHERE ACLID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM SMACL WHERE ACLID = ". (int)$_GET['ID']);
 
 ?>
 <script language="JavaScript" type="text/javascript">
@@ -128,13 +128,13 @@ echo "<a href=\"#editUsers\" title=\"ACL\" class=\"ui-btn-right\" data-iconpos=\
 echo "</div>\n";
 echo "<div data-role=\"content\">\n";
 
-if ( isset( $Error ) ) {
+if ( isset($Error) ) {
 	echo "\t<div class=\"ui-body ui-body-d ui-corner-all\" style=\"padding:1em;text-align:center;\">";
-	echo "<b>Prišlo je do napake!</b><br>Podatki niso vpisani.";
+	echo "<b>Error!</b><br>Data not saved.";
 	echo "</div>\n";
-} else if ( $_GET['ID'] == "0" ) {
+} elseif ( $_GET['ID'] == "0" ) {
 		echo "\t<div class=\"ui-body ui-body-d ui-corner-all\" style=\"padding:1em;text-align:center;\">";
-		echo "<B>Vnos ACL na tem mestu ni možen!</B>";
+		echo "<B>ACL cannot be created from this link!</B>";
 		echo "</div>\n";
 } else {
 	
@@ -156,7 +156,7 @@ if ( isset( $Error ) ) {
 	<INPUT Name="UserList" Type="HIDDEN" VALUE="">
 	<INPUT Name="Action" Type="HIDDEN" VALUE="Set">
 <?php
-	echo "\t<fieldset data-role=\"controlgroup\"><legend>Skupine</legend>\n";
+	echo "\t<fieldset data-role=\"controlgroup\"><legend>Groups</legend>\n";
 	// disable groups 1 (everyone) for anyone and 2 (administrators) for administrator
 	if ( count($Groups) > 0 )
 		foreach ( $Groups as $Member ) {
@@ -165,7 +165,7 @@ if ( isset( $Error ) ) {
 		}
 	echo "\t</fieldset>\n";
 
-	echo "\t<fieldset data-role=\"controlgroup\"><legend>Uporabniki</legend>\n";
+	echo "\t<fieldset data-role=\"controlgroup\"><legend>Users</legend>\n";
 	// disable groups 1 (everyone) for anyone and 2 (administrators) for administrator
 	if ( count($Users) > 0 )
 		foreach ( $Users as $Member ) {
@@ -175,7 +175,7 @@ if ( isset( $Error ) ) {
 	echo "\t</fieldset>\n";
 ?>
 <?php if ( contains($ActionACL,"W") ) : ?>
-	<INPUT TYPE="submit" VALUE="Shrani" data-iconpos="left" data-icon="check" data-theme="a">
+	<INPUT TYPE="submit" VALUE="Save" data-iconpos="left" data-icon="check" data-theme="a">
 <?php endif ?>
 </FORM>
 <?php

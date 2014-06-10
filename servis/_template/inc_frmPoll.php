@@ -46,8 +46,8 @@ $(document).ready(function(){
 				target: '#divEdit',
 				beforeSubmit: function( formDataArr, jqObj, options ) {
 					var fObj = jqObj[0];	// form object
-					if (empty(fObj.A1))	{alert("Anketa mora imeti vsaj 2 odgovora!"); fObj.A1.focus(); return false;}
-					if (empty(fObj.A2))	{alert("Anketa mora imeti vsaj 2 odgovora!"); fObj.A2.focus(); return false;}
+					if (empty(fObj.A1))	{alert("Answer #1 required!"); fObj.A1.focus(); return false;}
+					if (empty(fObj.A2))	{alert("Answer #2 required!"); fObj.A2.focus(); return false;}
 					return true;
 				} // pre-submit callback
 			});
@@ -64,7 +64,7 @@ $(document).ready(function(){
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 	<td><div id="ToggleFrame" style="display:none;">&nbsp;<A HREF="javascript:toggleFrame()"><img src="pic/control.frame.gif" height="14" width="14" alt="Preklop celo/zmanj�ano okno" border="0" align="absmiddle" class="icon">&nbsp;List</a></div></td>
-	<td id="editNote" align="right"><B>Ankete</B>&nbsp;&nbsp;</td>
+	<td id="editNote" align="right"><B>Polls</B>&nbsp;&nbsp;</td>
 </tr>
 </table>
 </DIV>
@@ -75,29 +75,24 @@ $(document).ready(function(){
 	<TD VALIGN="top">
 
 	<FIELDSET ID="fldData">
-	<LEGEND ID="lgdData">Anketa</LEGEND>
+	<LEGEND ID="lgdData">Poll</LEGEND>
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 	<TR>
-		<TD ALIGN="right">Zaklenjeno:&nbsp;</TD>
+		<TD ALIGN="right">Locked:&nbsp;</TD>
 		<TD><INPUT TYPE="Checkbox" NAME="Locked"<?php echo (($Podatek && $Podatek->Locked)? " CHECKED": "") ?>></TD>
 		<TD ALIGN="right"></TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right" VALIGN="top"><B>Vprašanje:</B>&nbsp;<BR> <SPAN CLASS="f10 gry">max 512 znakov</SPAN>&nbsp;</TD>
-		<TD COLSPAN="2"><TEXTAREA NAME="Q" ROWS="4" STYLE="width:100%;" WRAP="virtual"><?php echo ($Podatek)? $Podatek->Question: "" ?></TEXTAREA></TD>
+		<TD ALIGN="right" VALIGN="top"><B>Question:</B>&nbsp;<BR> <SPAN CLASS="f10 gry">max 512 characters</SPAN>&nbsp;</TD>
+		<TD COLSPAN="2"><TEXTAREA NAME="Q" ROWS="4" STYLE="width:100%;" WRAP="virtual"><?php echo $Podatek ? $Podatek->Question : "" ?></TEXTAREA></TD>
 	</TR>
 <?php for ( $i=1; $i<=10; $i++ ) { ?>
 	<TR>
-		<TD ALIGN="right">Odg. <?php echo $i ?>:&nbsp;</TD>
+		<TD ALIGN="right">Answer #<?php echo $i ?>:&nbsp;</TD>
 		<TD COLSPAN="2"><INPUT TYPE="Text" NAME="A<?php echo $i ?>" MAXLENGTH="64" VALUE="<?php if ($Podatek) eval('echo $Podatek->A'.$i.';') ?>" STYLE="width:100%;"></TD>
 	</TR>
 <?php } ?>
-<!--
-	<TR>
-		<TD ALIGN="right" COLSPAN="3" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="Submit" VALUE="Zapiši" TABINDEX="1" CLASS="but"></TD>
-	</TR>
--->
 	</TABLE>
 	</FORM>
 	</FIELDSET>
@@ -106,15 +101,14 @@ $(document).ready(function(){
 	<TD VALIGN="top">
 
 <?php if ( $Podatek ) : ?>
-	<!-- rezultati -->
 	<FIELDSET ID="fldResults">
-	<LEGEND ID="lgdResults">Rezultati</LEGEND>
+	<LEGEND ID="lgdResults">Results</LEGEND>
 	<TABLE ID="results" BORDER="0" CELLPADDING="2" CELLSPACING="1" WIDTH="100%">
 	<TR>
 		<TD ALIGN="left">
 		<?php $Size = 100; ?>
 		<!--DIV><?php echo $Podatek->Question ?></DIV-->
-		<DIV CLASS="f10 gry" STYLE="border-bottom:darkgrey solid 1px;padding-bottom:3px;margin-bottom:10px;">Skupaj <B><?php echo $Podatek->Votes ?></B> glas<?php eval("echo koncnica($Podatek->Votes,' ,ova,ovi,ov');"); ?></DIV>
+		<DIV CLASS="f10 gry" STYLE="border-bottom:darkgrey solid 1px;padding-bottom:3px;margin-bottom:10px;"><B><?php echo $Podatek->Votes ?></B> vote<?php eval("echo koncnica($Podatek->Votes,' ,s,s,s');"); ?></DIV>
 <?php
 		for ( $i=1; $i<=$Podatek->Answers; $i++ ) {
 			$Odg = '$Podatek->A' . $i;
@@ -147,7 +141,7 @@ $(document).ready(function(){
 </TABLE>
 
 <FIELDSET ID="fldVoters">
-	<LEGEND>Glasovalci</LEGEND>
+	<LEGEND>Voters</LEGEND>
 <div id="divContent" style="overflow: auto;">
 <?php if ( $Podatek ) : ?>
 	<?php
@@ -163,7 +157,7 @@ $(document).ready(function(){
 	<?php if ( !$List ) : ?>
 <TR BGCOLOR="white">
 	<TD ALIGN="center" VALIGN="middle">
-	<BR><BR><B>Ni podatkov o glasovanju!</B><BR><BR><BR>
+	<BR><BR><B>No data!</B><BR><BR><BR>
 	</TD>
 </TR>
 	<?php else : ?>

@@ -25,10 +25,10 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( !isset( $_GET['ID'] ) ) $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 // get data
-$Podatek = $db->get_row( "SELECT * FROM frmCategories WHERE ID = " . (int)$_GET['ID'] );
+$Podatek = $db->get_row("SELECT * FROM frmCategories WHERE ID = ". (int)$_GET['ID']);
 
 // get available moderators
 $Moderators = $db->get_results(
@@ -68,13 +68,13 @@ $(document).ready(function(){
 	<FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 	<TABLE BORDER="0" CELLSPACING="0" CELLPADDING="1" WIDTH="100%">
 	<TR>
-		<TD><B>Ime:</B>&nbsp;</TD>
-		<TD><INPUT TYPE="Text" NAME="Name" MAXLENGTH="50" VALUE="<?php echo ($Podatek? $Podatek->CategoryName: "") ?>" CLASS="txt" STYLE="width:100%"></TD>
+		<TD><B>Title:</B>&nbsp;</TD>
+		<TD><INPUT TYPE="Text" NAME="Name" MAXLENGTH="50" VALUE="<?php echo ($Podatek ? $Podatek->CategoryName : "") ?>" CLASS="txt" STYLE="width:100%"></TD>
 	</TR>
 	<TR>
 		<TD VALIGN="top">Admin.:&nbsp;</TD>
 		<TD COLSPAN="1"><SELECT NAME="Admin" SIZE="1">
-			<OPTION VALUE="">- nihče -</OPTION>
+			<OPTION VALUE="">- nobody -</OPTION>
 <?php
 	if ( $Moderators ) foreach ( $Moderators as $Moderator )
 		echo "<OPTION VALUE=\"$Moderator->ID\"".(($Moderator->ID==$Podatek->Administrator)? " SELECTED": "").">$Moderator->Nickname ($Moderator->Name)</OPTION>\n";

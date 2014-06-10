@@ -30,7 +30,7 @@ $WhereClause = "1=0";
 // iskanje besedila: $_GET['term']
 if ( isset( $_GET['term'] ) ) {
 	$Plus = " OR ";
-	$WhereClause .= $Plus . SearchString( "TagName",   $_GET['term'] );
+	$WhereClause .= $Plus . SearchString("TagName", $_GET['term']);
 }
 $Iskanje = $db->get_results(
 	"SELECT
@@ -39,15 +39,15 @@ $Iskanje = $db->get_results(
 	FROM
 		Tags
 	WHERE
-		" . $WhereClause . "
+		". $WhereClause ."
 	ORDER BY
 		TagName"
 	);
 
 // maximum # of results on one page
-if ( !isset( $_GET['num'] ) )
+if ( !isset($_GET['num']) )
 	$_GET['num'] = 10;
-$MaxRows = min( max( (int)$_GET['num'], 10 ), 50 );
+$MaxRows = min(max((int)$_GET['num'], 10), 50);
 
 echo "[";
 if ( $Iskanje ) for ( $i=0; $i<$MaxRows && $i<count($Iskanje); $i++ ) {
