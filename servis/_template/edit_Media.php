@@ -158,9 +158,9 @@ $(document).ready(function(){
     });
 
 	// load subdata
-	if ( $("#divNames").html() ) $("#divNames").load('inc.php?Izbor=MediaOpis&MediaID=<?php echo $_GET['ID'] ?>');
-	if ( $("#divBe").html() ) $("#divBe").load('inc.php?Izbor=MediaBesedila&MediaID=<?php echo $_GET['ID'] ?>');
-	if ( $("#divRu").html() ) $("#divRu").load('inc.php?Izbor=MediaKategorije&MediaID=<?php echo $_GET['ID'] ?>');
+	if ( $("#divNames").html() ) $("#divNames").load('inc.php?Izbor=medDescription&MediaID=<?php echo $_GET['ID'] ?>');
+	if ( $("#divBe").html() ) $("#divBe").load('inc.php?Izbor=medText&MediaID=<?php echo $_GET['ID'] ?>');
+	if ( $("#divRu").html() ) $("#divRu").load('inc.php?Izbor=medCategories&MediaID=<?php echo $_GET['ID'] ?>');
 
 	// initialize LigtBox
 	$("a.fancybox").fancybox({
@@ -229,7 +229,7 @@ $(document).ready(function(){
 	<FIELDSET ID="fldData" style="min-height:153px;">
 	<LEGEND ID="lgdData">
 <?php if ( contains($ACL, "W") && $Podatek ) {
-		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=ACL&ACL=".$Action->Action;
+		echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=sysACL&ACL=".$Action->Action;
 		echo "&MediaID=" . $_GET['ID'] . ($Podatek && $Podatek->ACLID!="" ? "&ID=". $Podatek->ACLID : "") . "')\" TITLE=\"Edit permissions\">";
 		echo "<IMG SRC=\"pic/control.permissions.gif\" HEIGHT=\"16\" WIDTH=\"16\" BORDER=0 ALT=\"Permissions\" ALIGN=\"absmiddle\"></A>&nbsp;:";
 } ?>
@@ -257,7 +257,7 @@ $(document).ready(function(){
 		</TD>
 	</TR>
 	<TR>
-		<TD ALIGN="right"><B>Title:</B>&nbsp;</TD>
+		<TD ALIGN="right"><B>Name:</B>&nbsp;</TD>
 		<TD COLSPAN="2"><INPUT TYPE="text" NAME="Naziv" MAXLENGTH="32" VALUE="<?php if ( $Podatek ) echo $Podatek->Naziv ?>" STYLE="width:100%;"></TD>
 	</TR>
 <?php if ( $Podatek ) : ?>
@@ -285,7 +285,7 @@ $(document).ready(function(){
 <?php else : ?>
 	<TR>
 		<TD COLSPAN="3" CLASS="f10"><B>File:</B><br>
-		<INPUT TYPE="FILE" NAME="Add" STYLE="border:none;"></TD>
+		<INPUT TYPE="FILE" NAME="Dodaj" STYLE="border:none;"></TD>
 	</TR>
 	<TR>
 		<TD COLSPAN="2" NOWRAP>Image:&nbsp;</TD>
@@ -332,9 +332,9 @@ $(document).ready(function(){
 	<FIELDSET ID="fldContent" style="min-height:200px;">
 	<LEGEND ID="lgdContent">
 	<?php if ( contains($ACL,"W") ) : ?>
-		<A HREF="javascript:void(0);" ONCLICK="loadTo('Names','inc.php?Izbor=MediaOpis&MediaID=<?php echo $_GET['ID'] ?>&ID=0')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
+		<A HREF="javascript:void(0);" ONCLICK="loadTo('Names','inc.php?Izbor=medDescription&MediaID=<?php echo $_GET['ID'] ?>&ID=0')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" ALIGN="absmiddle" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 	<?php endif ?>
-		Titles and descriptions</LEGEND>
+		Titles &amp; descriptions</LEGEND>
 		<DIV ID="divNames" STYLE="overflow:none;">&nbsp;</DIV>
 	</FIELDSET>
 <?php endif ?>
@@ -352,7 +352,7 @@ $(document).ready(function(){
 		<LEGEND>
 <?php if ( contains($ACL,"W") ) : ?>
 		<div id="findBe" class="find" style="margin:0;">
-		<form name="findFrmBe" action="inc.php?Izbor=MediaBesedila&MediaID=<?php echo $_GET['ID'] ?>" method="get">
+		<form name="findFrmBe" action="inc.php?Izbor=medText&MediaID=<?php echo $_GET['ID'] ?>" method="get">
 		<input id="findTxtBe" type="Text" name="Find" maxlength="32" value=" Attach to text " style="color:#aaa;" onkeypress="$('#clrSkFind').show();">
 		<a id="findClrBe" href="javascript:void(0);" onclick="$(this).hide();$('#findTxtBe').val('').select();"><img src="pic/list.clear.gif" border="0"></a>
 		</form>

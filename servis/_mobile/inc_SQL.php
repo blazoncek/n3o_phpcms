@@ -34,7 +34,7 @@ $('#edit').live('pageinit', function(event){
 		// inside event callbacks 'this' is the DOM element so we first
 		// wrap it in a jQuery object
 		jqObj = $(this);
-		if ( (this.SQLfile.selectedIndex && this.SQLfile.selectedIndex==0) || empty(this.SQL) )	{alert("Izberite datoteko ali vpišite SQL!"); this.SQL.focus(); return false;}
+		if ( (this.SQLfile.selectedIndex && this.SQLfile.selectedIndex==0) || empty(this.SQL) )	{alert("Select a file or enter SQL statement!"); this.SQL.focus(); return false;}
 		return true;
 	});
 	if ( window.tReload ) clearTimeout( window.tReload );

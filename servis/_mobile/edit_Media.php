@@ -93,7 +93,7 @@ $('#edit').live('pageinit', function(event){
 		e.preventDefault();
 		var fObj = this;	// input object
 		if (fObj.value.length==0) {return false;}
-		URL = '<?php echo dirname($_SERVER['PHP_SELF']) ?>/inc.php?Izbor=MediaBesedila&MediaID=<?php echo $_GET['ID'] ?>';
+		URL = '<?php echo dirname($_SERVER['PHP_SELF']) ?>/inc.php?Izbor=medText&MediaID=<?php echo $_GET['ID'] ?>';
 		$.mobile.changePage(URL, {
 			reloadPage: true,
 			type: "get",
@@ -191,15 +191,15 @@ if ( (int)$_GET['ID'] != 0 ) {
 	echo "<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\" data-split-icon=\"delete\" data-split-theme=\"a\" data-count-theme=\"e\">\n";
 	if ( $List ) foreach ( $List as $Naziv ) {
 		echo "<li>";
-		echo (contains($ACL,"W")? "<a href=\"inc.php?Izbor=MediaOpis&MediaID=".(int)$_GET['ID']."&ID=$Naziv->ID\">": "");
+		echo (contains($ACL,"W")? "<a href=\"inc.php?Izbor=medDescription&MediaID=".(int)$_GET['ID']."&ID=$Naziv->ID\">": "");
 		echo "<b>". $Naziv->Naziv ."</b>";
-		echo "<span class=\"ui-li-count\">".(($Naziv->Jezik=="")? "vsi": $Naziv->Jezik)."</span>";
+		echo "<span class=\"ui-li-count\">".(($Naziv->Jezik=="")? "all": $Naziv->Jezik)."</span>";
 		echo (contains($ACL,"W")? "</a>": "");
 		if ( contains($ACL,"D") )
 			echo "<a href=\"#\" onclick=\"checkFld('BrisiOpis','$Naziv->ID','$Naziv->Naziv');\" data-theme=\"c\">Delete</a>";
 		echo "</li>\n";
 	}
-	echo "<li data-icon=\"add\"><a href=\"inc.php?Izbor=MediaOpis&MediaID=". $_GET['ID'] ."&ID=0\" title=\"Dodaj opis\">Dodaj opis</a>\n";
+	echo "<li data-icon=\"add\"><a href=\"inc.php?Izbor=medDescription&MediaID=". $_GET['ID'] ."&ID=0\" title=\"Dodaj opis\">Dodaj opis</a>\n";
 	echo "</ul>\n";
 	echo "</fieldset>\n";
 
@@ -240,7 +240,7 @@ if ( (int)$_GET['ID'] != 0 ) {
 	echo "<li data-theme=\"c\"><input type=\"text\" name=\"Find\" placeholder=\"Find\"></li>\n";
 	if ( $List ) foreach ( $List as $Item ) {
 		echo "<li -data-icon=\"delete\">";
-		echo (contains($ACL,"W") ? "<a href=\"inc.php?Izbor=MediaBesedila&MediaID=". (int)$_GET['ID'] ."\" data-ajax=\"false\" data-theme=\"c\">" : "");
+		echo (contains($ACL,"W") ? "<a href=\"inc.php?Izbor=medText&MediaID=". (int)$_GET['ID'] ."\" data-ajax=\"false\" data-theme=\"c\">" : "");
 		echo $Item->Ime;
 		echo (contains($ACL,"W") ? "</a>": "");
 		echo "</li>\n";

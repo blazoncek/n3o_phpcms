@@ -42,33 +42,33 @@ INSERT INTO SMACLr (ACLID,UserID,MemberACL) VALUES (1,1,'LRWDX');
 INSERT INTO SMACLr (ACLID,GroupID,MemberACL) VALUES (1,2,'LRWDX');
 -- Admin actions
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('00','System',1,NULL,NULL,1,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0001','Menus',1,'Servis','folder',0,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0001','Menus',1,'sysMenus','folder',0,1);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0002','',1,NULL,NULL,0,1);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0003','Users',1,'Uporabniki','user',1,1);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0004','Groups',1,'Grupe','group',1,1);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0005','ACL',1,'ACL','protection',1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0003','Users',1,'sysUsers','user',1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0004','Groups',1,'sysGroups','group',1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0005','ACL',1,'sysACL','protection',1,1);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0006','',1,NULL,NULL,1,1);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0007','Parameters',1,'Sifranti','toolbox',1,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0008','Languages',1,'Jeziki','flags',1,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0009','Translations',1,'NLSText','flags',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0007','Parameters',1,'sysParams','toolbox',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0008','Languages',1,'sysLang','flags',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0009','Translations',1,'sysNLSText','flags',1,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0010','',1,NULL,NULL,1,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0011','Templates',1,'Predloge','brick',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0011','Templates',1,'sysTemplates','brick',1,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0012','SQL',1,'../inc.php?Izbor=SQL','process',1 ,1);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('01','Content',1,NULL,NULL,1,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0101','Categories',1,'Kategorije','sitemap',0,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0102','Texts',1,'Besedila','edit',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0101','Categories',1,'Categories','sitemap',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0102','Texts',1,'Text','edit',1,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0103','Files',1,'Media','attachment',1,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0104','',1,NULL,NULL,1,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0105','Polls',1,'Ankete','accept',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0105','Polls',1,'Polls','accept',1,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('02','Mailing lists',1,NULL,NULL,0,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0201','Groups',1,'emlGrupe','folder',0,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0202','Members',1,'emlUporabniki','user',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0201','Groups',1,'emlGroups','folder',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0202','Members',1,'emlUsers','user',0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0203','',1,NULL,NULL,0,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0204','Messages',1,'emlSporocila','mail',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0204','Messages',1,'emlMessages','mail',0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('03','Forums',1,NULL,NULL,0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0301','Categories',1,'frmCategories','folder',0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0302','Threads',1,'frmForums','cloud_comment',0,NULL);
-INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0303','Chats',1,'frmChat','sms',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0303','Chats',0,'frmChat','sms',0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0304','',1,NULL,NULL,0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0305','Members',1,'frmMembers','user',0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0306','Parameters',1,'frmSetup','toolbox',0,NULL);
@@ -141,7 +141,7 @@ UPDATE SifrantiTxt SET SifNazivDesc='Mail server hostname',SifCVal1Desc='Mail lo
 INSERT INTO Sifranti (SifrCtrl,SifrZapo,SifrText,SifNVal1,SifNVal2,ACLID) VALUES ('BESE',1,'Text',512,96,NULL);
 INSERT INTO Sifranti (SifrCtrl,SifrZapo,SifrText,SifNVal1,SifNVal2,ACLID) VALUES ('BESE',2,'News',256,64,NULL);
 INSERT INTO Sifranti (SifrCtrl,SifrZapo,SifrText,SifNVal1,SifNVal2,SifLVal1,ACLID) VALUES ('BESE',3,'Blog',512,96,1,NULL);
-INSERT INTO Sifranti (SifrCtrl,SifrZapo,SifrText,SifNVal1,SifNVal2,ACLID) VALUES ('BESE',3,'Gallery',640,96,NULL);
+INSERT INTO Sifranti (SifrCtrl,SifrZapo,SifrText,SifNVal1,SifNVal2,SifNval3,ACLID) VALUES ('BESE',3,'Gallery',640,128,1024,NULL);
 INSERT INTO SifrantiTxt (SifrantID,SifNaziv)
 	SELECT SifrantID,'gallery' FROM Sifranti WHERE SifrCtrl='BESE' AND SifrText='Text';
 INSERT INTO SifrantiTxt (SifrantID,SifNaziv)
@@ -150,7 +150,7 @@ INSERT INTO SifrantiTxt (SifrantID,SifNaziv)
 	SELECT SifrantID,'gallery' FROM Sifranti WHERE SifrCtrl='BESE' AND SifrText='Blog';
 INSERT INTO SifrantiTxt (SifrantID,SifNaziv)
 	SELECT SifrantID,'gallery' FROM Sifranti WHERE SifrCtrl='BESE' AND SifrText='Gallery';
-UPDATE Sifranti SET SifNVal1Desc='Max reduced image size',SifNVal2Desc='Max thumbnail image size',SifLVal1Desc='Create forum topic for comments'
+UPDATE Sifranti SET SifNVal1Desc='Max reduced image size',SifNVal2Desc='Max thumbnail image size',SifNVal3Desc='Max original image size',SifLVal1Desc='Create forum topic for comments'
 	WHERE SifrCtrl='BESE';
 UPDATE SifrantiTxt SET SifNazivDesc='Default image folder'
 	WHERE SifrantID IN (SELECT SifrantID FROM Sifranti WHERE SifrCtrl='BESE');

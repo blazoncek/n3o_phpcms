@@ -129,7 +129,7 @@ if ( isset($_GET['file']) ) {
 	</TR>
 	<TR>
 	<TD align="center" colspan="2">
-		<input type="submit" value="Naloži" class="but">
+		<input type="submit" value="Upload" class="but">
 	</TD>
 	</TR>
 	</TABLE>

@@ -5,8 +5,8 @@
 |   Version: 2.2.0                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
-|    Author: Blaû Kristan (blaz@kristan-sp.si)                              |
-| Copyright (c) 2007-2014, Blaû Kristan. All Rights Reserved.               |
+|    Author: Bla≈æ Kristan (blaz@kristan-sp.si)                              |
+| Copyright (c) 2007-2014, Bla≈æ Kristan. All Rights Reserved.               |
 | ------------------------------------------------------------------------- |
 |   License: Distributed under the Lesser General Public License (LGPL)     |
 |            http://www.gnu.org/copyleft/lesser.html                        |
@@ -26,16 +26,16 @@
 */
 
 // define default values for URL ID and Find parameters (in case not defined)
-if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
+if ( !isset($_GET['ID']) )   $_GET['ID']   = "0";
 if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
-if ( !isset($_GET['Kdo']) )  $_GET['Kdo'] = "vsi";
+if ( !isset($_GET['Kdo']) )  $_GET['Kdo']  = "all";
 
 switch ( $_GET['Kdo'] ) {
-	case "novi":        $filter = 'AND lastvisit IS NULL'; break;
-	case "neaktivni":   $filter = 'AND enabled = 0';       break;
-	case "donatorji":   $filter = 'AND patron <> 0';       break;
-	case "moderatorji": $filter = 'AND accesslevel > 1';   break;
-	default:            $filter = '';                      break;
+	case "new":        $filter = 'AND lastvisit IS NULL'; break;
+	case "inactive":   $filter = 'AND enabled = 0';       break;
+	case "donators":   $filter = 'AND patron <> 0';       break;
+	case "moderators": $filter = 'AND accesslevel > 1';   break;
+	default:           $filter = '';                      break;
 }
 // get members
 $List = $db->get_results(
@@ -82,16 +82,16 @@ $EndR = min(($Page * $MaxRows), $RecordCount);
 echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
 echo "<tr>\n";
 echo "<td>";
-echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','inc.php?Action=".$_GET['Action']."&Izbor=frmEmail&Who=".$_GET['Kdo']."');\">Sporoƒçilo</A>";
+echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','inc.php?Action=".$_GET['Action']."&Izbor=frmEmail&Who=".$_GET['Kdo']."');\">Message</A>";
 echo "</td>\n";
 echo "<td align=\"right\">\n";
 echo "Users:";
 echo "<SELECT NAME=\"Kdo\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=".$_GET['Action']."&Kdo='+this[this.selectedIndex].value);\">\n";
-echo "<OPTION VALUE=\"vsi\"".(($_GET['Kdo']=="vsi")? " SELECTED": "").">all</OPTION>\n";
-echo "<OPTION VALUE=\"novi\"".(($_GET['Kdo']=="novi")? " SELECTED": "").">new</OPTION>\n";
-echo "<OPTION VALUE=\"neaktivni\"".(($_GET['Kdo']=="neaktivni")? " SELECTED": "").">inactive</OPTION>\n";
-echo "<OPTION VALUE=\"donatorji\"".(($_GET['Kdo']=="donatorji")? " SELECTED": "").">donators</OPTION>\n";
-echo "<OPTION VALUE=\"moderatorji\"".(($_GET['Kdo']=="moderatorji")? " SELECTED": "").">moderators</OPTION>\n";
+echo "<OPTION VALUE=\"all\"".(($_GET['Kdo']=="all")? " SELECTED": "").">all</OPTION>\n";
+echo "<OPTION VALUE=\"new\"".(($_GET['Kdo']=="new")? " SELECTED": "").">new</OPTION>\n";
+echo "<OPTION VALUE=\"inactive\"".(($_GET['Kdo']=="inactive")? " SELECTED": "").">inactive</OPTION>\n";
+echo "<OPTION VALUE=\"donators\"".(($_GET['Kdo']=="donators")? " SELECTED": "").">donators</OPTION>\n";
+echo "<OPTION VALUE=\"moderators\"".(($_GET['Kdo']=="moderators")? " SELECTED": "").">moderators</OPTION>\n";
 echo "</SELECT>\n";
 echo "</td>\n";
 echo "</tr>\n";

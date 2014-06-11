@@ -106,14 +106,27 @@ if ( isset($_GET["login"]) && isset($_POST["Usr"]) ) {
 				$_SESSION['Groups'] = "0";
 			}
 			// update login timestamp
+			$db->query("START TRANSACTION");
+			$db->query(
+				"INSERT INTO SMAudit (
+					UserID,
+					Action,
+					Description
+				) VALUES (
+					". (int)$_SESSION['UserID'] .",
+					'Login',
+					'". $_SERVER['REMOTE_ADDR'] ."'
+				)"
+				);
 			$db->query(
 				"UPDATE
 					SMUser
 				SET
 					LastLogon = '". date("Y-m-d H:i:s") ."'
 				WHERE
-					UserID = ". (int) $_SESSION['UserID']
+					UserID = ". (int)$_SESSION['UserID']
 				);
+			$db->query("COMMIT");
 		}
 	} else {
 		$Error = "NoUser";
@@ -351,7 +364,7 @@ onload="selectEdit()";
 	<INPUT Name="Usr" Type="TEXT" Size="20" MAXLENGTH="50" class="txt" TABINDEX=1 VALUE="<?php if ( isset($_COOKIE['User']) ) echo $_COOKIE['User']; ?>"><BR>
 	Password:<BR>
 	<INPUT Name="Pwd" Type="PASSWORD" Size="20" MAXLENGTH="50" class="txt" TABINDEX=2><BR>
-	<DIV ALIGN="right"><INPUT TYPE="submit" VALUE="VSTOP" CLASS="but" TABINDEX="3"></DIV>
+	<DIV ALIGN="right"><INPUT TYPE="submit" VALUE="Enter" CLASS="but" TABINDEX="3"></DIV>
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 <!-- //
 selectEdit();

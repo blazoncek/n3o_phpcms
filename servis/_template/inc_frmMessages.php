@@ -141,8 +141,8 @@ $(document).ready(function(){
 			target: '#divTopics',
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.UserName))	{alert("Prosim vnesite ime!"); fObj.UserName.focus(); return false;}
-				if (empty(fObj.UserEmail))	{alert("Prosim vnesite epošto!"); fObj.UserEmail.focus(); return false;}
+				if (empty(fObj.UserName))	{alert("Please enter username!"); fObj.UserName.focus(); return false;}
+				if (empty(fObj.UserEmail))	{alert("Please enter email address!"); fObj.UserEmail.focus(); return false;}
 				return true;
 			} // pre-submit callback
 		});

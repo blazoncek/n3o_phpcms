@@ -144,7 +144,7 @@ if ( isset($_GET['message']) ) {
 	echo "<h3>". $msgTitle ."</h3>";
 	echo "<p><i>". $msgSubtitle ."</i></p>";
 	echo "<p>". $msgAbstract ."</p>";
-	echo "<a href=\"list.php?Izbor=Msg&process=". $_GET['message'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"b\">Naloži</a>\n";
+	echo "<a href=\"list.php?Izbor=Msg&process=". $_GET['message'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"b\">Upload</a>\n";
 	echo "<a href=\"list.php?Izbor=Msg&remove=". $_GET['message'] ."\" data-role=\"button\" data-ajax=\"false\" data-theme=\"e\">Delete</a>\n";
 	echo "</div>\n";
 

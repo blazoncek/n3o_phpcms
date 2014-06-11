@@ -82,7 +82,7 @@ BLOCKQUOTE.code {
 	z-index: 0;
 }
 
-#divList, #divEdit, #divVnos {
+#divList, #divEdit {
 	float: left;
 }
 

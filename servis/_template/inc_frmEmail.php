@@ -30,11 +30,11 @@ setcookie("img_path", "");
 
 if ( isset($_POST['Who']) ) {
 	switch ( $_POST['Who'] ) {
-		case "vsi":         $filter = 'Enabled <> 0';                       break;
-		case "novi":        $filter = 'Enabled <> 0 AND LastVisit IS NULL'; break;
-		case "naroceni":    $filter = 'Enabled <> 0 AND MailList <> 0';     break;
-		case "moderatorji": $filter = 'Enabled <> 0 AND AccessLeel > 2';    break;
-		default:            $filter = 'ID = '.(int)$_POST['ID'];            break;
+		case "all":        $filter = 'Enabled <> 0';                       break;
+		case "new":        $filter = 'Enabled <> 0 AND LastVisit IS NULL'; break;
+		case "subscribed": $filter = 'Enabled <> 0 AND MailList <> 0';     break;
+		case "moderators": $filter = 'Enabled <> 0 AND AccessLeel > 2';    break;
+		default:           $filter = 'ID = '.(int)$_POST['ID'];            break;
 	}
 	$MailList = $db->get_results(
 		"SELECT Name, Nickname, Email
@@ -109,7 +109,7 @@ $(document).ready(function(){
 		elements : "HTMLeditor",
 		element_format : "html",
 		theme : "advanced",
-		content_css : "mail.css",
+		content_css : "editor_css.php",
 		plugins : "safari,contextmenu",
 		auto_cleanup_word : true,
 		extended_valid_elements : "a[href|target|title],hr[size|noshade],font[face|size|color|style],div[class|align|style],span[class|style],ol[type],ul[type]",
@@ -139,45 +139,31 @@ $(document).ready(function(){
 </DIV>
 <DIV ID="divContent" style="margin: 5px;">
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
-<TABLE BORDER="0" CELLPADDING="1" CELLSPACING="0" WIDTH="100%">
-<TR>
-	<TD>
-	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="1" WIDTH="100%">
+	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
+<?php if ( isset($_GET['ID']) ) : ?>
+	<INPUT TYPE="Hidden" NAME="ID" VALUE="<?php echo $_GET['ID'] ?>">
+	<INPUT TYPE="Hidden" NAME="Who" VALUE="single">
+<?php else : ?>
 	<TR>
-		<TD>
-		<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0">
-	<?php if ( isset($_GET['ID']) ) : ?>
-		<INPUT TYPE="Hidden" NAME="ID" VALUE="<?php echo $_GET['ID'] ?>">
-		<INPUT TYPE="Hidden" NAME="Who" VALUE="single">
-	<?php else : ?>
-		<TR>
-		    <TD ALIGN="right"><b>Send to</b>:&nbsp;</TD>
-		    <TD COLSPAN="2" CLASS="a10" VALIGN="top">
-			<INPUT TYPE="Radio" NAME="Who" CHECKED VALUE="naroceni">&nbsp;subscribed&nbsp;&nbsp;
-			<INPUT TYPE="Radio" NAME="Who" value="moderatorji">&nbsp;moderators&nbsp;&nbsp;
-			<INPUT TYPE="Radio" NAME="Who" VALUE="vsi">&nbsp;all&nbsp;&nbsp;
-			<INPUT TYPE="Radio" NAME="Who" VALUE="novi">&nbsp;new members&nbsp;&nbsp;
-			</TD>
-		</TR>
-	<?php endif ?>
-		<TR>
-			<TD ALIGN="right"><b>Subject</b>:&nbsp;</TD>
-			<TD><INPUT NAME="Subj" CLASS="Txt" MAXLENGTH="64" STYLE="width:100%;"></TD>
-			<TD ALIGN="right"><INPUT TYPE="Submit" NAME="what" VALUE=" Send " CLASS="but"></TD>
-		</TR>
-		<TR>
-			<TD ALIGN="center" COLSPAN="3">
-			<TEXTAREA NAME="Body" ID="HTMLeditor" STYLE="width:100%;height:100%;"></TEXTAREA>
-			</TD>
-		</TR>
-		<TR>
-			<TD></TD>
-			<TD></TD>
-		</TR></TABLE>
+		<TD ALIGN="right"><b>Send to</b>:&nbsp;</TD>
+		<TD CLASS="a10" VALIGN="top">
+		<INPUT TYPE="Radio" NAME="Who" CHECKED VALUE="subscribed">&nbsp;subscribed&nbsp;&nbsp;
+		<INPUT TYPE="Radio" NAME="Who" value="moderators">&nbsp;moderators&nbsp;&nbsp;
+		<INPUT TYPE="Radio" NAME="Who" VALUE="all">&nbsp;all&nbsp;&nbsp;
+		<INPUT TYPE="Radio" NAME="Who" VALUE="new">&nbsp;new members&nbsp;&nbsp;
 		</TD>
-	</TR></TABLE>
-	</TD>
-</TR>
-</TABLE>
+		<TD ALIGN="right"><INPUT TYPE="Submit" NAME="what" VALUE=" Send " CLASS="but"></TD>
+	</TR>
+<?php endif ?>
+	<TR>
+		<TD ALIGN="right"><b>Subject</b>:&nbsp;</TD>
+		<TD><INPUT NAME="Subj" CLASS="Txt" MAXLENGTH="64" STYLE="width:100%;"></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="center" COLSPAN="3">
+		<TEXTAREA NAME="Body" ID="HTMLeditor" STYLE="width:100%;height:100%;"></TEXTAREA>
+		</TD>
+	</TR>
+	</TABLE>
 </FORM>
 <DIV>

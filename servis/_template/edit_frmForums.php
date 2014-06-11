@@ -71,7 +71,7 @@ $(document).ready(function(){
 	
 	// load subdata
 	if ( $("#divTopics").text() )    $("#divTopics").load('inc.php?Izbor=frmTopic&ForumID=<?php echo $_GET['ID'] ?>');
-	if ( $("#divModeratorji").text() )    $("#divModeratorji").load('inc.php?Izbor=frmModeratorji&ForumID=<?php echo $_GET['ID'] ?>');
+	if ( $("#divModeratorji").text() )    $("#divModeratorji").load('inc.php?Izbor=frmModerators&ForumID=<?php echo $_GET['ID'] ?>');
 
 	// refresh list
 	listRefresh();
