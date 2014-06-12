@@ -26,38 +26,55 @@
 */
 
 if ( !isset($_GET['ID']) )   $_GET['ID'] = "";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
-if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
+if ( isset($_GET['Brisi']) && $_GET['Brisi'] != "" ) {
 	$db->query("START TRANSACTION");
 	// delete subtree of ACLs 
 	$List = $db->get_col(
 		"SELECT ACLID
 		FROM SMActions
-		WHERE ActionID LIKE '". $_GET['Brisi'] ."%' AND ACLID IS NOT NULL", 0 );
-	if ( $List )
-		foreach ( $List as $ACLID ) {
-			$db->query( "DELETE FROM SMACLr WHERE ACLID = $ACLID" );
-			$db->query( "DELETE FROM SMACL  WHERE ACLID = $ACLID" );
-		}
+		WHERE ActionID LIKE '". $db->escape($_GET['Brisi']) ."%' AND ACLID IS NOT NULL", 0
+		);
+	if ( $List ) foreach ( $List as $ACLID ) {
+		$db->query("DELETE FROM SMACLr WHERE ACLID = $ACLID");
+		$db->query("DELETE FROM SMACL  WHERE ACLID = $ACLID");
+	}
 
-	$db->query( "DELETE FROM SMActions WHERE ActionID LIKE '". $_GET['Brisi'] ."%'" );
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'SMActions',
+			'Delete',
+			'". $db->escape($_GET['Brisi']) ."'
+		)"
+		);
+
+	$db->query("DELETE FROM SMActions WHERE ActionID LIKE '". $db->escape($_GET['Brisi']) ."%'");
 	$db->query("COMMIT");
 	
 	// change URL parameter to reflect deletions
 	if ( strlen( $_GET['Brisi'] ) > 2 )
-		$_GET['ID'] = left( $_GET['Brisi'], strlen( $_GET['Brisi'] )-2 );
+		$_GET['ID'] = left($_GET['Brisi'], strlen($_GET['Brisi'])-2);
 }
 
-if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
+if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$len = strlen($_GET['ID']);
 	$Start = $len + 1;
 
 	if ( $len > 2 )
-		$Prfx = left( $_GET['ID'], $len - 2 );
+		$Prfx = left($_GET['ID'], $len - 2);
 	else
 		$Prfx = "";
-	$Nov = $Prfx . sprintf( "%02d", (int)right($_GET['ID'],2) + (int)$_GET['Smer'] );
+	$Nov = $Prfx . sprintf("%02d", (int)right($_GET['ID'],2) + (int)$_GET['Smer']);
 	$Zac = $Prfx . "xx";
 	if ( right( $Nov, 2 ) != "00" ) {
 		$db->query("START TRANSACTION");
@@ -80,6 +97,22 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 			$db->query( "UPDATE SMActions SET ActionID='".$_GET['ID']."' + substring(ActionID,".$Start.",99) WHERE left(ActionID,".$len.")='".$Nov."'" );
 			$db->query( "UPDATE SMActions SET ActionID='".$Nov."' + substring(ActionID,".$Start.",99)        WHERE left(ActionID,".$len.")='".$Zac."'" );
 		}
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'SMActions',
+				'Move',
+				'". $db->escape($_GET['ID']) .",->". $Nov ."'
+			)"
+			);
 		$db->query("COMMIT");
 	}
 	// prevent opening subcategory

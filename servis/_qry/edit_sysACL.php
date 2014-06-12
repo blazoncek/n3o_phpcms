@@ -33,7 +33,7 @@ if ( isset($_GET['ACL']) && $_GET['ACL'] != "" ) {
 	// ACL does not exist: create a new entry
 	if ( $_GET['ID'] == "0" ) {
 
-	$db->query("START TRANSACTION");
+		$db->query("START TRANSACTION");
 	
 		$ACLName = "XXX-";
 		switch ( $_GET['ACL'] ) {
@@ -61,50 +61,117 @@ if ( isset($_GET['ACL']) && $_GET['ACL'] != "" ) {
 
 
 		//set everyones privileges
-		$db->query( "INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (".$_GET['ID'].", 1, 'LRWDX')" );
+		$db->query("INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (".$_GET['ID'].", 1, 'LRWDX')");
 		//set user's privileges
-		$db->query( "INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (".$_GET['ID'].", ".$_SESSION['UserID'].", 'LRWDX')" );
+		$db->query("INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (".$_GET['ID'].", ".$_SESSION['UserID'].", 'LRWDX')");
 	
 		// update object's ACL
 		switch ( $_GET['ACL'] ) {
-			case "Servis":       $db->query( "UPDATE SMActions   SET ACLID = ".$_GET['ID']." WHERE ActionID = ".$_GET['ActionID'] );         break;
-			case "Sifranti":     $db->query( "UPDATE Sifranti    SET ACLID = ".$_GET['ID']." WHERE SifrCtrl = ".$_GET['SifrantID'] );        break;
-			case "Predloge":     $db->query( "UPDATE Predloge    SET ACLID = ".$_GET['ID']." WHERE PredlogaID = ".$_GET['PredlogaID'] );     break;
-			case "Kategorije":   $db->query( "UPDATE Kategorije  SET ACLID = ".$_GET['ID']." WHERE KategorijaID = ".$_GET['KategorijaID'] ); break;
-			case "Media":        $db->query( "UPDATE Media       SET ACLID = ".$_GET['ID']." WHERE MediaID = ".$_GET['MediaID'] );           break;
-			case "Besedila":     $db->query( "UPDATE Besedila    SET ACLID = ".$_GET['ID']." WHERE BesdiloID = ".$_GET['BesediloID'] );      break;
-			case "Ankete":       $db->query( "UPDATE Ankete      SET ACLID = ".$_GET['ID']." WHERE ID = ".$_GET['AnketaID'] );               break;
-			case "emlSporocila": $db->query( "UPDATE emlMessages SET ACLID = ".$_GET['ID']." WHERE emlMessageID = ".$_GET['emlMessageID'] ); break;
+			case "Servis":       $db->query("UPDATE SMActions   SET ACLID = ".$_GET['ID']." WHERE ActionID = ".$_GET['ActionID']);         break;
+			case "Sifranti":     $db->query("UPDATE Sifranti    SET ACLID = ".$_GET['ID']." WHERE SifrCtrl = ".$_GET['SifrantID']);        break;
+			case "Predloge":     $db->query("UPDATE Predloge    SET ACLID = ".$_GET['ID']." WHERE PredlogaID = ".$_GET['PredlogaID']);     break;
+			case "Kategorije":   $db->query("UPDATE Kategorije  SET ACLID = ".$_GET['ID']." WHERE KategorijaID = ".$_GET['KategorijaID']); break;
+			case "Media":        $db->query("UPDATE Media       SET ACLID = ".$_GET['ID']." WHERE MediaID = ".$_GET['MediaID']);           break;
+			case "Besedila":     $db->query("UPDATE Besedila    SET ACLID = ".$_GET['ID']." WHERE BesdiloID = ".$_GET['BesediloID']);      break;
+			case "Ankete":       $db->query("UPDATE Ankete      SET ACLID = ".$_GET['ID']." WHERE ID = ".$_GET['AnketaID']);               break;
+			case "emlSporocila": $db->query("UPDATE emlMessages SET ACLID = ".$_GET['ID']." WHERE emlMessageID = ".$_GET['emlMessageID']); break;
 		}
-	
+
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'SMACL',
+				'Create ACL',
+				'". $ACLName ."'
+			)"
+			);
+
 		$db->query("COMMIT");
 	}
 }
 
 // change ACL entry's name
 if ( isset($_POST['Name']) && $_POST['Name'] != "" ) {
-	if ( $_GET['ID'] != "0" ) {
-		$db->query( "UPDATE SMACL SET Name = '".$_POST['Name']."' WHERE ACLID = " . (int)$_GET['ID'] );
+	$db->query("START TRANSACTION");
+	if ( (int)$_GET['ID'] != 0 ) {
+		$db->query("UPDATE SMACL SET Name = '". $db->escape($_POST['Name']) ."' WHERE ACLID = " . (int)$_GET['ID']);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'SMACL',
+				'Rename ACL',
+				'". $db->escape($_POST['Name']) ."'
+			)"
+			);
 	} else {
-		$db->query( "INSERT INTO SMACL (Name) VALUES ('".$_POST['Name']."')" );
+		$db->query("INSERT INTO SMACL (Name) VALUES ('". $db->escape($_POST['Name']) ."')");
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'SMACL',
+				'Create ACL',
+				'". $db->escape($_POST['Name']) ."'
+			)"
+			);
 	}
+	$db->query("COMMIT");
 }
 
 // add users to permissions list
 if ( isset($_POST['UserList']) && $_POST['UserList'] !== "" && isset($_POST['Action']) ) {
 	$db->query("START TRANSACTION");
 	if ( $_POST['Action'] == "Add" )
-		foreach ( explode( ",", $_POST['UserList'] ) as $UserID ) {
-			$db->query( "INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '     ')" );
+		foreach ( explode(",", $_POST['UserList']) as $UserID ) {
+			$db->query( "INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '     ')");
 		}
 	if ( $_POST['Action'] == "Remove" )
-		$db->query( "DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID IN (". $_POST['UserList'] .")" );
+		$db->query("DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID IN (". $_POST['UserList'] .")");
 	if ( $_POST['Action'] == "Set" ) {
-		$db->query( "DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID NOT IN (". $_POST['UserList'] .")" );
+		$db->query("DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID NOT IN (". $_POST['UserList'] .")");
 		foreach ( explode( ",", $_POST['UserList'] ) as $UserID ) {
-			@$db->query( "INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '". ($UserID==1? "LRWDX":"     ") ."')" );
+			@$db->query("INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '". ($UserID==1? "LRWDX":"     ") ."')");
 		}
 	}
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['ID'] .",
+			'SMACL',
+			'Change ACL membership',
+			'". $db->escape($_POST['Action']) ." user,". $db->escape($_POST['UserList']) ."'
+		)"
+		);
 	$db->query("COMMIT");
 }
 
@@ -123,11 +190,27 @@ if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset($_POST['A
 			@$db->query( "INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (". (int)$_GET['ID'] .", $GroupID, '". ($GroupID==2? "LRWDX":"     ") ."')" );
 		}
 	}
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['ID'] .",
+			'SMACL',
+			'Change ACL membership',
+			'". $db->escape($_POST['Action']) ." group,". $db->escape($_POST['GroupList']) ."'
+		)"
+		);
 	$db->query("COMMIT");
 }
 
 // update user's or group's permissions
-if ( isset( $_POST['GroupID'] ) || isset( $_POST['UserID'] ) ) {
+if ( isset($_POST['GroupID']) || isset($_POST['UserID']) ) {
 	$db->query("START TRANSACTION");
 	$ACL = $db->get_var(
 		"SELECT MemberACL ".
@@ -157,6 +240,26 @@ if ( isset( $_POST['GroupID'] ) || isset( $_POST['UserID'] ) ) {
 		"	".((isset($_POST['GroupID']) && $_POST['GroupID']!="0")? "GroupID = ".$_POST['GroupID']: "").
 		")"
 	);
+
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['ID'] .",
+			'SMACLr',
+			'Change ACL permissions',
+			'". ((isset($_POST['UserID']) && (int)$_POST['UserID'] != 0) ? "UserID=". (int)$_POST['UserID'] : "") .
+				((isset($_POST['GroupID']) && (int)$_POST['GroupID'] != 0) ? "GroupID=". (int)$_POST['GroupID'] : "") .
+			", ". $ACL ."'
+		)"
+		);
+
 	$db->query("COMMIT");
 }
 ?>

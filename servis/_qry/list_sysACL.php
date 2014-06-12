@@ -25,18 +25,34 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] > 1 ) {
+if ( isset($_GET['Brisi']) && (int)$_GET['Brisi'] > 1 ) {
 	$db->query("START TRANSACTION");
-	$db->query( "UPDATE SMActions   SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "UPDATE Sifranti    SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "UPDATE Kategorije  SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "UPDATE Predloge    SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "UPDATE Besedila    SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "UPDATE Media       SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "UPDATE Ankete      SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "UPDATE emlMessages SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM SMACLr WHERE ACLID = ".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM SMACL  WHERE ACLID = ".(int)$_GET['Brisi'] );
+	$db->query("UPDATE SMActions   SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("UPDATE Sifranti    SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("UPDATE Kategorije  SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("UPDATE Predloge    SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("UPDATE Besedila    SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("UPDATE Media       SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("UPDATE Ankete      SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("UPDATE emlMessages SET ACLID = NULL WHERE ACLID = ".(int)$_GET['Brisi']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'SMACL',
+			'Delete ACL',
+			'". $db->get_var("SELECT Name FROM SMACL WHERE ACLID=". (int)$_GET['Brisi']) ."'
+		)"
+		);
+	$db->query("DELETE FROM SMACLr WHERE ACLID = ".(int)$_GET['Brisi']);
+	$db->query("DELETE FROM SMACL  WHERE ACLID = ".(int)$_GET['Brisi']);
 	$db->query("COMMIT");
 }
 ?>

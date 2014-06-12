@@ -26,11 +26,27 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] > 2 ) {
-	$db->query("START TRANSACTION");
 	// never delete never delete everyone (GroupID==1) and administrators (GroupID==2) groups
+	$db->query("START TRANSACTION");
 	$db->query( "UPDATE SMUser SET DefGrp = NULL WHERE DefGrp = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM SMACLr WHERE GroupID = ".(int)$_GET['Brisi'] );
 	$db->query( "DELETE FROM SMUserGroups WHERE GroupID = ".(int)$_GET['Brisi'] );
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'SMGroup',
+			'Delete group',
+			'". $db->get_var("SELECT Name FROM SMGroup WHERE GroupID=". (int)$_GET['Brisi']) ."'
+		)"
+		);
 	$db->query( "DELETE FROM SMGroup WHERE GroupID = ".(int)$_GET['Brisi'] );
 	$db->query("COMMIT");
 }

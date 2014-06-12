@@ -27,17 +27,15 @@
 
 // get first available top level menu ID
 if ( !isset($_GET['ID']) || $_GET['ID'] == "" || $_GET['ID'] === "0" ) {
-	$ActionID = $db->get_var( "SELECT max(ActionID) FROM SMActions WHERE ActionID LIKE '__'" );
+	$ActionID = $db->get_var("SELECT max(ActionID) FROM SMActions WHERE ActionID LIKE '__'");
 
 	$_GET['ID'] = sprintf( "%0".strlen($ActionID)."d", (int)$ActionID + 1 );
-	$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+	$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 }
 
 if ( isset($_POST['Name']) ) {
-	$ActionID = $db->get_var(
-		"SELECT ActionID
-		FROM SMActions
-		WHERE ActionID='" . $_GET['ID'] . "'" );
+	$db->query("START TRANSACTION");
+	$ActionID = $db->get_var("SELECT ActionID FROM SMActions WHERE ActionID='". $db->escape($_GET['ID']) ."'");
 
 	if ( $ActionID ) {
 		$db->query(
@@ -47,7 +45,24 @@ if ( isset($_POST['Name']) ) {
 				MobileCapable=" . (isset($_POST['Mobile']) && $_POST['Mobile'] == "yes" ? "1" : "0" ) . ",
 				Action =" . (($_POST['Action'] != "") ? "'".$db->escape($_POST['Action'])."'" : "NULL" ) . ",
 				Icon   =" . (($_POST['Icon'] != "")   ? "'".$db->escape($_POST['Icon'])."'" : "NULL" ) . "
-			WHERE ActionID = '".$_GET['ID']."'" );
+			WHERE ActionID = '".$_GET['ID']."'"
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'SMActions',
+				'Update',
+				'". $db->escape($_GET['ID']) .",". $db->escape($_POST['Name']) .",". $db->escape($_POST['Action']) .",". (isset($_POST['Show']) && $_POST['Show'] == "yes" ? "1" : "0" ) ."'
+			)"
+			);
 	} else {
 		$db->query(
 			"INSERT INTO SMActions (ActionID, Name, Action, Enabled, MobileCapable, Icon)
@@ -57,13 +72,32 @@ if ( isset($_POST['Name']) ) {
 				. (isset($_POST['Show']) && $_POST['Show'] == "yes" ? "1" : "0" ) . ","
 				. (isset($_POST['Mobile']) && $_POST['Mobile'] == "yes" ? "1" : "0" ) . ","
 				. (($_POST['Icon'] != "")   ? "'".$db->escape($_POST['Icon'])."'" : "NULL" ) . ")" );
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'SMActions',
+				'Insert',
+				'". $db->escape($_GET['ID']) .",". $db->escape($_POST['Name']) .",". $db->escape($_POST['Action']) .",". (isset($_POST['Show']) && $_POST['Show'] == "yes" ? "1" : "0" ) ."'
+			)"
+			);
 	}
+	$db->query("COMMIT");
 }
 
 // delete access control list (ACL)
 if ( isset( $_GET['BrisiACL'] ) && $_GET['BrisiACL'] != "" ) {
-	$db->query( "UPDATE SMActions SET ACLID = NULL WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "DELETE FROM SMACLr WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "DELETE FROM SMACL  WHERE ACLID = " . $_GET['BrisiACL'] );
+	$db->query("START TRANSACTION");
+	$db->query("UPDATE SMActions SET ACLID = NULL WHERE ACLID = " . $_GET['BrisiACL']);
+	$db->query("DELETE FROM SMACLr WHERE ACLID = " . $_GET['BrisiACL']);
+	$db->query("DELETE FROM SMACL  WHERE ACLID = " . $_GET['BrisiACL']);
+	$db->query("COMMIT");
 }
 ?>

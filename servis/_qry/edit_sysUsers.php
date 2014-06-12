@@ -44,7 +44,28 @@ if ( $_GET['ID'] == "0" ) {
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
 		// add new user to everyone group
-		$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES (1, $db->insert_id)" );
+		$db->query("INSERT INTO SMUserGroups (GroupID, UserID) VALUES (1, $db->insert_id)");
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". $_GET['ID'] .",
+				'SMUser',
+				'Add user',
+				'".$db->escape($_POST['Name']).",".
+				$db->escape($_POST['Email']).",".
+				$db->escape($_POST['Phone']).",".
+				$db->escape($_POST['TwitterName']).",".
+				$db->escape($_POST['Username']).",".
+				((isset($_POST['Active']) && $_POST['Active'] == "yes") ? "1" : "0") ."'
+			)"
+			);
 		$db->query("COMMIT");
 	}
 } else {
@@ -70,13 +91,34 @@ if ( $_GET['ID'] == "0" ) {
 		}
 		if ( isset($_POST['Name']) && isset($_POST['Password']) )
 			$db->query( "UPDATE SMUser SET Active = ".( (isset($_POST['Active']) && $_POST['Active']=="yes") ? "1" : "0" )." WHERE UserID = " . (int)$_GET['ID'] );
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". $_GET['ID'] .",
+				'SMUser',
+				'Update user',
+				'".$db->escape($_POST['Name']).",".
+				$db->escape($_POST['Email']).",".
+				$db->escape($_POST['Phone']).",".
+				$db->escape($_POST['TwitterName']).",".
+				$db->escape($_POST['Username']).",".
+				((isset($_POST['Active']) && $_POST['Active'] == "yes") ? "1" : "0") ."'
+			)"
+			);
 		$db->query("COMMIT");
 
 	} else if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset( $_POST['Action'] ) ) {
 
 		$db->query("START TRANSACTION");
 		if ( $_POST['Action'] == "Add" )
-			foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
+			foreach ( explode(",", $_POST['GroupList']) as $GroupID ) {
 				$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
 			}
 		if ( $_POST['Action'] == "Remove" )
@@ -87,6 +129,22 @@ if ( $_GET['ID'] == "0" ) {
 				$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
 			}
 		}
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". $_GET['ID'] .",
+				'SMUserGroups',
+				'Change user membership',
+				'". (int)$_POST['UserID'] .",". $db->escape($_POST['Action']) .",". $db->escape($_POST['GroupList']) ."'
+			)"
+			);
 		$db->query("COMMIT");
 	}
 }

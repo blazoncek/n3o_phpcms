@@ -107,6 +107,8 @@ if ( isset($_GET["login"]) && isset($_POST["Usr"]) ) {
 			}
 			// update login timestamp
 			$db->query("START TRANSACTION");
+			// purge old audit events (>3 months)
+			$db->query("DELETE FROM SMAudit WHERE DateOfEntry < subdate(now(),90)");
 			$db->query(
 				"INSERT INTO SMAudit (
 					UserID,

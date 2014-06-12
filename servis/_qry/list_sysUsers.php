@@ -25,12 +25,28 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] > 1 ) {
-	$db->query("START TRANSACTION");
+if ( isset($_GET['Brisi']) && (int)$_GET['Brisi'] > 1 ) {
 	// never delete administrator (UserID==1)
-	$db->query( "DELETE FROM SMACLr WHERE UserID = ".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM SMUserGroups WHERE UserID = ".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM SMUser WHERE UserID = ".(int)$_GET['Brisi'] );
+	$db->query("START TRANSACTION");
+	$db->query("DELETE FROM SMACLr WHERE UserID = ".(int)$_GET['Brisi']);
+	$db->query("DELETE FROM SMUserGroups WHERE UserID = ".(int)$_GET['Brisi']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'SMUser',
+			'Delete user',
+			'". $db->get_var("SELECT Username FROM SMUser WHERE UserID=". (int)$_GET['Brisi']) ."'
+		)"
+		);
+	$db->query("DELETE FROM SMUser WHERE UserID = ".(int)$_GET['Brisi']);
 	$db->query("COMMIT");
 }
 ?>
