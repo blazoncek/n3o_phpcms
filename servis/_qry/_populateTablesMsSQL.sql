@@ -21,17 +21,19 @@
 --| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             |
 --| GNU Lesser General Public License for more details.                       |
 --'---------------------------------------------------------------------------'
-
-INSERT INTO n3oParameters (ParamName, ParamValue) VALUES ('Version', '2.2.1');
-INSERT INTO n3oParameters (ParamName, ParamValue) VALUES ('PostMaster', 'root@localhost');
-
+INSERT INTO n3oParameters (ParamName,ParamValue) VALUES ('Version','2.2.1');
+INSERT INTO n3oParameters (ParamName,ParamValue) VALUES ('PostMaster','root@localhost');
+INSERT INTO n3oParameters (ParamName,ParamValue) VALUES ('ForumAnonymous','No');
+INSERT INTO n3oParameters (ParamName,ParamValue) VALUES ('ForumTitle','Forum');
+INSERT INTO n3oParameters (ParamName,ParamValue) VALUES ('ForumChat','No');
+-- Groups
 SET IDENTITY_INSERT SMGroup ON;
 INSERT INTO SMGroup (GroupID, Name) VALUES (1, 'Everyone');
 INSERT INTO SMGroup (GroupID, Name) VALUES (2, 'Administrators');
 INSERT INTO SMGroup (GroupID, Name) VALUES (3, 'Power Users');
 INSERT INTO SMGroup (GroupID, Name) VALUES (4, 'Users');
 SET IDENTITY_INSERT SMGroup OFF;
-
+-- Users (password is Pa$$w0rD)
 SET IDENTITY_INSERT SMUser ON;
 INSERT INTO SMUser (UserID, Username, Password, Active, DefGrp, Name) VALUES (1, 'Admin', '$1$N3O_CMS:$U31VsZSt0fHSxVuMlCEmF/', 1, 1, 'Administrator'); -- Pa$$w0rD
 SET IDENTITY_INSERT SMUser OFF;
@@ -40,50 +42,52 @@ INSERT INTO SMUserGroups (GroupID, UserID) VALUES (0, 1);
 INSERT INTO SMUserGroups (GroupID, UserID) VALUES (1, 1);
 
 SET IDENTITY_INSERT SMACL ON;
-INSERT INTO SMACL (ACLID, Name) VALUES (1, 'Administratorski');
+INSERT INTO SMACL (ACLID, Name) VALUES (1, 'Admin');
 SET IDENTITY_INSERT SMACL OFF;
 
 INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (1, 1, 'LRWDX');
 INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (1, 2, 'LRWDX');
-
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('00', 'Servis', 1, NULL, NULL, 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0001', 'Menuji', 1, 'Servis', 'folder', 0, 1);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0002', '', 1, NULL, NULL, 0, 1);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0003', 'Uporabniki', 1, 'Uporabniki', 'user', 1, 1);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0004', 'Grupe', 1, 'Grupe', 'group', 1, 1);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0005', 'ACL', 1, 'ACL', 'key', 1, 1);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0006', '', 1, NULL, NULL, 1, 1);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0007', N'Šifranti', 1, 'Sifranti', 'toolbox', 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0008', 'Jeziki', 1, 'Jeziki', 'flags', 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0009', 'Prevodi', 1, 'NLSText', 'flags', 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0010', '', 1, NULL, NULL, 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0011', 'Predloge', 1, 'Predloge', 'brick', 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0012', 'SQL', 1, '../inc.php?Izbor=SQL', 'process', 1, 1);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('01', 'Vsebina', 1, NULL, NULL, 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0101', 'Kategorije', 1, 'Kategorije', 'sitemap', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0102', 'Besedila', 1, 'Besedila', 'edit', 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0103', 'Priloge', 1, 'Media', 'attachment', 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0104', '', 1, NULL, NULL, 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0105', 'Ankete', 1, 'Ankete', 'accept', 1, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('02', N'Poštne liste', 0, NULL, NULL, 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0201', 'Skupine', 1, 'emlGrupe', 'folder', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0202', 'Uporabniki', 1, 'emlUporabniki', 'user', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0203', '', 1, NULL, NULL, 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0204', N'Sporočila', 1, 'emlSporocila', 'mail', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('03', 'Forumi', 0, NULL, NULL, 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0301', 'Skupine', 1, 'frmCategories', 'folder', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0302', 'Niti', 1, 'frmForums', 'cloud_comment', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0303', 'Klepetalnice', 1, 'frmChat', 'sms', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0304', '', 1, NULL, NULL, 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0305', N'Člani', 1, 'frmMembers', 'user', 0, NULL);
-INSERT INTO SMActions (ActionID, Name, Enabled, Action, Icon, MobileCapable, ACLID) VALUES ('0306', 'Nastavitve', 1, 'frmSetup', 'toolbox', 0, NULL);
-
-INSERT INTO Jeziki(Jezik, Opis, Enabled, Charset, DefLang, LangCode) VALUES ('Sl', 'Slovenski', 1, 'utf-8', 1, 'sl');
-INSERT INTO Jeziki(Jezik, Opis, Enabled, Charset, DefLang, LangCode) VALUES ('En', 'English', 0, 'utf-8', 0, 'en');
-INSERT INTO Jeziki(Jezik, Opis, Enabled, Charset, DefLang, LangCode) VALUES ('De', 'Deutsch', 0, 'utf-8', 0, 'de');
-INSERT INTO Jeziki(Jezik, Opis, Enabled, Charset, DefLang, LangCode) VALUES ('Fr', 'Francois', 0, 'utf-8', 0, 'fr');
-INSERT INTO Jeziki(Jezik, Opis, Enabled, Charset, DefLang, LangCode) VALUES ('Hr', 'Hrvatski', 0, 'utf-8', 0, 'hr');
-INSERT INTO Jeziki(Jezik, Opis, Enabled, Charset, DefLang, LangCode) VALUES ('Sr', 'Srpski', 0, 'utf-8', 0, 'sr');
+-- Admin actions
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('00','System',1,NULL,NULL,1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0001','Menus',1,'sysMenus','folder',0,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0002','',1,NULL,NULL,0,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0003','Users',1,'sysUsers','user',1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0004','Groups',1,'sysGroups','group',1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0005','ACL',1,'sysACL','protection',1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0006','',1,NULL,NULL,1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0007','Audit',1,'sysAudit','bell',1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0008','',1,NULL,NULL,1,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0009','Parameters',1,'sysParams','toolbox',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0010','Languages',1,'sysLang','flags',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0011','Translations',1,'sysNLSText','flags',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0012','',1,NULL,NULL,1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0013','Templates',1,'sysTemplates','brick',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0014','SQL',1,'../inc.php?Izbor=SQL','database',1 ,1);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('01','Content',1,NULL,NULL,1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0101','Categories',1,'Categories','sitemap',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0102','Texts',1,'Text','edit',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0103','Files',1,'Media','attachment',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0104','',1,NULL,NULL,1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0105','Polls',1,'Polls','accept',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('02','Mailing lists',1,NULL,NULL,0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0201','Groups',1,'emlGroups','folder',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0202','Members',1,'emlUsers','user',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0203','',1,NULL,NULL,0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0204','Messages',1,'emlMessages','mail',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('03','Forums',1,NULL,NULL,0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0301','Categories',1,'frmCategories','folder',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0302','Threads',1,'frmForums','cloud_comment',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0303','Chats',0,'frmChat','sms',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0304','',1,NULL,NULL,0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0305','Members',1,'frmMembers','user',0,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0306','Parameters',1,'frmSetup','toolbox',0,NULL);
+-- Languages
+INSERT INTO Jeziki(Jezik,Opis,Enabled,Charset,DefLang,LangCode) VALUES ('En','English',1,'utf-8',1,'en');
+INSERT INTO Jeziki(Jezik,Opis,Enabled,Charset,DefLang,LangCode) VALUES ('De','Deutsch',0,'utf-8',0,'de');
+INSERT INTO Jeziki(Jezik,Opis,Enabled,Charset,DefLang,LangCode) VALUES ('Fr','Francois',0,'utf-8',0,'fr');
+INSERT INTO Jeziki(Jezik,Opis,Enabled,Charset,DefLang,LangCode) VALUES ('Hr','Hrvatski',0,'utf-8',0,'hr');
+INSERT INTO Jeziki(Jezik,Opis,Enabled,Charset,DefLang,LangCode) VALUES ('Sl','Slovenski',1,'utf-8',0,'sl');
+INSERT INTO Jeziki(Jezik,Opis,Enabled,Charset,DefLang,LangCode) VALUES ('Sr','Srpski',0,'utf-8',0,'sr');
 
 INSERT INTO Sifranti (SifrCtrl, SifrZapo, SifrText, SifNVal1, ACLID) VALUES ('PARA', 1, 'ListMax', 25, 1);
 INSERT INTO Sifranti (SifrCtrl, SifrZapo, SifrText, SifLVal1, ACLID) VALUES ('PARA', 2, 'BESESimple', 1, 1);

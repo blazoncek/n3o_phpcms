@@ -27,7 +27,7 @@
 
 if ( !isset($_GET['ID']) ) $_GET['ID'] = "";
 
-$Podatek = $db->get_row("SELECT * FROM Jeziki WHERE Jezik='".$_GET['ID']."'");
+$Podatek = $db->get_row("SELECT * FROM Jeziki WHERE Jezik='". $db->escape($_GET['ID']) ."'");
 ?>
 <script language="JavaScript" type="text/javascript">
 <!-- //
