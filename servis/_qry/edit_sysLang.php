@@ -73,11 +73,28 @@ if ( isset($_POST['Opis']) && $_POST['Opis'] != "" ) {
 			"UPDATE Jeziki ".
 			"SET Opis = '".$db->escape($_POST['Opis'])."',".
 			(isset($Slika)? "Ikona = '".$Slika."',": "").
-			"	Enabled = ".(isset($_POST['Izpis'])? "1": "0").",".
-			"	CharSet = ".(($_POST['CharSet']!="")? "'".$db->escape($_POST['CharSet'])."'": "NULL").",".
-			"	LangCode = ".(($_POST['LangCode']!="")? "'".$db->escape($_POST['LangCode'])."'": "NULL").",".
-			"	DefLang = ".(isset($_POST['DefLang'])? "1": "0")." ".
-			"WHERE Jezik = '".$_POST['Jezik']."'" );
+			"	Enabled = ". (isset($_POST['Izpis']) ? "1" : "0") .",".
+			"	CharSet = ". (($_POST['CharSet']!="") ? "'".$db->escape($_POST['CharSet'])."'": "NULL") .",".
+			"	LangCode = ". (($_POST['LangCode']!="") ? "'".$db->escape($_POST['LangCode'])."'": "NULL") .",".
+			"	DefLang = ". (isset($_POST['DefLang']) ? "1": "0") ." ".
+			"WHERE Jezik = '". $db->escape($_POST['Jezik']) ."'"
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'Language',
+				'Update language',
+				'". $db->escape($_POST['Jezik']) .",". $db->escape($_POST['Opis']) .",". (isset($_POST['Izpis'])? "1": "0") .",". $db->escape($_POST['CharSet']) .",". $db->escape($_POST['LangCode']) ."'
+			)"
+			);
 	} else {
 		$db->query(
 			"INSERT INTO Jeziki (".
@@ -97,6 +114,22 @@ if ( isset($_POST['Opis']) && $_POST['Opis'] != "" ) {
 			"	".(isset($_POST['Izpis'])? "1": "0").",".
 			"	".(isset($_POST['DefLang'])? "1": "0").
 			")" );
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'Language',
+				'Add language',
+				'". $db->escape($_POST['Jezik']) .",". $db->escape($_POST['Opis']) .",". (isset($_POST['Izpis'])? "1": "0") .",". $db->escape($_POST['CharSet']) .",". $db->escape($_POST['LangCode']) ."'
+			)"
+			);
 		$_GET['ID'] = $_POST['Jezik'];
 	}
 	$db->query("COMMIT");

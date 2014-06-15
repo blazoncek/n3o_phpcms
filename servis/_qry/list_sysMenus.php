@@ -53,7 +53,7 @@ if ( isset($_GET['Brisi']) && $_GET['Brisi'] != "" ) {
 			". $_SESSION['UserID'] .",
 			NULL,
 			'SMActions',
-			'Delete',
+			'Delete menu',
 			'". $db->escape($_GET['Brisi']) ."'
 		)"
 		);
@@ -109,7 +109,7 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 				". $_SESSION['UserID'] .",
 				NULL,
 				'SMActions',
-				'Move',
+				'Move menu',
 				'". $db->escape($_GET['ID']) .",->". $Nov ."'
 			)"
 			);

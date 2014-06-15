@@ -29,6 +29,7 @@ if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 
+	$db->query("START TRANSACTION");
 	if ( $_GET['ID'] != "0" ) {
 		$db->query(
 			"UPDATE Sifranti ".
@@ -43,6 +44,30 @@ if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 			"	SifLVal2 = ".(isset($_POST['LVal2'])? "1": "0")." ".
 			"WHERE SifrantID = " . (int)$_GET['ID']
 		);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Parameters',
+				'Update parameter',
+				'". $db->escape($_POST['Ctrl']) .",". $db->escape($_POST['Text']) .",".
+				(($_POST['NVal1']!="") ? $db->escape($_POST['NVal1']) : "") .",".
+				(($_POST['NVal2']!="") ? $db->escape($_POST['NVal2']) : "") .",".
+				(($_POST['NVal3']!="") ? $db->escape($_POST['NVal3']) : "") .",".
+				(($_POST['DVal1']!="") ? date("Y-m-d",strtotime($_POST['DVal1'])) : "") .",".
+				(($_POST['DVal2']!="") ? date("Y-m-d",strtotime($_POST['DVal2'])) : "") .",".
+				(($_POST['DVal3']!="") ? date("Y-m-d",strtotime($_POST['DVal3'])) : "") .",".
+				(isset($_POST['LVal1']) ? "1" : "0") .",".
+				(isset($_POST['LVal2']) ? "1" : "0") ."'
+			)"
+			);
 	} else {
 		if ($_POST['NVal1Desc']==" field description") $_POST['NVal1Desc']="";
 		if ($_POST['NVal2Desc']==" field description") $_POST['NVal2Desc']="";
@@ -52,7 +77,6 @@ if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 		if ($_POST['DVal3Desc']==" field description") $_POST['DVal3Desc']="";
 		if ($_POST['LVal1Desc']==" field description") $_POST['LVal1Desc']="";
 		if ($_POST['LVal2Desc']==" field description") $_POST['LVal2Desc']="";
-		$db->query("START TRANSACTION");
 		$ACL  = $db->get_var( "SELECT min(ACLID) FROM Sifranti WHERE SifrCtrl='".$_POST['Ctrl']."'" );
 		$Zapo = $db->get_var( "SELECT max(SifrZapo)+1 FROM Sifranti WHERE SifrCtrl='".$_POST['Ctrl']."'" );
 		$db->query(
@@ -102,14 +126,56 @@ if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 		);
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Parameters',
+				'Add parameter',
+				'". $db->escape($_POST['Ctrl']) .",". $db->escape($_POST['Text']) .",".
+				(($_POST['NVal1']!="") ? $db->escape($_POST['NVal1']) : "") .",".
+				(($_POST['NVal2']!="") ? $db->escape($_POST['NVal2']) : "") .",".
+				(($_POST['NVal3']!="") ? $db->escape($_POST['NVal3']) : "") .",".
+				(($_POST['DVal1']!="") ? date("Y-m-d",strtotime($_POST['DVal1'])) : "") .",".
+				(($_POST['DVal2']!="") ? date("Y-m-d",strtotime($_POST['DVal2'])) : "") .",".
+				(($_POST['DVal3']!="") ? date("Y-m-d",strtotime($_POST['DVal3'])) : "") .",".
+				(isset($_POST['LVal1']) ? "1" : "0") .",".
+				(isset($_POST['LVal2']) ? "1" : "0") ."'
+			)"
+			);
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
-		$db->query("COMMIT");
 	}
+	$db->query("COMMIT");
 }
 
 if ( isset( $_GET['BrisiTxt'] ) && $_GET['BrisiTxt'] != "" ) {
-	$db->query( "DELETE FROM SifrantiTxt WHERE ID = " . $_GET['BrisiTxt'] );
+	$db->query("START TRANSACTION");
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BrisiTxt'] .",
+			'Parameters',
+			'Delete parameter text',
+			'". $db->get_var("SELECT SifNaziv FROM SifrantiTxt WHERE ID = ". (int)$_GET['BrisiTxt']) ."'
+		)"
+		);
+	$db->query("DELETE FROM SifrantiTxt WHERE ID = ". (int)$_GET['BrisiTxt']);
+	$db->query("COMMIT");
 }
 
 // insert/update text value
@@ -119,7 +185,7 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 	$ID = $db->get_var(
 		"SELECT ID ".
 		"FROM SifrantiTxt ".
-		"WHERE SifrantID = ".$_POST['TxtID']." AND ".
+		"WHERE SifrantID = ". (int)$_POST['TxtID'] ." AND ".
 		"	Jezik ".(($_POST['Jezik']!="")? "='".$_POST['Jezik']."'": "IS NULL")
 	);
 	if ( !$ID ) {
@@ -152,6 +218,22 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 			"	".(($_POST['CVal3Desc']!="")? "'".$db->escape($_POST['CVal3Desc'])."'": "NULL").
 			")"
 		);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_POST['TxtID'] .",
+				'Parameters',
+				'Add parameter text',
+				'". ($_POST['Naziv']!="" ? "'".$db->escape($_POST['Naziv'])."'" : "'(prazno)'"). ."'
+			)"
+			);
 	} else
 		$db->query(
 			"UPDATE SifrantiTxt ".
@@ -161,17 +243,22 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 			"	SifCVal3 = ".(($_POST['CVal3']!="")? "'".$db->escape($_POST['CVal3'])."'": "NULL")." ".
 			"WHERE ID= " . $ID
 		);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". $ID .",
+				'Parameters',
+				'Update parameter text',
+				'". ($_POST['Naziv']!="" ? "'".$db->escape($_POST['Naziv'])."'" : "'(prazno)'"). ."'
+			)"
+			);
 	$db->query("COMMIT");
 }
-
-/* note: no longer supported
-// delete access control list (ACL)
-if ( isset( $_GET['BrisiACL'] ) && $_GET['BrisiACL'] != "" ) {
-	$db->query("START TRANSACTION");
-	$db->query( "UPDATE Sifranti SET ACLID = NULL WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "DELETE FROM SMACLr WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "DELETE FROM SMACL  WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query("COMMIT");
-}
-*/
 ?>

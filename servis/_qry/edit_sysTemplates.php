@@ -29,6 +29,7 @@ if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
 if ( isset($_POST['Naziv']) && $_POST['Naziv'] !== "" ) {
 
+	$db->query("START TRANSACTION");
 	if ( $_GET['ID'] != "0" ) {
 		$db->query(
 			"UPDATE Predloge ".
@@ -39,9 +40,24 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] !== "" ) {
 			"	Tip = ".(isset($_POST['Tip'])? $_POST['Tip']: "0").",".
 			"	Enabled = ".(isset($_POST['Enabled'])? "1": "0")." ".
 			"WHERE PredlogaID = " . (int)$_GET['ID']
-		);
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Templates',
+				'Update template',
+				'". $db->escape($_POST['Naziv']) .",". $db->escape($_POST['Opis']) .",". $db->escape($_POST['Datoteka']) ."'
+			)"
+			);
 	} else {
-		$db->query("START TRANSACTION");
 		$db->query(
 			"INSERT INTO Predloge (".
 			"	Naziv,".
@@ -58,10 +74,28 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] !== "" ) {
 			"	".(isset($_POST['Tip'])? $_POST['Tip']: "0").",".
 			"	".(isset($_POST['Enabled'])? "1": "0").
 			")"
-		);
+			);
 
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
+
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'SMActions',
+				'Add template',
+				'". $db->escape($_POST['Naziv']) .",". $db->escape($_POST['Opis']) .",". $db->escape($_POST['Datoteka']) ."'
+			)"
+			);
+
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
 
@@ -76,26 +110,34 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] !== "" ) {
 				"VALUES (".(int)$_GET['ID'].", '".$_GET['KategorijaID']."', ".(($Polozaj)? $Polozaj: "1").", ".(int)$_GET['Ekstra'].")"
 			);
 		}
-	$db->query("COMMIT");
 	}
-
+	$db->query("COMMIT");
 }
 
-if ( isset( $_FILES['Dodaj'] ) ) {
+if ( isset($_FILES['Dodaj']) ) {
 	$uploadfile = $StoreRoot . "/template/_" . basename($_FILES['Dodaj']['name']);
 	// upload file in $_FILES['Dodaj'] to ../template/ if .php
 	if ( $_FILES['Dodaj']['error'] == 0 && contains(".php,html",strtolower(right($_FILES['Dodaj']['name'], 4))) ) {
-		if ( !@move_uploaded_file($_FILES['Dodaj']['tmp_name'], $uploadfile) )
+		if ( !@move_uploaded_file($_FILES['Dodaj']['tmp_name'], $uploadfile) ) {
 			$Error = "Upload error!";
+		} else {
+			// audit action
+			$db->query(
+				"INSERT INTO SMAudit (
+					UserID,
+					ObjectID,
+					ObjectType,
+					Action,
+					Description
+				) VALUES (
+					". $_SESSION['UserID'] .",
+					NULL,
+					'SMActions',
+					'Upload template',
+					'". basename($_FILES['Dodaj']['name']) ."'
+				)"
+				);
+		}
 	}
-}
-
-// delete access control list (ACL)
-if ( isset( $_GET['BrisiACL'] ) && $_GET['BrisiACL'] != "" ) {
-	$db->query("START TRANSACTION");
-	$db->query( "UPDATE Predloge SET ACLID = NULL WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "DELETE FROM SMACLr WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query( "DELETE FROM SMACL  WHERE ACLID = " . $_GET['BrisiACL'] );
-	$db->query("COMMIT");
 }
 ?>

@@ -26,22 +26,29 @@
 */
 
 if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
-	$Slika    = $db->get_var( "SELECT Slika FROM Predloge WHERE PredlogaID = ".(int)$_GET['Brisi'] );
-	$Datoteka = $db->get_var( "SELECT Datoteka FROM Predloge WHERE PredlogaID = ".(int)$_GET['Brisi'] );
+	$db->query("START TRANSACTION");
+	$Slika    = $db->get_var("SELECT Slika FROM Predloge WHERE PredlogaID = ". (int)$_GET['Brisi']);
+	$Datoteka = $db->get_var("SELECT Datoteka FROM Predloge WHERE PredlogaID = ". (int)$_GET['Brisi']);
 
-	// BRISANJE DATOTEK
-	// images no longer supported
-	//if ( $Slika && $Slika != "" ) {
-	//	@unlink( $StoreRoot . "/media/" . $Slika );
-	//	@unlink( $StoreRoot . "/media/thumbs/" . $Slika );
-	//}
-	/*
-	if ( $Datoteka && $Datoteka != "" ) {
-		@unlink( $StoreRoot . "/template/" . $Datoteka );
-	}
-	 */
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'Templates',
+			'Delete template',
+			'". $db->get_var("SELECT Naziv FROM Predloge WHERE PredlogaID = ". (int)$_GET['Brisi']) .",". $Datoteka ."'
+		)"
+		);
 
-	$db->query( "DELETE FROM KategorijeVsebina WHERE PredlogaID = ".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM Predloge          WHERE PredlogaID = ".(int)$_GET['Brisi'] );
+	$db->query("DELETE FROM KategorijeVsebina WHERE PredlogaID = ". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM Predloge          WHERE PredlogaID = ". (int)$_GET['Brisi']);
+	$db->query("COMMIT");
 }
 ?>

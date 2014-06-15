@@ -25,8 +25,9 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_POST['NLSToken'] ) && $_POST['NLSToken'] != "" ) {
+if ( isset($_POST['NLSToken']) && $_POST['NLSToken'] != "" ) {
 
+	$db->query("START TRANSACTION");
 	$db->query(
 		"INSERT INTO NLSText (".
 		"	NLSToken,".
@@ -34,20 +35,54 @@ if ( isset( $_POST['NLSToken'] ) && $_POST['NLSToken'] != "" ) {
 		"	NLSShort,".
 		"	NLSLong".
 		") VALUES (".
-		"	'".$_POST['NLSToken']."',".
-		"	".(($_POST['Jezik']!="")? "'".$db->escape($_POST['Jezik'])."'": "NULL").",".
-		"	".(($_POST['NLSShort']!="")? "'".$db->escape($_POST['NLSShort'])."'": "NULL").",".
-		"	".(($_POST['NLSLong']!="")? "'".$db->escape($_POST['NLSLong'])."'": "NULL").
+		"	'". $db->escape($_POST['NLSToken']) ."',".
+		"	". ($_POST['Jezik']!="" ? "'".$db->escape($_POST['Jezik'])."'" : "NULL").",".
+		"	". ($_POST['NLSShort']!="" ? "'".$db->escape($_POST['NLSShort'])."'" : "NULL").",".
+		"	". ($_POST['NLSLong']!="" ? "'".$db->escape($_POST['NLSLong'])."'" : "NULL").
 		")" );
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'NLS Text',
+			'Add NLS text',
+			'". $db->escape($_POST['NLSToken']) .",". $db->escape($_POST['Jezik']) .",". ($_POST['NLSShort']!="" ? $db->escape($_POST['NLSShort']) : $db->escape($_POST['NLSLong'])) ."'
+		)"
+		);
+	$db->query("COMMIT");
 
-} else if ( isset( $_POST['Jezik'] ) && $_POST['Jezik'] != "" ) {
+} elseif ( isset($_POST['Jezik']) && $_POST['Jezik'] != "" ) {
 
+	$db->query("START TRANSACTION");
 	$db->query(
 		"UPDATE NLSText ".
 		"SET NLSShort = ".(($_POST['NLSShort']!="")? "'".$db->escape($_POST['NLSShort'])."'": "NULL").",".
 		"	NLSLong = ".(($_POST['NLSLong']!="")? "'".$db->escape($_POST['NLSLong'])."'": "NULL")." ".
 		"WHERE NLSToken = '".$db->escape($_GET['ID'])."' AND".
 		"	Jezik = '".$db->escape($_POST['Jezik'])."'" );
-
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'NLS Text',
+			'Update NLS text',
+			'". $db->escape($_GET['ID']) .",". $db->escape($_POST['Jezik']) .",". ($_POST['NLSShort']!="" ? $db->escape($_POST['NLSShort']) : $db->escape($_POST['NLSLong'])) ."'
+		)"
+		);
+	$db->query("COMMIT");
 }
 ?>

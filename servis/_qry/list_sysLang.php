@@ -26,21 +26,40 @@
 */
 
 if ( isset($_GET['Brisi']) && $_GET['Brisi'] != "" ) {
+	$ID = $db->escape($_GET['Brisi']);
 	$db->query("START TRANSACTION");
 	// remove image
-	$Slika = $db->get_var("SELECT Ikona FROM Jeziki WHERE Jezik = '".$_GET['Brisi']."'");
+	$Slika = $db->get_var("SELECT Ikona FROM Jeziki WHERE Jezik = '". $ID ."'");
 	if ( $Slika && $Slika != "" ) {
 		@unlink($StoreRoot ."/pic/". $Slika);
 	}
-	$db->query("DELETE FROM SifrantiTxt WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM NLSText     WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM Predloge    WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM Ankete      WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM MediaOpisi  WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM KategorijeNazivi WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM BesedilaOpisi    WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM emlMessagesTxt   WHERE Jezik = '".$_GET['Brisi']."'");
-	$db->query("DELETE FROM Jeziki WHERE Jezik = '".$_GET['Brisi']."'");
+
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Language',
+			'Delete language',
+			'". $ID .",". $db->get_var("SELECT Opis FROM Jeziki WHERE Jezik = '". $ID ."'") ."'
+		)"
+		);
+
+	$db->query("DELETE FROM SifrantiTxt WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM NLSText     WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM Predloge    WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM Ankete      WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM MediaOpisi  WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM KategorijeNazivi WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM BesedilaOpisi    WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM emlMessagesTxt   WHERE Jezik = '". $ID ."'");
+	$db->query("DELETE FROM Jeziki      WHERE Jezik = '". $ID ."'");
 	$db->query("COMMIT");
 }
 ?>

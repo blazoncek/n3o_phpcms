@@ -150,6 +150,23 @@ if ( isset($_POST['SQL']) && $_POST['SQL'] != "" ) {
 
 			} else {
 
+				// audit action
+				$db->query(
+					"INSERT INTO SMAudit (
+						UserID,
+						ObjectID,
+						ObjectType,
+						Action,
+						Description
+					) VALUES (
+						". $_SESSION['UserID'] .",
+						NULL,
+						'SQL',
+						'Execute SQL statement',
+						'". $db->escape(substr($SQLcmd, 0, 511)) ."'
+					)"
+					);
+
 				echo "<TR VALIGN=\"top\">\n";
 				echo "<TD><B>OK:</B>&nbsp;</TD>\n";
 				echo "<TD>&nbsp;$SQLcmd</TD>\n";

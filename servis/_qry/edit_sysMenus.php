@@ -59,7 +59,7 @@ if ( isset($_POST['Name']) ) {
 				". $_SESSION['UserID'] .",
 				NULL,
 				'SMActions',
-				'Update',
+				'Update menu',
 				'". $db->escape($_GET['ID']) .",". $db->escape($_POST['Name']) .",". $db->escape($_POST['Action']) .",". (isset($_POST['Show']) && $_POST['Show'] == "yes" ? "1" : "0" ) ."'
 			)"
 			);
@@ -84,7 +84,7 @@ if ( isset($_POST['Name']) ) {
 				". $_SESSION['UserID'] .",
 				NULL,
 				'SMActions',
-				'Insert',
+				'Aadd menu',
 				'". $db->escape($_GET['ID']) .",". $db->escape($_POST['Name']) .",". $db->escape($_POST['Action']) .",". (isset($_POST['Show']) && $_POST['Show'] == "yes" ? "1" : "0" ) ."'
 			)"
 			);

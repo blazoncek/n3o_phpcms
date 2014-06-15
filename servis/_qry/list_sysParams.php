@@ -25,19 +25,36 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
+if ( isset($_GET['Brisi']) && (int)$_GET['Brisi'] != "" ) {
 	$db->query("START TRANSACTION");
-	$ACLID    = $db->get_var( "SELECT ACLID    FROM Sifranti WHERE SifrantID = ". $_GET['Brisi'] );
-	$SifrCtrl = $db->get_var( "SELECT SifrCtrl FROM Sifranti WHERE SifrantID = ". $_GET['Brisi'] );
+	$ACLID    = $db->get_var("SELECT ACLID    FROM Sifranti WHERE SifrantID = ". (int)$_GET['Brisi']);
+	$SifrCtrl = $db->get_var("SELECT SifrCtrl FROM Sifranti WHERE SifrantID = ". (int)$_GET['Brisi']);
 
-	$db->query( "DELETE FROM SifrantiTxt WHERE SifrantID = ". (int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM Sifranti    WHERE SifrantID = ". (int)$_GET['Brisi'] );
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'Parameters',
+			'Delete parameter',
+			'". $SifrCtrl ."'
+		)"
+		);
+
+	$db->query("DELETE FROM SifrantiTxt WHERE SifrantID = ". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM Sifranti    WHERE SifrantID = ". (int)$_GET['Brisi']);
 
 	// remove ACL if no parameters exist for this type
-	$test = $db->get_var( "SELECT SifrantID FROM Sifranti WHERE SifrCtrl = '". $SifrCtrl . "'" );
+	$test = $db->get_var("SELECT SifrantID FROM Sifranti WHERE SifrCtrl = '". $SifrCtrl . "'");
 	if ( !$test ) {
-		$db->query( "DELETE FROM SmACLr WHERE ACLID = ". (int)$ACLID );
-		$db->query( "DELETE FROM SmACL  WHERE ACLID = ". (int)$ACLID );
+		$db->query("DELETE FROM SmACLr WHERE ACLID = ". (int)$ACLID);
+		$db->query("DELETE FROM SmACL  WHERE ACLID = ". (int)$ACLID);
 		$_GET['Tip'] = "";
 	} else
 		$_GET['Tip'] = $SifrCtrl;
@@ -48,8 +65,24 @@ if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
 if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	$db->query("START TRANSACTION");
 	// calculate new position
-	$ItemPos = $db->get_var( "SELECT SifrZapo FROM Sifranti WHERE SifrantID = ". $_GET['Item'] );
+	$ItemPos = $db->get_var("SELECT SifrZapo FROM Sifranti WHERE SifrantID = ". (int)$_GET['Item']);
 	$ItemNew = $ItemPos + (int)$_GET['Smer'];
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Item'] .",
+			'Parameters',
+			'Move parameter',
+			'". $db->get_var("SELECT SifrCtrl FROM Sifranti WHERE SifrantID = ". (int)$_GET['Item']) .",". $ItemPos ."->". $ItemNew ."'
+		)"
+		);
 	// move
 	$db->query( "UPDATE Sifranti SET SifrZapo=9999     WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=$ItemNew" );
 	$db->query( "UPDATE Sifranti SET SifrZapo=$ItemNew WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=$ItemPos" );

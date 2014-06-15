@@ -25,7 +25,25 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
-	$db->query( "DELETE FROM NLSText WHERE NLSToken='".$_GET['Brisi']."'" );
+if ( isset($_GET['Brisi']) && $_GET['Brisi'] != "" ) {
+	$db->query("START TRANSACTION");
+	$db->query("DELETE FROM NLSText WHERE NLSToken='". $db->escape($_GET['Brisi']) ."'");
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'NLS Text',
+			'Delete NLS token',
+			'". $db->escape($_GET['Brisi']) ."'
+		)"
+		);
+	$db->query("COMMIT");
 }
 ?>
