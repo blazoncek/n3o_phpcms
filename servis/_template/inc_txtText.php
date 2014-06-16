@@ -37,36 +37,72 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 	$db->query("START TRANSACTION");
 	if ( $_GET['ID'] != "0" ) {
 		$db->query(
-			"UPDATE BesedilaOpisi ".
-			"SET".
-			"	Naslov = ".(($_POST['Naslov']!="")? "'".$_POST['Naslov']."'": "'(neimenovan)'").",".
-			"	Podnaslov = ".(($_POST['Podnaslov']!="")? "'".$_POST['Podnaslov']."'": "NULL").",".
-			"	Povzetek = ".(($_POST['Povzetek']!="")? "'".$_POST['Povzetek']."'": "NULL").",".
-			"	Opis = ".(($_POST['Opis']!="")? "'".$_POST['Opis']."'": "NULL")." ".
-			"WHERE ID = ". (int)$_GET['ID']
-		);
+			"UPDATE BesedilaOpisi
+			SET
+				Naslov = '". ($_POST['Naslov']!="" ? $_POST['Naslov']: "(neimenovan)")."',
+				Podnaslov = ". ($_POST['Podnaslov']!="" ? "'".$_POST['Podnaslov']."'": "NULL").",
+				Povzetek = ". ($_POST['Povzetek']!="" ? "'".$_POST['Povzetek']."'": "NULL").",
+				Opis = ". ($_POST['Opis']!="" ? "'".$_POST['Opis']."'": "NULL")."
+			WHERE ID = ". (int)$_GET['ID']
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['BesediloID'] .",
+				'Text',
+				'Edit content',
+				'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
+				.",". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(neimenovan)") ."'
+			)"
+			);
 	} else {
-		$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaOpisi WHERE BesediloID = ".(int)$_GET['BesediloID'].
-			" AND Jezik ".($_POST['Jezik']!=""? "='".$_POST['Jezik']."'": "IS NULL") );
+		$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaOpisi WHERE BesediloID = ".(int)$_GET['BesediloID'].
+			" AND Jezik ".($_POST['Jezik']!="" ? "='".$_POST['Jezik']."'" : "IS NULL"));
 		
 		$db->query(
-			"INSERT INTO BesedilaOpisi (".
-			"	BesediloID,".
-			"	Jezik,".
-			"	Polozaj,".
-			"	Naslov,".
-			"	Podnaslov,".
-			"	Povzetek,".
-			"	Opis".
-			") VALUES (".
-			"	".$_GET['BesediloID'].",".
-			"	".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",".
-			"	".($Polozaj? $Polozaj+1: 1).",".
-			"	".(($_POST['Naslov']!="")? "'".$_POST['Naslov']."'": "'(neimenovan)'").",".
-			"	".(($_POST['Podnaslov']!="")? "'".$_POST['Podnaslov']."'": "NULL").",".
-			"	".(($_POST['Povzetek']!="")? "'".$_POST['Povzetek']."'": "NULL").",".
-			"	".(($_POST['Opis']!="")? "'".$_POST['Opis']."'": "NULL")." )"
-		);
+			"INSERT INTO BesedilaOpisi (
+				BesediloID,
+				Jezik,
+				Polozaj,
+				Naslov,
+				Podnaslov,
+				Povzetek,
+				Opis
+			) VALUES (
+				". (int)$_GET['BesediloID'] .",
+				". ($_POST['Jezik']!="" ? "'".$_POST['Jezik']."'": "NULL") .",
+				". ($Polozaj ? $Polozaj+1 : 1) .",
+				'". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(neimenovan)") ."',
+				". ($_POST['Podnaslov']!="" ? "'".$_POST['Podnaslov']."'" : "NULL") .",
+				". ($_POST['Povzetek']!="" ? "'".$_POST['Povzetek']."'" : "NULL") .",
+				". ($_POST['Opis']!="" ? "'".$_POST['Opis']."'" : "NULL") ."
+			)"
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['BesediloID'] .",
+				'Text',
+				'Add content',
+				'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
+				.",". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(neimenovan)")
+				.",". ($_POST['Jezik']!="" ? $_POST['Jezik'] : "all") ."'
+			)"
+			);
 	}
 	$db->query("UPDATE Besedila SET DatumSpremembe = '". date('Y-m-d H:i:s') ."' WHERE BesediloID = ". (int)$_GET['BesediloID']);
 	$db->query("COMMIT");

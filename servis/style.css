@@ -100,6 +100,11 @@ BLOCKQUOTE.code {
 	text-align: center;
 }
 
+#tabs {
+	height:14em;
+	margin-top:5px;
+}
+
 /* classes */
 .center {
 	text-align: center;
@@ -265,8 +270,8 @@ BLOCKQUOTE.code {
 
 /* jQuery UI override */
 .ui-tabs .ui-tabs-panel {
-    padding: 0.2em 0.4em;
-	min-height: 12em;
+    padding: 0em 0.4em;
+	height: 12em;
 }
 .ui-tabs .ui-tabs-nav li a {
     padding: 0.2em 0.4em;

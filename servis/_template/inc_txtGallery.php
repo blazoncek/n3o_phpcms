@@ -27,7 +27,27 @@
 
 // delete image from list
 if ( isset($_GET['BrisiSliko']) && $_GET['BrisiSliko'] != "" ) {
-	$db->query("DELETE FROM BesedilaSlike WHERE ID = ". (int)$_GET['BrisiSliko']);
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT BesediloID, MediaID FROM BesedilaSlike WHERE ID=". (int)$_GET['BrisiSliko']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Remove image from text gallery',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". $x->BesediloID)
+			.",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". $x->MediaID) ."'
+		)"
+		);
+	$db->query("DELETE FROM BesedilaSlike WHERE ID=". (int)$_GET['BrisiSliko']);
+	$db->query("COMMIT");
 }
 
 // move items up/down

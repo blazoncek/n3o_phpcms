@@ -80,6 +80,7 @@ if ( isset($_FILES['photo_file']) ) {
 
 	if ( $photo ) { // successful upload & resize
 
+		$db->query("START TRANSACTION");
 		// insert info into Media table
 		$db->query(
 			"INSERT INTO Media (
@@ -101,7 +102,24 @@ if ( isset($_FILES['photo_file']) ) {
 				'".date("Y-m-d H:i:s")."',
 				1
 			)"
-		);
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'Media',
+				'Upload image',
+				'". $photo['name'] .",". substr($UPLOADpath,strlen($StoreRoot)+1) .'/'. $photo['name'] ."'
+			)"
+			);
+		$db->query("COMMIT");
 		// create shortcut link
 		echo "<a href=\"javascript:parent.parseform('".substr($UPLOADpath,strlen($StoreRoot)+1)."/". $photo['name'] ."','". $photo['name'] ."',null,". $db->insert_id .");\" class=\"red\">Slika dodana!</a><br>\n";
 	} else { // error during upload or resize
@@ -112,8 +130,8 @@ if ( isset($_FILES['photo_file']) ) {
 // delete media (remove reference and file)
 if ( isset($_GET['delete']) && (int)$_GET['delete'] != "" ) {
 	$db->query("START TRANSACTION");
-	$Slika    = $db->get_var( "SELECT Slika FROM Media WHERE MediaID = ".(int)$_GET['delete'] );
-	$Datoteka = $db->get_var( "SELECT Datoteka FROM Media WHERE MediaID = ".(int)$_GET['delete'] );
+	$Slika    = $db->get_var("SELECT Slika FROM Media WHERE MediaID=". (int)$_GET['delete']);
+	$Datoteka = $db->get_var("SELECT Datoteka FROM Media WHERE MediaID=". (int)$_GET['delete']);
 
 	// BRISANJE DATOTEK
 	if ( $Slika && $Slika != "" ) {
@@ -141,11 +159,27 @@ if ( isset($_GET['delete']) && (int)$_GET['delete'] != "" ) {
 		@unlink($tDir ."/large/". $tFile);
 	}
 
-	$db->query( "DELETE FROM BesedilaMedia   WHERE MediaID = ".(int)$_GET['delete'] );
-	$db->query( "DELETE FROM BesedilaSlike   WHERE MediaID = ".(int)$_GET['delete'] );
-	$db->query( "DELETE FROM KategorijeMedia WHERE MediaID = ".(int)$_GET['delete'] );
-	$db->query( "DELETE FROM MediaOpisi      WHERE MediaID = ".(int)$_GET['delete'] );
-	$db->query( "DELETE FROM Media           WHERE MediaID = ".(int)$_GET['delete'] );
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['delete'] .",
+			'Media',
+			'Delete media',
+			'". $Datoteka ."'
+		)"
+		);
+	$db->query("DELETE FROM BesedilaMedia   WHERE MediaID=".(int)$_GET['delete']);
+	$db->query("DELETE FROM BesedilaSlike   WHERE MediaID=".(int)$_GET['delete']);
+	$db->query("DELETE FROM KategorijeMedia WHERE MediaID=".(int)$_GET['delete']);
+	$db->query("DELETE FROM MediaOpisi      WHERE MediaID=".(int)$_GET['delete']);
+	$db->query("DELETE FROM Media           WHERE MediaID=".(int)$_GET['delete']);
 	$db->query("COMMIT");
 	echo "<div class=\"red\">Slika zbrisana!</div>\n";
 }

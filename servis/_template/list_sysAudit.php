@@ -78,7 +78,7 @@ if ( count( $List ) == 0 ) {
 			echo "<A HREF=\"javascript:void(0);\" onclick=\"loadTo('List','list.php?Action=".$_GET['Action']."&pg=$PrPg');\">&lt;</A>\n";
 		for ( $i = $StPg; $i <= $EdPg; $i++ ) {
 			if ( $i == $Page )
-				echo "<FONT COLOR=\"red\"><B>$i</B></FONT>]\n";
+				echo "<FONT COLOR=\"red\"><B>$i</B></FONT>\n";
 			else
 				echo "<A HREF=\"javascript:void(0);\" onclick=\"loadTo('List','list.php?Action=".$_GET['Action']."&pg=$i');\">$i</A>\n";
 		}

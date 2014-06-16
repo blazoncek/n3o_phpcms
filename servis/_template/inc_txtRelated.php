@@ -28,30 +28,64 @@
 // add additional text
 if ( isset($_GET['DodatniID']) && $_GET['DodatniID'] != "" ) {
 	$db->query("START TRANSACTION");
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ".(int)$_GET['BesediloID'] );
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID=". (int)$_GET['BesediloID']);
 	$db->query(
 		"INSERT INTO BesedilaSkupine (BesediloID, DodatniID, Polozaj) ".
 		"VALUES (".(int)$_GET['BesediloID'].", ".(int)$_GET['DodatniID'].", ".($Polozaj? $Polozaj+1: 1).")"
 		);
-	$Polozaj = $db->get_var( "SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID = ".(int)$_GET['DodatniID']);
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaSkupine WHERE BesediloID=".( int)$_GET['DodatniID']);
 	$db->query(
 		"INSERT INTO BesedilaSkupine (BesediloID, DodatniID, Polozaj) ".
 		"VALUES (".(int)$_GET['DodatniID'].", ".(int)$_GET['BesediloID'].", ".($Polozaj? $Polozaj+1: 1).")"
+		);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Add related text',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
+			.",". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['DodatniID']) ."'
+		)"
 		);
 	$db->query("COMMIT");
 }
 
 // delete additional text from list
-if ( isset( $_GET['BrisiDodatni'] ) && $_GET['BrisiDodatni'] != "" ) {
+if ( isset($_GET['BrisiDodatni']) && $_GET['BrisiDodatni'] != "" ) {
 	$db->query("START TRANSACTION");
-	$x = $db->get_row("SELECT BesediloID, DodatniID FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni']);
-	if ( $x ) $db->query("DELETE FROM BesedilaSkupine WHERE BesediloID  = $x->DodatniID AND DodatniID = $x->BesediloID");
+	$x = $db->get_row("SELECT BesediloID, DodatniID FROM BesedilaSkupine WHERE ID = ". (int)$_GET['BrisiDodatni']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Remove related text',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". $x->BesediloID)
+			.",". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". $x->DodatniID) ."'
+		)"
+		);
+	if ( $x ) $db->query("DELETE FROM BesedilaSkupine WHERE BesediloID=". $x->DodatniID ." AND DodatniID=". $x->BesediloID);
 	$db->query("DELETE FROM BesedilaSkupine WHERE ID = ".(int)$_GET['BrisiDodatni']);
 	$db->query("COMMIT");
 }
 
 // move items up/down
-if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
+if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$db->query("START TRANSACTION");
 	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM BesedilaSkupine WHERE ID = ". (int)$_GET['Dodatni'])) {
 		// calculate new position

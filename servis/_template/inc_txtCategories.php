@@ -28,17 +28,53 @@
 // add category
 if ( isset($_GET['KategorijaID']) && $_GET['KategorijaID'] != "" ) {
 	$db->query("START TRANSACTION");
-	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '". $_GET['KategorijaID'] ."'");
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '". $db->escape($_GET['KategorijaID']) ."'");
 	$db->query(
 		"INSERT INTO KategorijeBesedila (BesediloID, KategorijaID, Polozaj) ".
-		"VALUES (". (int)$_GET['BesediloID'] .", '". $_GET['KategorijaID'] ."', ". ($Polozaj ? $Polozaj+1 : 1) .")"
+		"VALUES (". (int)$_GET['BesediloID'] .", '". $db->escape($_GET['KategorijaID']) ."', ". ($Polozaj ? $Polozaj+1 : 1) .")"
+		);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Add to category',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
+			.",". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."'") ."'
+		)"
 		);
 	$db->query("COMMIT");
 }
 
 // remove category
-if ( isset( $_GET['BrisiKategorijo'] ) && $_GET['BrisiKategorijo'] != "" ) {
+if ( isset($_GET['BrisiKategorijo']) && $_GET['BrisiKategorijo'] != "" ) {
+	$db->query("START TRANSACTION");
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Remove from category',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
+			.",". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID IN (SELECT KategorijaID FROM KategorijeBesedila WHERE ID=". (int)$_GET['BrisiKategorijo'] .")") ."'
+		)"
+		);
 	$db->query("DELETE FROM KategorijeBesedila WHERE ID = ". (int)$_GET['BrisiKategorijo']);
+	$db->query("COMMIT");
 }
 
 // display list of assigned categories
@@ -66,10 +102,10 @@ if ( !isset($_GET['Find']) ) {
 				echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 				echo "<TD>&nbsp;";
 				if ( contains($rACL,"R") )
-					echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=Categories&ID=$Item->KategorijaID');\">";
-				echo "<b>$Item->Ime</b>";
+					echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"loadTo('Edit','edit.php?Izbor=Categories&ID=$Item->KategorijaID');\"><b>";
+				echo $Item->Ime;
 				if ( contains($rACL,"R") )
-					echo "</a>";
+					echo "</b></a>";
 				echo "</TD>\n";
 				echo "<TD ALIGN=\"right\" NOWRAP>";
 				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#rubrike').load('inc.php?Izbor=txtCategories&BesediloID=".$_GET['BesediloID']."&BrisiKategorijo=$Item->ID');\"><IMG SRC=\"pic/list.delete.gif\" WIDTH=11 HEIGHT=11 ALT=\"Bri۩\" BORDER=\"0\" CLASS=\"icon\"></A>";
@@ -94,16 +130,16 @@ if ( !isset($_GET['Find']) ) {
 	echo "<script language=\"JavaScript\" type=\"text/javascript\">\n";
 	echo "<!-- //\n";
 	echo "$(document).ready(function(){\n";
-	echo "\tif ($('#txtRuFind').val() != \"\" ) $('#clrRuFind').show();\n";
-	echo "\t$('#txtRuFind').change(function(){\n";
-	echo "\t\t$('#rubrike').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".(int)$_GET['BesediloID']."&Find='+$('#txtRuFind').val());\n";
-	echo "\t});\n";
-	echo "\t$('#clrRuFind').click(function(){\n";
-	echo "\t\t$('#txtRuFind').val('');\n";
-	echo "\t\t$('#clrRuFind').hide();\n";
-	echo "\t\t$('#txtRuFind').select();\n";
-	echo "\t\t$('#rubrike').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".(int)$_GET['BesediloID']."');\n";
-	echo "\t});\n";
+	echo "if ($('#txtRuFind').val() != \"\" ) $('#clrRuFind').show();\n";
+	echo "$('#txtRuFind').change(function(){\n";
+	echo "$('#rubrike').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".(int)$_GET['BesediloID']."&Find='+$('#txtRuFind').val());\n";
+	echo "});\n";
+	echo "$('#clrRuFind').click(function(){\n";
+	echo "$('#txtRuFind').val('');\n";
+	echo "$('#clrRuFind').hide();\n";
+	echo "$('#txtRuFind').select();\n";
+	echo "$('#rubrike').load('inc.php?Izbor=".$_GET['Izbor']."&BesediloID=".(int)$_GET['BesediloID']."');\n";
+	echo "});\n";
 	echo "});\n";
 	echo "//-->\n";
 	echo "</script>\n";
@@ -123,10 +159,10 @@ if ( !isset($_GET['Find']) ) {
 			echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
 			echo "<TD>". str_repeat("&nbsp;",(strlen($Item->KategorijaID)-1)*2);
 			if ( !$Item->ID )
-				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#rubrike').load('inc.php?Izbor=txtCategories&BesediloID=".(int)$_GET['BesediloID']."&KategorijaID=$Item->KategorijaID');\">";
-			echo "<b>$Item->Ime</b>";
+				echo "<A HREF=\"javascript:void(0);\" ONCLICK=\"$('#rubrike').load('inc.php?Izbor=txtCategories&BesediloID=".(int)$_GET['BesediloID']."&KategorijaID=$Item->KategorijaID');\"><b>";
+			echo $Item->Ime;
 			if ( !$Item->ID )
-				echo "</A>";
+				echo "</b></A>";
 			echo "</TD>\n";
 			echo "</TR>\n";
 			$CurrentRow++;

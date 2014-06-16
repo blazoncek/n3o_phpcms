@@ -40,7 +40,28 @@ if ( isset($_POST['BrisiSliko']) || (isset($_FILES['file']) && !$_FILES['file'][
 		@unlink($imgpath .'/thumbs/'. $Slika);        // remove thumbnail
 		@unlink($imgpath .'/thumbs/'. $b .'@2x'. $e); // remove retina thumbnail
 		@unlink($imgpath .'/large/'. $Slika);         // remove large original
-		$db->query("UPDATE Besedila SET Slika = NULL WHERE BesediloID = ". (int)$_GET['ID']);
+
+		$db->query("START TRANSACTION");
+		if ( isset($_POST['BrisiSliko']) ) {
+			// audit action
+			$db->query(
+				"INSERT INTO SMAudit (
+					UserID,
+					ObjectID,
+					ObjectType,
+					Action,
+					Description
+				) VALUES (
+					". $_SESSION['UserID'] .",
+					". (int)$_GET['ID'] .",
+					'Text',
+					'Remove text image',
+					'". $Slika .",". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['ID']) ."'
+				)"
+				);
+		}
+		$db->query("UPDATE Besedila SET Slika=NULL WHERE BesediloID=". (int)$_GET['ID']);
+		$db->query("COMMIT");
 	}
 	unset($Slika);
 }
@@ -63,7 +84,25 @@ if ( (isset($_FILES['file']) && !$_FILES['file']['error']) ) {
 
 	if ( $photo ) {
 		$Slika = $photo['name'];
-		$db->query( "UPDATE Besedila SET Slika = '". $Slika ."' WHERE BesediloID = ". (int)$_GET['ID'] );
+		$db->query("START TRANSACTION");
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Text',
+				'Upload text image',
+				'". $Slika .",". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['ID']) ."'
+			)"
+			);
+		$db->query("UPDATE Besedila SET Slika = '". $Slika ."' WHERE BesediloID = ". (int)$_GET['ID']);
+		$db->query("COMMIT");
 	} else {
 		$Error = "Upload error!";
 	}
@@ -127,7 +166,24 @@ if ( !isset($Error) && count($_POST) ) {
 			}
 			$db->query( "UPDATE Besedila SET $name = $set WHERE BesediloID = ".(int)$_GET['ID'] );
 		}
-		$db->query("UPDATE Besedila SET DatumSpremembe = '". date('Y-m-d H:i:s') ."' WHERE BesediloID = ". (int)$_GET['ID'] );
+		$db->query("UPDATE Besedila SET DatumSpremembe = '". date('Y-m-d H:i:s') ."' WHERE BesediloID = ". (int)$_GET['ID']);
+
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Text',
+				'Update text',
+				'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['ID']) ."'
+			)"
+			);
 
 	} else {
 
@@ -154,65 +210,86 @@ if ( !isset($Error) && count($_POST) ) {
 		}
 		// insert new record including rich text
 		$db->query(
-			"INSERT INTO Besedila (".
-			"	Datum,".
-			"	DatumObjave,".
-			"	DatumSpremembe,".
-			"	Izpis,".
-			"	Ime,".
-			"	Slika,".
-			"	Center,".
-			"	URL,".
-			"	ForumTopicID,".
-			"	Avtor,".
-			"	Tip".
-			") VALUES (".
-			"	'".date("Y-m-d",strtotime($_POST['Datum']))."',".
-			"	'".date('Y-n-j H:i:s')."',".
-			"	'".date('Y-n-j H:i:s')."',".
-			"	".(isset($_POST['Izpis'])? 1: 0).",".
-			"	".(($_POST['Ime']!="")? "'".$db->escape(left($_POST['Ime'],64))."'": "'(neimenovan)'").",".
-			"	".(isset($Slika)? "'".$Slika."',": "NULL").",".
-			"	".(isset($_POST['Center'])? 1: 0).",".
-			"	".(($_POST['URL']!="")? "'".$db->escape($_POST['URL'])."'": "NULL").",".
-			"	".(isset($TopicID)? "$TopicID": "NULL").",".
-			"	".$_SESSION['UserID'].",".
-			"	".(($_POST['Tip']!="")? "'".$db->escape($_POST['Tip'])."'": "'Besedilo'").")"
-		);
+			"INSERT INTO Besedila (
+				Datum,
+				DatumObjave,
+				DatumSpremembe,
+				Izpis,
+				Ime,
+				Slika,
+				URL,
+				ForumTopicID,
+				Avtor,
+				Tip
+			) VALUES (
+				'". date("Y-m-d",strtotime($_POST['Datum'])) ."',
+				'". date('Y-n-j H:i:s') ."',
+				'". date('Y-n-j H:i:s') ."',
+				". (isset($_POST['Izpis'])? 1: 0) .",
+				'". ($_POST['Ime']!="" ? $db->escape(left($_POST['Ime'],64)) : "(neimenovan)") ."',
+				". (isset($Slika)? "'". $Slika ."'" : "NULL") .",
+				". ($_POST['URL']!="" ? "'". $db->escape($_POST['URL']) ."'" : "NULL") .",
+				". (isset($TopicID) ? $TopicID : "NULL") .",
+				". $_SESSION['UserID'] .",
+				". ($_POST['Tip']!="" ? "'". $db->escape($_POST['Tip']) ."'" : "'Text'")."
+			)"
+			);
 		$ID = $db->insert_id;
+
 		// rich text
 		$db->query(
-			"INSERT INTO BesedilaOpisi (".
-			"	BesediloID,".
-			"	Jezik,".
-			"	Polozaj,".
-			"	Naslov,".
-			"	Podnaslov,".
-			"	Povzetek,".
-			"	Opis".
-			") VALUES (".
-			"	$ID,".
-			"	".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",".
-			"	1,".
-			"	".(($_POST['Naslov']!="")? "'".$_POST['Naslov']."'": "'(neimenovan)'").",".
-			"	".(($_POST['Podnaslov']!="")? "'".left($_POST['Podnaslov'],128)."'": "NULL").",".
-			"	".(($_POST['Povzetek']!="")? "'".left($_POST['Povzetek'],511)."'": "NULL").",".
-			"	".(($_POST['Opis']!="")? "'".$_POST['Opis']."'": "NULL")." )"
-		);
+			"INSERT INTO BesedilaOpisi (
+				BesediloID,
+				Jezik,
+				Polozaj,
+				Naslov,
+				Podnaslov,
+				Povzetek,
+				Opis
+			) VALUES (
+				". $ID .",
+				". ($_POST['Jezik']!="" ? "'". $db->escape($_POST['Jezik']) ."'" : "NULL").",
+				1,
+				". ($_POST['Naslov']!="" ? "'". $db->escape($_POST['Naslov']) ."'" : "'(neimenovan)'") .",
+				". ($_POST['Podnaslov']!="" ? "'". left($_POST['Podnaslov'],128) ."'" : "NULL") .",
+				". ($_POST['Povzetek']!="" ? "'". left($_POST['Povzetek'],511) ."'" : "NULL") .",
+				". ($_POST['Opis']!="" ? "'". $db->escape($_POST['Opis']) ."'" : "NULL")."
+			)"
+			);
+
 		// if category is included append text to category
 		if ( isset($_POST['KategorijaID']) && $_POST['KategorijaID']!='' ) {
-			$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '". $_POST['KategorijaID'] ."'");
+			$Polozaj = (int)$db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '". $db->escape($_POST['KategorijaID']) ."'");
 			$db->query(
-				"INSERT INTO KategorijeBesedila (".
-				"	KategorijaID,".
-				"	BesediloID,".
-				"	Polozaj".
-				") VALUES (".
-				"	'".$_POST['KategorijaID']."',".
-				"	$ID,".
-				"	".($Polozaj? $Polozaj+1: 1)." )"
-			);
+				"INSERT INTO KategorijeBesedila (
+					KategorijaID,
+					BesediloID,
+					Polozaj
+				) VALUES (
+					'". $db->escape($_POST['KategorijaID']) ."',
+					". $ID .",
+					". ($Polozaj ? $Polozaj+1 : 1) ."
+				)"
+				);
 		}
+
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". $ID .",
+				'Text',
+				'Add text',
+				'". $db->escape(left($_POST['Ime'],64)) ."'
+			)"
+			);
+
 		// get inserted ID
 		$_GET['ID'] = $ID;
 		// update URI
@@ -221,20 +298,36 @@ if ( !isset($Error) && count($_POST) ) {
 	$db->query("COMMIT");
 }
 
-// brisanje vsebine/opisa besedila
+// delete text content (title & description)
 if ( isset($_GET['BrisiOpis']) ) {
 	$db->query("START TRANSACTION");
-	$x = $db->get_row( "SELECT BesediloID, Polozaj, Jezik FROM BesedilaOpisi WHERE ID = ".(int)$_GET['BrisiOpis'] );
+	$x = $db->get_row("SELECT BesediloID, Polozaj, Jezik, Naslov FROM BesedilaOpisi WHERE ID = ". (int)$_GET['BrisiOpis']);
 	if ( $x ) {
-		$db->query( "DELETE FROM BesedilaOpisi WHERE ID = ".(int)$_GET['BrisiOpis'] );
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". $x->BesediloID .",
+				'Text',
+				'Delete text content',
+				'". $x->Naslov ."'
+			)"
+			);
+		$db->query("DELETE FROM BesedilaOpisi WHERE ID = ". (int)$_GET['BrisiOpis']);
 		// optionally update subsequent rows
 		$db->query(
-			"UPDATE BesedilaOpisi ".
-			"SET Polozaj = Polozaj - 1 ".
-			"WHERE BesediloID = ".$x->BesediloID.
-			"	AND Jezik ".($x->Jezik? "= '".$x->Jezik."'": "IS NULL").
-			"	AND Polozaj > ".$x->Polozaj
-		);
+			"UPDATE BesedilaOpisi
+			SET Polozaj = Polozaj - 1
+			WHERE BesediloID = ". $x->BesediloID ."
+				AND Jezik ". ($x->Jezik ? "='". $x->Jezik ."'" : "IS NULL") ."
+				AND Polozaj > ". $x->Polozaj
+			);
 	}
 	$db->query("COMMIT");
 
@@ -245,13 +338,29 @@ if ( isset($_GET['BrisiOpis']) ) {
 // move items up/down
 if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$db->query("START TRANSACTION");
-	if ( $ItemPos = $db->get_var( "SELECT Polozaj FROM BesedilaOpisi WHERE ID = ". (int)$_GET['Opis'] ) ) {
+	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM BesedilaOpisi WHERE ID = ". (int)$_GET['Opis']) ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
 		$db->query("UPDATE BesedilaOpisi SET Polozaj = 9999     WHERE BesediloID = ". (int)$_GET['ID'] ." AND Polozaj = $ItemNew");
 		$db->query("UPDATE BesedilaOpisi SET Polozaj = $ItemNew WHERE BesediloID = ". (int)$_GET['ID'] ." AND Polozaj = $ItemPos");
 		$db->query("UPDATE BesedilaOpisi SET Polozaj = $ItemPos WHERE BesediloID = ". (int)$_GET['ID'] ." AND Polozaj = 9999");
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Text',
+				'Move text content',
+				'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['ID']) ."'
+			)"
+			);
 	}
 	$db->query("COMMIT");
 
@@ -259,11 +368,3 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$_SERVER['QUERY_STRING'] = preg_replace("/\&Opis=[0-9]+/", "", $_SERVER['QUERY_STRING']);
 	$_SERVER['QUERY_STRING'] = preg_replace("/\&Smer=[-0-9]+/", "", $_SERVER['QUERY_STRING']);
 }
-
-// brisanje kategorije
-if ( isset( $_GET['BrisiKategorijo'] ) && $_GET['BrisiKategorijo'] != "" ) {
-	$db->query("DELETE FROM KategorijeBesedila WHERE ID = ". (int)$_GET['BrisiKategorijo']);
-	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( "/\&BrisiKategorijo=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
-}
-?>

@@ -489,17 +489,17 @@ $(document).ready(function(){
 	//-->
 	</SCRIPT>
 
-	<DIV ID="tabs" style="margin-top:5px;">
+	<DIV ID="tabs">
 		<ul>
 <?php
 		$Kategorija = $db->get_var("SELECT KategorijaID FROM KategorijeBesedila WHERE BesediloID=". (int)$_GET['ID'] ." LIMIT 1");
 		$Jeziki = $db->get_results("SELECT Jezik, Opis FROM Jeziki WHERE Enabled=1");
 		
 		if ( count($Jeziki) > 1 )
-			echo "\t\t\t<li><a href=\"#all\">All</a></li>\n";
+			echo "<li><a href=\"#all\">All</a></li>\n";
 		
 		if ( $Jeziki ) foreach ( $Jeziki as $Jezik )
-			echo "\t\t\t<li><a href=\"#$Jezik->Jezik\">$Jezik->Jezik</a></li>\n";
+			echo "<li><a href=\"#$Jezik->Jezik\">$Jezik->Jezik</a></li>\n";
 ?>
 			<li><a href="#rubrike">Categories</a></li>
 			<li><a href="#tags">Tags</a></li>

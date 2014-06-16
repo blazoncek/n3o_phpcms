@@ -78,22 +78,6 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	@$db->query("UPDATE KategorijeBesedila SET Polozaj = 9999   WHERE KategorijaID = '$KatID' AND Polozaj = $Novo");
 	@$db->query("UPDATE KategorijeBesedila SET Polozaj = $Novo  WHERE KategorijaID = '$KatID' AND Polozaj = $Staro");
 	@$db->query("UPDATE KategorijeBesedila SET Polozaj = $Staro WHERE KategorijaID = '$KatID' AND Polozaj = 9999");
-	// audit action
-	$db->query(
-		"INSERT INTO SMAudit (
-			UserID,
-			ObjectID,
-			ObjectType,
-			Action,
-			Description
-		) VALUES (
-			". $_SESSION['UserID'] .",
-			NULL,
-			'Text',
-			'Move text position',
-			'". $KatID .",". $Staro ."->". $Novo .",". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=(SELECT BesediloID FROM KategorijeBesedila WHERE ID=". (int)$_GET['kbID'] .")") ."'
-		)"
-		);
 	$db->query("COMMIT");
 }
 ?>

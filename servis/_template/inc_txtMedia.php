@@ -28,17 +28,54 @@
 // add media
 if ( isset($_GET['MediaID']) && $_GET['MediaID'] != "" ) {
 	$db->query("START TRANSACTION");
-	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaMedia WHERE BesediloID = ". (int)$_GET['BesediloID']);
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaMedia WHERE BesediloID=". (int)$_GET['BesediloID']);
 	$db->query(
 		"INSERT INTO BesedilaMedia (BesediloID, MediaID, Polozaj)
-		VALUES (". (int)$_GET['BesediloID'] .", ". (int)$_GET['MediaID'] .", ".( $Polozaj ? $Polozaj+1 : 1) .")"
+		VALUES (". (int)$_GET['BesediloID'] .",". (int)$_GET['MediaID'] .",". ($Polozaj ? $Polozaj+1 : 1) .")"
+		);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Attach media to text',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
+			.",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". (int)$_GET['MediaID']) ."'
+		)"
 		);
 	$db->query("COMMIT");
 }
 
-// delete image from list
+// delete attachment from list
 if ( isset($_GET['BrisiMedia']) && $_GET['BrisiMedia'] != "" ) {
-	$db->query("DELETE FROM BesedilaMedia WHERE ID = ". (int)$_GET['BrisiMedia']);
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT BesediloID, MediaID FROM BesedilaMedia WHERE ID=". (int)$_GET['BrisiMedia']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Remove media from text',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". $x->BesediloID)
+			.",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". $x->MediaID) ."'
+		)"
+		);
+	$db->query("DELETE FROM BesedilaMedia WHERE ID=". (int)$_GET['BrisiMedia']);
+	$db->query("COMMIT");
 }
 
 // move items up/down

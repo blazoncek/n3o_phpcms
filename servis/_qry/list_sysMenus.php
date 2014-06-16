@@ -97,22 +97,6 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 			$db->query( "UPDATE SMActions SET ActionID='".$_GET['ID']."' + substring(ActionID,".$Start.",99) WHERE left(ActionID,".$len.")='".$Nov."'" );
 			$db->query( "UPDATE SMActions SET ActionID='".$Nov."' + substring(ActionID,".$Start.",99)        WHERE left(ActionID,".$len.")='".$Zac."'" );
 		}
-		// audit action
-		$db->query(
-			"INSERT INTO SMAudit (
-				UserID,
-				ObjectID,
-				ObjectType,
-				Action,
-				Description
-			) VALUES (
-				". $_SESSION['UserID'] .",
-				NULL,
-				'SMActions',
-				'Move menu',
-				'". $db->escape($_GET['ID']) .",->". $Nov ."'
-			)"
-			);
 		$db->query("COMMIT");
 	}
 	// prevent opening subcategory

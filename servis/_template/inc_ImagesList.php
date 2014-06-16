@@ -27,6 +27,7 @@
 
 // attach selected image to text
 if ( isset($_POST['MediaID']) && $_POST['MediaID'] != "" ) {
+	$db->query("START TRANSACTION");
 	$polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaSlike WHERE BesediloID = ". (int)$_GET['BesediloID']);
 	$db->query(
 		"INSERT INTO BesedilaSlike (
@@ -39,12 +40,50 @@ if ( isset($_POST['MediaID']) && $_POST['MediaID'] != "" ) {
 			".$_POST['MediaID']."
 		)"
 	);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['BesediloID'] .",
+			'Text',
+			'Attach image to text gallery',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
+			.",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". (int)$_POST['MediaID']) ."'
+		)"
+		);
+	$db->query("COMMIT");
 	$Changed = true;
 }
 
 // remove image
 if ( isset($_GET['BrisiSliko']) && $_GET['BrisiSliko'] != "" ) {
-	$db->query("DELETE FROM BesedilaSlike WHERE ID = ". (int)$_GET['BrisiSliko']);
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT BesediloID, MediaID FROM BesedilaSlike WHERE ID=". (int)$_GET['BrisiSliko']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". $x->BesediloID .",
+			'Text',
+			'Remove image from text gallery',
+			'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". $x->BesediloID)
+			.",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". $x->MediaID) ."'
+		)"
+		);
+	$db->query("DELETE FROM BesedilaSlike WHERE ID=". (int)$_GET['BrisiSliko']);
+	$db->query("COMMIT");
 	$Changed = true;
 }
 
