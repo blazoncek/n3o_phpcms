@@ -81,7 +81,7 @@ if ( count($_POST) > 0 ) {
 					$value = str_replace(chr(62), "&gt;", $value);
 					$value = preg_replace("/&[;>]*;/i", "", $value);
 					if ( $value == "" )
-						$value = "(neimenovan)";
+						$value = "(unnamed)";
 				default :
 					$set = ($value!="" ? "'".$db->escape($value)."'" : "NULL");
 					break;

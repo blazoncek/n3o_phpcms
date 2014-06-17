@@ -27,13 +27,29 @@
 
 // define default values for URL ID and Find parameters (in case not defined)
 if ( !isset($_GET['ID']) )   $_GET['ID'] = "";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
-if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
+if ( isset($_GET['Brisi']) && $_GET['Brisi'] != "" ) {
 	$db->query("START TRANSACTION");
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Category',
+			'Delete category',
+			'". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['Brisi']) ."'") ."'
+		)"
+		);
 	
 	// delete image file
-	$Slika = $db->get_var( "SELECT Slika FROM Kategorije WHERE KategorijaID = '". $_GET['Brisi'] ."'" );
+	$Slika = $db->get_var("SELECT Slika FROM Kategorije WHERE KategorijaID = '". $db->escape($_GET['Brisi']) ."'");
 	if ( $Slika && $Slika != "" ) {
 		$e = right($Slika, 4);
 		$b = left($Slika, strlen($Slika)-4);
@@ -42,36 +58,37 @@ if ( isset( $_GET['Brisi'] ) && $_GET['Brisi'] != "" ) {
 	}
 
 	// delete subtree of ACLs 
-	$List = $db->get_col( "SELECT ACLID FROM Kategorije WHERE KategorijaID LIKE '". $_GET['Brisi'] ."%' AND ACLID IS NOT NULL", 0 );
+	$List = $db->get_col("SELECT ACLID FROM Kategorije WHERE KategorijaID LIKE '". $db->escape($_GET['Brisi']) ."%' AND ACLID IS NOT NULL", 0);
 	if ( $List ) foreach ( $List as $ACLID ) {
-		$db->query( "DELETE FROM SMACLr WHERE ACLID = $ACLID" );
-		$db->query( "DELETE FROM SMACL  WHERE ACLID = $ACLID" );
+		$db->query("DELETE FROM SMACLr WHERE ACLID=". $ACLID);
+		$db->query("DELETE FROM SMACL  WHERE ACLID=". $ACLID);
 	}
 
-	$db->query( "DELETE FROM KategorijeMedia    WHERE KategorijaID LIKE '". $_GET['Brisi'] ."%'" );
-	$db->query( "DELETE FROM KategorijeBesedila WHERE KategorijaID LIKE '". $_GET['Brisi'] ."%'" );
-	$db->query( "DELETE FROM KategorijeVsebina  WHERE KategorijaID LIKE '". $_GET['Brisi'] ."%'" );
-	$db->query( "DELETE FROM KategorijeNazivi   WHERE KategorijaID LIKE '". $_GET['Brisi'] ."%'" );
-	$db->query( "DELETE FROM Kategorije         WHERE KategorijaID LIKE '". $_GET['Brisi'] ."%'" );
+	$db->query("DELETE FROM KategorijeMedia    WHERE KategorijaID LIKE '". $db->escape($_GET['Brisi']) ."%'");
+	$db->query("DELETE FROM KategorijeBesedila WHERE KategorijaID LIKE '". $db->escape($_GET['Brisi']) ."%'");
+	$db->query("DELETE FROM KategorijeVsebina  WHERE KategorijaID LIKE '". $db->escape($_GET['Brisi']) ."%'");
+	$db->query("DELETE FROM KategorijeNazivi   WHERE KategorijaID LIKE '". $db->escape($_GET['Brisi']) ."%'");
+	$db->query("DELETE FROM Kategorije         WHERE KategorijaID LIKE '". $db->escape($_GET['Brisi']) ."%'");
 
 	// change URL parameter to reflect deletions
 	if ( strlen( $_GET['Brisi'] ) > 2 )
-		$_GET['ID'] = left( $_GET['Brisi'], strlen( $_GET['Brisi'] )-2 );
+		$_GET['ID'] = left($_GET['Brisi'], strlen($_GET['Brisi'])-2);
 
 	$db->query("COMMIT");
 }
 
-if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
+// move items up/down
+if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$len = strlen($_GET['ID']);
 	$Start = $len + 1;
 
 	if ( $len > 2 )
-		$Prfx = left( $_GET['ID'], $len - 2 );
+		$Prfx = left($_GET['ID'], $len-2);
 	else
 		$Prfx = "";
-	$Nov = $Prfx . sprintf( "%02d", (int)right($_GET['ID'],2) + (int)$_GET['Smer'] );
+	$Nov = $Prfx . sprintf("%02d", (int)right($_GET['ID'],2) + (int)$_GET['Smer']);
 	$Zac = $Prfx . "xx";
-	if ( right( $Nov, 2 ) != "00" ) {
+	if ( right($Nov, 2) != "00" ) {
 		$db->query("START TRANSACTION");
 		if ( SQLType == "MySQL" ) {
 			$db->query( "ALTER TABLE KategorijeNazivi   DROP FOREIGN KEY KTN_FK_KAT" );
@@ -150,7 +167,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	}
 	// prevent opening subcategory
 	if ( $len > 2 )
-		$_GET['ID'] = left( $_GET['ID'], $len - 2 );
+		$_GET['ID'] = left($_GET['ID'], $len-2);
 	else
 		$_GET['ID'] = "";
 }

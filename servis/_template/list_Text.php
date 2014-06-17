@@ -101,7 +101,7 @@ function loop($Menu="", &$BgCol="white")
 						if ( contains( $ACL, "R" ) )
 							echo "<a href=\"javascript:void(0);\" onclick=\"loadTo('Edit','edit.php?Izbor=".$_GET['Izbor']."&Action=".$_GET['Action']."&ID=$Item->ID');\">";
 						// display category name
-						echo ($Item->Ime=="")? "(neimenovan)": left($Item->Ime,32).((strlen($Item->Ime)>32)? "...": "");
+						echo ($Item->Ime=="")? "(unnamed)": left($Item->Ime,32).((strlen($Item->Ime)>32)? "...": "");
 						if ( contains( $ACL, "R" ) )
 							echo "</a>";
 						// mark disabled items
@@ -159,7 +159,7 @@ function loop($Menu="", &$BgCol="white")
 					echo "<a href=\"javascript:void(0);\" onclick=\"loadTo('Edit','edit.php?Izbor=".$_GET['Izbor']."&Action=".$_GET['Action']."&ID=$Item->ID');\">";
 					// display category name
 					if ( $Item->Ime == "" )
-						echo "(neimenovan)";
+						echo "(unnamed)";
 					else
 						echo left($Item->Ime,32).((strlen($Item->Ime)>32)? "...": "");
 					// mark disabled items

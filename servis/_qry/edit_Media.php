@@ -367,7 +367,7 @@ if ( isset($_POST['Naslov']) ) {
 			) VALUES (
 				". (($_POST['Jezik']!="")? "'".$db->escape($_POST['Jezik'])."'": "NULL") .",
 				". (int)$_GET['ID'] .",
-				". (($_POST['Naslov']!="")? "'". $_POST['Naslov'] ."'": "'(neimenovan)'") .",
+				". (($_POST['Naslov']!="")? "'". $_POST['Naslov'] ."'": "'(unnamed)'") .",
 				". (($_POST['Opis']!="")? "'". $_POST['Opis'] ."'": "NULL") ."
 			)");
 	}

@@ -28,17 +28,54 @@
 // add category
 if ( isset($_GET['BesediloID']) && $_GET['BesediloID'] != "" ) {
 	$db->query("START TRANSACTION");
-	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID = '".$_GET['KategorijaID']."'" );
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeBesedila WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."'");
 	$db->query(
 		"INSERT INTO KategorijeBesedila (BesediloID, KategorijaID, Polozaj) ".
-		"VALUES (".(int)$_GET['BesediloID'].", '".$_GET['KategorijaID']."', ".($Polozaj? $Polozaj+1: 1).")"
+		"VALUES (". (int)$_GET['BesediloID'] .",'". $db->escape($_GET['KategorijaID']) ."',". ($Polozaj? $Polozaj+1: 1) .")"
+		);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Category',
+			'Attach text',
+			'". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."'")
+			.",". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID']) ."'
+		)"
 		);
 	$db->query("COMMIT");
 }
 
 // remove category
 if ( isset($_GET['Odstrani']) && $_GET['Odstrani'] != "" ) {
-	$db->query("DELETE FROM KategorijeBesedila WHERE ID = ".(int)$_GET['Odstrani']);
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT KategorijaID, BesediloID FROM KategorijeBesedila WHERE ID=". (int)$_GET['Odstrani']);
+	$db->query("DELETE FROM KategorijeBesedila WHERE ID=".(int)$_GET['Odstrani']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Category',
+			'Remove text',
+			'". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $x->KategorijaID ."'")
+			.",". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". $x->BesediloID) ."'
+		)"
+		);
+	$db->query("COMMIT");
 }
 
 // move items up/down
@@ -64,7 +101,7 @@ if ( $ACLID )
 else
 	$ACL = "LRWDX";
 
-// display list of assigned media
+// display list of assigned texts
 if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 
 	if ( $_GET['Find'] == "*" ) $_GET['Find'] = "";

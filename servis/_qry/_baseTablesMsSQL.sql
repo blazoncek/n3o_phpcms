@@ -201,7 +201,7 @@ CREATE TABLE Kategorije (
 	KategorijaID varchar(10) NOT NULL PRIMARY KEY,
 	Izpis bit NOT NULL DEFAULT 0,
 	Iskanje bit NOT NULL DEFAULT 0,
-	Ime varchar(32) NULL,
+	Ime varchar(128) NULL,
 	Slika nvarchar(64) NULL,
 	ACLID int NULL
 );

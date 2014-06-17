@@ -38,7 +38,8 @@ if ( isset($_POST['D']) || isset($_POST['V']) || (isset($_POST['O1']) && isset($
 	if ( $_POST['O9'] != "" ) $StOdg = 9;
 	if ( $_POST['O10'] != "" ) $StOdg = 10;
 	
-	if ( $_GET['ID'] != "0" )
+	$db->query("START TRANSACTION");
+	if ( $_GET['ID'] != "0" ) {
 		$db->query(
 			"UPDATE Ankete ".
 			"SET Datum = '".date("Y-m-d",strtotime($_POST['D']))."',".
@@ -57,8 +58,24 @@ if ( isset($_POST['D']) || isset($_POST['V']) || (isset($_POST['O1']) && isset($
 			"	StOdg = $StOdg,".
 			"	Multiple = ".(isset($_POST['Multiple'])? "1": "0")." ".
 			"WHERE ID = " . (int)$_GET['ID']
-		);
-	else {
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Poll',
+				'Update poll',
+				'". $db->escape(left($_POST['V'],255)) ."'
+			)"
+			);
+	} else {
 		$db->query(
 			"INSERT INTO Ankete (".
 			"	Jezik, Datum, Vprasanje, Komentar,".
@@ -68,7 +85,7 @@ if ( isset($_POST['D']) || isset($_POST['V']) || (isset($_POST['O1']) && isset($
 			") VALUES (".
 			"	".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",".
 			"	'".date("Y-m-d",strtotime($_POST['D']))."',".
-			"	'".left($_POST['V'],255)."',".
+			"	'".$db->escape(left($_POST['V'],255))."',".
 			"	".(($_POST['K']!="")? "'".left($_POST['K'],255)."'": "NULL").",".
 			"	".(($_POST['O1']!="")? "'".$db->escape($_POST['O1'])."'": "NULL").",".
 			"	".(($_POST['O2']!="")? "'".$db->escape($_POST['O2'])."'": "NULL").",".
@@ -85,9 +102,25 @@ if ( isset($_POST['D']) || isset($_POST['V']) || (isset($_POST['O1']) && isset($
 		);
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Poll',
+				'Add new poll',
+				'". $db->escape(left($_POST['V'],255)) ."'
+			)"
+			);
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 	}
+	$db->query("COMMIT");
 }
-
 ?>

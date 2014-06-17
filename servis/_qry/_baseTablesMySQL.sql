@@ -201,7 +201,7 @@ CREATE TABLE Kategorije (
 	KategorijaID varchar(10) NOT NULL PRIMARY KEY,
 	Izpis boolean NOT NULL DEFAULT 0,
 	Iskanje boolean NOT NULL DEFAULT 0,
-	Ime varchar(32) NULL,
+	Ime varchar(128) NULL,
 	Slika varchar(64) NULL,
 	ACLID int NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

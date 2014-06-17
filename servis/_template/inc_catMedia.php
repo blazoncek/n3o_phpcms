@@ -25,20 +25,57 @@
 '---------------------------------------------------------------------------'
 */
 
-// add category
+// attache media file to category
 if ( isset($_GET['MediaID']) && $_GET['MediaID'] != "" ) {
 	$db->query("START TRANSACTION");
-	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeMedia WHERE KategorijaID = '".$_GET['KategorijaID']."'");
+	$Polozaj = $db->get_var("SELECT max(Polozaj) FROM KategorijeMedia WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."'");
 	$db->query(
 		"INSERT INTO KategorijeMedia (MediaID, KategorijaID, Polozaj) ".
-		"VALUES (".(int)$_GET['MediaID'].", '".$_GET['KategorijaID']."', ".($Polozaj? $Polozaj+1: 1).")"
+		"VALUES (". (int)$_GET['MediaID'] .",'". $db->escape($_GET['KategorijaID']) ."',". ($Polozaj ? $Polozaj+1 : 1) .")"
+		);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Category',
+			'Attach media to category',
+			'". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."'")
+			.",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". (int)$_GET['MediaID']) ."'
+		)"
 		);
 	$db->query("COMMIT");
 }
 
-// remove category
-if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
-	$db->query("DELETE FROM KategorijeMedia WHERE ID = ".(int)$_GET['Odstrani']);
+// remove media from category
+if ( isset($_GET['Odstrani']) && $_GET['Odstrani'] != "" ) {
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT KategorijaID, MediaID FROM KategorijeMedia WHERE ID=". (int)$_GET['Odstrani']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Category',
+			'Remove media from category',
+			'". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $x->KategorijaID ."'")
+			.",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". $x->MediaID) ."'
+		)"
+		);
+	$db->query("DELETE FROM KategorijeMedia WHERE ID=". (int)$_GET['Odstrani']);
+	$db->query("COMMIT");
 }
 
 // move items up/down

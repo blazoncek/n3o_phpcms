@@ -39,7 +39,7 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 		$db->query(
 			"UPDATE BesedilaOpisi
 			SET
-				Naslov = '". ($_POST['Naslov']!="" ? $_POST['Naslov']: "(neimenovan)")."',
+				Naslov = '". ($_POST['Naslov']!="" ? $_POST['Naslov']: "(unnamed)")."',
 				Podnaslov = ". ($_POST['Podnaslov']!="" ? "'".$_POST['Podnaslov']."'": "NULL").",
 				Povzetek = ". ($_POST['Povzetek']!="" ? "'".$_POST['Povzetek']."'": "NULL").",
 				Opis = ". ($_POST['Opis']!="" ? "'".$_POST['Opis']."'": "NULL")."
@@ -59,7 +59,7 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 				'Text',
 				'Edit content',
 				'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
-				.",". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(neimenovan)") ."'
+				.",". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(unnamed)") ."'
 			)"
 			);
 	} else {
@@ -79,7 +79,7 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 				". (int)$_GET['BesediloID'] .",
 				". ($_POST['Jezik']!="" ? "'".$_POST['Jezik']."'": "NULL") .",
 				". ($Polozaj ? $Polozaj+1 : 1) .",
-				'". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(neimenovan)") ."',
+				'". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(unnamed)") ."',
 				". ($_POST['Podnaslov']!="" ? "'".$_POST['Podnaslov']."'" : "NULL") .",
 				". ($_POST['Povzetek']!="" ? "'".$_POST['Povzetek']."'" : "NULL") .",
 				". ($_POST['Opis']!="" ? "'".$_POST['Opis']."'" : "NULL") ."
@@ -99,12 +99,12 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 				'Text',
 				'Add content',
 				'". $db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_GET['BesediloID'])
-				.",". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(neimenovan)")
+				.",". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(unnamed)")
 				.",". ($_POST['Jezik']!="" ? $_POST['Jezik'] : "all") ."'
 			)"
 			);
 	}
-	$db->query("UPDATE Besedila SET DatumSpremembe = '". date('Y-m-d H:i:s') ."' WHERE BesediloID = ". (int)$_GET['BesediloID']);
+	$db->query("UPDATE Besedila SET DatumSpremembe='". date('Y-m-d H:i:s') ."' WHERE BesediloID=". (int)$_GET['BesediloID']);
 	$db->query("COMMIT");
 	
 	echo "<SCRIPT LANGUAGE=JAVASCRIPT>\n";

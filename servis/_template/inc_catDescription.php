@@ -27,47 +27,8 @@
 
 if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 
-/* note: moved to edit_Kategorije.php
-if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
-	// cleanup
-	$_POST['Naziv'] = $db->escape(str_replace( "\"", "'", $_POST['Naziv'] ));
-	$_POST['Opis'] = str_replace("\\\"","\"",$db->escape(CleanupTinyMCE($_POST['Opis'])));
-
-	// note: adding image no longer supported
-	if ( $_GET['ID'] != "0" ) {
-		$db->query(
-			"UPDATE KategorijeNazivi
-			SET Naziv = ".(($_POST['Naziv']!="")? "'".left($_POST['Naziv'],128)."'": "'(neimenovan)'").",
-				Povzetek = ".(($_POST['Povzetek']!="")? "'".$db->escape(left($_POST['Povzetek'],511))."'": "NULL").",
-				Opis = ".(($_POST['Opis']!="")? "'".$_POST['Opis']."'": "NULL")."
-			WHERE ID = ".(int)$_GET['ID']
-		);
-	} else {
-		$db->query(
-			"INSERT INTO KategorijeNazivi (
-				Jezik,
-				KategorijaID,
-				Naziv,
-				Povzetek,
-				Opis,
-				Slika
-			) VALUES (
-				".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",
-				'".$_GET['KategorijaID']."',
-				".(($_POST['Naziv']!="")? "'".left($_POST['Naziv'],128)."'": "'(neimenovan)'").",
-				".(($_POST['Povzetek']!="")? "'".$db->escape(left($_POST['Povzetek'],511))."'": "NULL").",
-				".(($_POST['Opis']!="")? "'".$_POST['Opis']."'": "NULL")."
-			)"
-		);
-	}
-
-	echo "<SCRIPT LANGUAGE=JAVASCRIPT>\n";
-	echo "<!--\n";
-	echo "\$(document).ready(function(){loadTo('Edit','edit.php?Izbor=Categories&ID=".$_GET['KategorijaID']."')});\n";
-	echo "//-->\n";
-	echo "</SCRIPT>\n";
-	die();
-}
+/* NOTE:
+updating DB moved to _qry/edit_Categories.php
 */
 
 $Podatek = $db->get_row(

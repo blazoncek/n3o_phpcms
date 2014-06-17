@@ -30,42 +30,79 @@ if ( isset($_GET['Dodaj']) && $_GET['Dodaj'] != "" ) {
 	$db->query("START TRANSACTION");
 	$Polozaj = $db->get_var(
 		"SELECT max(Polozaj) FROM KategorijeVsebina ".
-		"WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra = ".(int)$_GET['Ekstra']
-	);
+		"WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."' AND Ekstra=".(int)$_GET['Ekstra']
+		);
 	$db->query(
 		"INSERT INTO KategorijeVsebina (PredlogaID, KategorijaID, Polozaj, Ekstra) ".
-		"VALUES (".(int)$_GET['Dodaj'].", '".$_GET['KategorijaID']."', ".($Polozaj? $Polozaj+1: 1).", ".(int)$_GET['Ekstra'].")"
-	);
+		"VALUES (". (int)$_GET['Dodaj'] .", '". $db->escape($_GET['KategorijaID']) ."',". ($Polozaj? $Polozaj+1: 1) .",". (int)$_GET['Ekstra'] .")"
+		);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Category',
+			'Attach template to category',
+			'". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."'")
+			.",". $db->get_var("SELECT Naziv FROM Predloge WHERE PredlogaID=". (int)$_GET['Dodaj']) ."'
+		)"
+		);
 	$db->query("COMMIT");
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Dodaj=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace("/\&Dodaj=[0-9]+/", "", $_SERVER['QUERY_STRING']);
 }
 
 // delete additional text from list
-if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
-	$db->query( "DELETE FROM KategorijeVsebina WHERE ID = ".(int)$_GET['Odstrani'] );
+if ( isset($_GET['Odstrani']) && $_GET['Odstrani'] != "" ) {
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT PredlogaID, KategorijaID FROM KategorijeVsebina WHERE ID=".(int)$_GET['Odstrani']);
+	$db->query("DELETE FROM KategorijeVsebina WHERE ID=". (int)$_GET['Odstrani']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			NULL,
+			'Category',
+			'Remove template from category',
+			'". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $x->KategorijaID ."'")
+			.",". $db->get_var("SELECT Naziv FROM Predloge WHERE PredlogaID=". $x->PredlogaID) ."'
+		)"
+		);
+	$db->query("COMMIT");
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Odstrani=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace("/\&Odstrani=[0-9]+/", "", $_SERVER['QUERY_STRING']);
 }
 
 // move items up/down
-if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
+if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$db->query("START TRANSACTION");
-	if ( $ItemPos = $db->get_var( "SELECT Polozaj FROM KategorijeVsebina WHERE ID = ". (int)$_GET['Predloga'] ) ) {
+	if ( $ItemPos = $db->get_var("SELECT Polozaj FROM KategorijeVsebina WHERE ID = ". (int)$_GET['Predloga']) ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
-		$db->query( "UPDATE KategorijeVsebina SET Polozaj = 9999     WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra = ".$_GET['Ekstra']." AND Polozaj = $ItemNew" );
-		$db->query( "UPDATE KategorijeVsebina SET Polozaj = $ItemNew WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra = ".$_GET['Ekstra']." AND Polozaj = $ItemPos" );
-		$db->query( "UPDATE KategorijeVsebina SET Polozaj = $ItemPos WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra = ".$_GET['Ekstra']." AND Polozaj = 9999" );
+		$db->query("UPDATE KategorijeVsebina SET Polozaj=9999 WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."' AND Ekstra=". (int)$_GET['Ekstra'] ." AND Polozaj=". $ItemNew);
+		$db->query("UPDATE KategorijeVsebina SET Polozaj=". $ItemNew ." WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."' AND Ekstra=". (int)$_GET['Ekstra'] ." AND Polozaj=". $ItemPos);
+		$db->query("UPDATE KategorijeVsebina SET Polozaj=". $ItemPos ." WHERE KategorijaID='". $db->escape($_GET['KategorijaID']) ."' AND Ekstra=". (int)$_GET['Ekstra'] ." AND Polozaj=9999");
 	}
 	$db->query("COMMIT");
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Smer=[-0-9]+/", "", $_SERVER['QUERY_STRING'] );
-	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Predloga=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace("/\&Smer=[-0-9]+/", "", $_SERVER['QUERY_STRING']);
+	$_SERVER['QUERY_STRING'] = preg_replace("/\&Predloga=[0-9]+/", "", $_SERVER['QUERY_STRING']);
 }
 
-$ACLID = $db->get_var( "SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$_GET['KategorijaID']."'" );
+$ACLID = $db->get_var("SELECT ACLID FROM Kategorije WHERE KategorijaID = '". $db->escape($_GET['KategorijaID']) ."'");
 if ( $ACLID )
 	$ACL = userACL($ACLID);
 else
@@ -86,11 +123,11 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		"SELECT P.PredlogaID, P.Jezik, P.Naziv, P.ACLID
 		FROM Predloge P
 			LEFT JOIN KategorijeVsebina KV
-				ON P.PredlogaID = KV.PredlogaID AND KV.KategorijaID='".$_GET['KategorijaID']."'
+				ON P.PredlogaID = KV.PredlogaID AND KV.KategorijaID='". $db->escape($_GET['KategorijaID']) ."'
 		WHERE P.Tip = ".(int)$_GET['Ekstra']."
 			AND KV.PredlogaID IS NULL
 			AND P.Enabled = 1".
-			($_GET['Find']!=""? " AND (P.Naziv LIKE '%".$_GET['Find']."%') ": " ").
+			($_GET['Find']!=""? " AND (P.Naziv LIKE '%". $db->escape($_GET['Find']) ."%') ": " ").
 		"ORDER BY P.Naziv"
 	);
 
@@ -102,7 +139,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		$RecordCount = count( $List );
 		foreach ( $List as $Item ) {
 			if ( $Item->ACLID )
-				$rACL = userACL( $Item->ACLID );
+				$rACL = userACL($Item->ACLID);
 			else
 				$rACL = "LRWDX";
 			if ( contains($rACL,"L") ) {
@@ -128,10 +165,10 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		FROM KategorijeVsebina KV
 			LEFT JOIN Predloge P
 				ON KV.PredlogaID = P.PredlogaID
-		WHERE KV.KategorijaID = '".$_GET['KategorijaID']."'
-			AND KV.Ekstra = ".(int)$_GET['Ekstra']."
+		WHERE KV.KategorijaID = '". $db->escape($_GET['KategorijaID']) ."'
+			AND KV.Ekstra = ". (int)$_GET['Ekstra'] ."
 		ORDER BY KV.Polozaj"
-	);
+		);
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=\"99%\">\n";
 	if ( !$List ) 
@@ -141,7 +178,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		$RecordCount = count( $List );
 		foreach ( $List as $Item ) {
 			if ( $Item->ACLID )
-				$rACL = userACL( $Item->ACLID );
+				$rACL = userACL($Item->ACLID);
 			else
 				$rACL = "LRWDX";
 			echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='whitesmoke';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";
@@ -151,7 +188,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			if ( contains($rACL,"L") )
 				echo $Item->Naziv;
 			else
-				echo "-- skrita predloga --";
+				echo "-- hidden template --";
 			if ( contains($rACL,"R") )
 				echo "</A>";
 			if ( !$Item->Enabled )

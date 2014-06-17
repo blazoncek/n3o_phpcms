@@ -51,7 +51,7 @@ if ( isset($_POST['Naslov']) ) {
 			") VALUES (".
 			"	".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",".
 			"	".(int)$_GET['MediaID'].",".
-			"	".(($_POST['Naslov']!="")? "'".$_POST['Naslov']."'": "'(neimenovan)'").",".
+			"	".(($_POST['Naslov']!="")? "'".$_POST['Naslov']."'": "'(unnamed)'").",".
 			"	".(($_POST['Opis']!="")? "'".$_POST['Opis']."'": "NULL")." )"
 		);
 		//$_GET['ID'] = $db->insert_id;

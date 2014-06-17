@@ -25,13 +25,29 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
+if ( isset($_GET['Brisi']) && (int)$_GET['Brisi'] != "" ) {
 	$db->query("START TRANSACTION");
-	$ACLID = $db->get_var( "SELECT ACLID FROM Ankete WHERE ID = ".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM Ankete WHERE ID = ".(int)$_GET['Brisi'] );
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'Poll',
+			'Delete poll',
+			'". $db->get_var("SELECT Vprasanje FROM Ankete WHERE ID=". (int)$_GET['Brisi']) ."'
+		)"
+		);
+	$ACLID = $db->get_var("SELECT ACLID FROM Ankete WHERE ID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM Ankete WHERE ID=". (int)$_GET['Brisi']);
 	if ( $ACLID ) {
-		$db->query( "DELETE FROM SmACLr WHERE ACLID = ".(int)$ACLID );
-		$db->query( "DELETE FROM SmACL  WHERE ACLID = ".(int)$ACLID );
+		$db->query("DELETE FROM SmACLr WHERE ACLID=". (int)$ACLID);
+		$db->query("DELETE FROM SmACL  WHERE ACLID=". (int)$ACLID);
 	}
 	$db->query("COMMIT");
 }

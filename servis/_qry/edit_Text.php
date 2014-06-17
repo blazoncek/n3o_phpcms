@@ -226,7 +226,7 @@ if ( !isset($Error) && count($_POST) ) {
 				'". date('Y-n-j H:i:s') ."',
 				'". date('Y-n-j H:i:s') ."',
 				". (isset($_POST['Izpis'])? 1: 0) .",
-				'". ($_POST['Ime']!="" ? $db->escape(left($_POST['Ime'],64)) : "(neimenovan)") ."',
+				'". ($_POST['Ime']!="" ? $db->escape(left($_POST['Ime'],64)) : "(unnamed)") ."',
 				". (isset($Slika)? "'". $Slika ."'" : "NULL") .",
 				". ($_POST['URL']!="" ? "'". $db->escape($_POST['URL']) ."'" : "NULL") .",
 				". (isset($TopicID) ? $TopicID : "NULL") .",
@@ -250,7 +250,7 @@ if ( !isset($Error) && count($_POST) ) {
 				". $ID .",
 				". ($_POST['Jezik']!="" ? "'". $db->escape($_POST['Jezik']) ."'" : "NULL").",
 				1,
-				". ($_POST['Naslov']!="" ? "'". $db->escape($_POST['Naslov']) ."'" : "'(neimenovan)'") .",
+				". ($_POST['Naslov']!="" ? "'". $db->escape($_POST['Naslov']) ."'" : "'(unnamed)'") .",
 				". ($_POST['Podnaslov']!="" ? "'". left($_POST['Podnaslov'],128) ."'" : "NULL") .",
 				". ($_POST['Povzetek']!="" ? "'". left($_POST['Povzetek'],511) ."'" : "NULL") .",
 				". ($_POST['Opis']!="" ? "'". $db->escape($_POST['Opis']) ."'" : "NULL")."
