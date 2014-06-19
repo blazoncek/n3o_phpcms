@@ -27,7 +27,7 @@
 
 if ( !isset($_GET['ID']) ) $_GET['ID'] = "00";
 
-$Podatek = $db->get_row("SELECT * FROM Kategorije WHERE KategorijaID = '". $_GET['ID'] ."'");
+$Podatek = $db->get_row("SELECT * FROM Kategorije WHERE KategorijaID = '". $db->escape($_GET['ID']) ."'");
 // get ACL
 if ( $Podatek ) {
 	$ACL = userACL($Podatek->ACLID);

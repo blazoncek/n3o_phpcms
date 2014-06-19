@@ -30,20 +30,49 @@ if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
 	$db->query("START TRANSACTION");
 	if ( $_GET['ID']=="0" ) {
-		$db->query(
-			"INSERT INTO emlMessages (Naziv)
-			VALUES ('".$db->escape($_POST['Naziv'])."')"
-		);
+		$db->query("INSERT INTO emlMessages (Naziv) VALUES ('". $db->escape($_POST['Naziv']) ."')");
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing message',
+				'Add mailing mesage',
+				'". $db->escape($_POST['Naziv']) ."'
+			)"
+			);
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 	} else {
 		$db->query(
 			"UPDATE emlMessages
 			SET Naziv = '".$db->escape($_POST['Naziv'])."'
 			WHERE emlMessageID = ". $_GET['ID']
-		);
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing message',
+				'Update mailing mesage',
+				'". $db->escape($_POST['Naziv']) ."'
+			)"
+			);
 	}
 	$db->query("COMMIT");
 }
@@ -68,39 +97,90 @@ if ( isset($_POST['MemberList']) && $_POST['MemberList'] !== "" && isset($_POST[
 			"DELETE FROM emlMessagesGrp
 			WHERE emlMessageID = ".(int)$_POST['MessageID']
 		);
-		foreach ( explode( ",", $_POST['MemberList'] ) as $UserID ) {
+		foreach ( explode(",", $_POST['MemberList']) as $UserID ) {
 			$db->query(
 				"INSERT INTO emlMessagesGrp (emlMessageID, emlGroupID)
 				VALUES (".(int)$_POST['MessageID'].",$UserID)"
 			);
 		}
 	}
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['ID'] .",
+			'Mailing message',
+			'Update recipients',
+			'". $db->get_var("SELECT Naziv FROM emlMessages WHERE emlMessageID=". (int)$_GET['ID'])
+			.",". $db->escape($_POST['Action']) .",". $db->escape($_POST['MemberList']) ."'
+		)"
+		);
 	$db->query("COMMIT");
 }
 
 //delete title/description
 if ( isset($_GET['BrisiOpis']) ) {
+	$db->query("START TRANSACTION");
+	// audit action
 	$db->query(
-		"DELETE FROM emlMessagesTxt
-		WHERE emlMessageTxtID = ".(int)$_GET['BrisiOpis'] );
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['ID'] .",
+			'Mailing message',
+			'Delete message content',
+			'". $db->get_var("SELECT Naziv FROM emlMessages WHERE emlMessageID=". (int)$_GET['ID'])
+			.",". $db->get_var("SELECT Naziv FROM emlMessageTxt WHERE emlMessageTxtID=". (int)$_GET['BrisiOpis']) ."'
+		)"
+		);
+	$db->query("DELETE FROM emlMessagesTxt WHERE emlMessageTxtID = ". (int)$_GET['BrisiOpis']);
+	$db->query("COMMIT");
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( "/\&BrisiOpis=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace("/\&BrisiOpis=[0-9]+/", "", $_SERVER['QUERY_STRING']);
 }
 
 // adding mesage content
 if ( isset($_POST['Subject']) && $_POST['Subject']!="" ) {
 	// cleanup
-	$_POST['Subject'] = $db->escape(str_replace( "\"", "&quot;", left($_POST['Subject'],128) ));
-	$_POST['Opis']    = str_replace("\\\"","\"",$db->escape(CleanupTinyMCE($_POST['Opis'])));
+	$_POST['Subject'] = $db->escape(str_replace("\"", "&quot;", left($_POST['Subject'],128)));
+	$_POST['Opis']    = str_replace("\\\"","\&quot;",$db->escape(CleanupTinyMCE($_POST['Opis'])));
 
-	// note: adding image no longer supported
+	$db->query("START TRANSACTION");
 	if ( isset($_POST['OpisID']) ) {
 		$db->query(
 			"UPDATE emlMessagesTxt
-			SET Naziv = '".$_POST['Subject']."',
-				Opis = '".$_POST['Opis']."'
+			SET Naziv = '". $_POST['Subject'] ."',
+				Opis = '". $_POST['Opis'] ."'
 			WHERE emlMessageTxtID = ".(int)$_POST['OpisID']
-		);
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing message',
+				'Update message content',
+				'". $db->get_var("SELECT Naziv FROM emlMessages WHERE emlMessageID=". (int)$_GET['ID'])
+				.",". $_POST['Subject'] ."'
+			)"
+			);
 	} else {
 		$db->query(
 			"INSERT INTO emlMessagesTxt (
@@ -109,41 +189,30 @@ if ( isset($_POST['Subject']) && $_POST['Subject']!="" ) {
 				Naziv,
 				Opis
 			) VALUES (
-				".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",
-				".(int)$_GET['ID'].",
-				'".$_POST['Subject']."',
-				'".$_POST['Opis']."'
+				". ($_POST['Jezik']!="" ? "'".$_POST['Jezik']."'" : "NULL") .",
+				". (int)$_GET['ID'] .",
+				'". $_POST['Subject'] ."',
+				'". $_POST['Opis'] ."'
 			)"
-		);
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing message',
+				'Add message content',
+				'". $db->get_var("SELECT Naziv FROM emlMessages WHERE emlMessageID=". (int)$_GET['ID'])
+				.",". $_POST['Subject'] ."'
+			)"
+			);
 	}
+	$db->query("COMMIT");
 }
-?>
-<?php
-/*
-<CFIF IsDefined("URL.BrisiDoc") AND URL.BrisiDoc NEQ "">
-	<CFQUERY DATASOURCE="#DSN#">
-		DELETE FROM emlMessagesDoc
-		WHERE emlMessageDocID = #val(URL.BrisiDoc)#
-	</CFQUERY>
-	<CFTRY>
-	<CFFILE ACTION="DELETE" FILE="#ExpandPath('..\datoteke\')##Form.Datoteka#">
-	<CFCATCH TYPE="Any"></CFCATCH>
-	</CFTRY>
-	<CFHEADER NAME="Refresh" VALUE="0; URL=#cgi.script_name#?izbor=#URL.Izbor#&ID=#URL.ID#">
-	<CFABORT>
-</CFIF>
-
-<CFIF IsDefined("Form.Datoteka") AND Form.Datoteka IS NOT "">
-	<CFTRY>
-	<CFFILE ACTION="Upload" FILEFIELD="Datoteka" DESTINATION="#ExpandPath('..\datoteke\')#" NAMECONFLICT="MAKEUNIQUE">
-	<CFQUERY DATASOURCE="#DSN#">
-		INSERT INTO emlMessagesDoc (emlMessageID, Datoteka)
-		VALUES (#URL.ID#, '#File.ServerFile#')
-	</CFQUERY>
-	<CFCATCH TYPE="Any"></CFCATCH>
-	</CFTRY>
-	<CFHEADER NAME="Refresh" VALUE="0; URL=#cgi.script_name#?izbor=#URL.Izbor#&ID=#URL.ID#">
-	<CFABORT>
-</CFIF>
-*/
 ?>

@@ -45,7 +45,28 @@ if ( isset($_POST['BrisiSliko']) || (isset($_FILES['file']) && !$_FILES['file'][
 		@unlink($imgpath .'/thumbs/'. $Slika);        // remove thumbnail
 		@unlink($imgpath .'/thumbs/'. $b .'@2x'. $e); // remove retina thumbnail
 		@unlink($imgpath .'/large/'. $Slika);         // remove large original
+
+		$db->query("START TRANSACTION");
+		if ( isset($_POST['BrisiSliko']) ) {
+			// audit action
+			$db->query(
+				"INSERT INTO SMAudit (
+					UserID,
+					ObjectID,
+					ObjectType,
+					Action,
+					Description
+				) VALUES (
+					". $_SESSION['UserID'] .",
+					NULL,
+					'Category',
+					'Remove category image',
+					'". $Slika .",". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['ID']) ."'") ."'
+				)"
+				);
+		}
 		$db->query("UPDATE Kategorije SET Slika=NULL WHERE KategorijaID='". $db->escape($_GET['ID']) ."'");
+		$db->query("COMMIT");
 	}
 	unset($Slika);
 }
@@ -68,13 +89,31 @@ if ( (isset($_FILES['file']) && !$_FILES['file']['error']) ) {
 
 	if ( $photo ) {
 		$Slika = $photo['name'];
+		$db->query("START TRANSACTION");
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'Category',
+				'Upload category image',
+				'". $Slika .",". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['ID']) ."'") ."'
+			)"
+			);
 		$db->query("UPDATE Kategorije SET Slika='". $Slika ."' WHERE KategorijaID='". $db->escape($_GET['ID']) ."'");
+		$db->query("COMMIT");
 	} else {
 		$Error = "Upload error!";
 	}
 }
 
-// vpis nove/popravek kategorije
+// edit category
 if ( isset($_POST['Ime']) && $_POST['Ime'] != "" ) {
 
 	// cleanup Ime (used for permalinks)

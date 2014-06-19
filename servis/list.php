@@ -139,15 +139,15 @@ if( $Mobile ) {
 	echo "<script language=\"javascript\" type=\"text/javascript\">\n";
 	echo "<!-- //\n";
 	echo "function check(ID, Naziv) {\n";
-	echo "\tif (confirm(\"Do you really want to delete '\"+Naziv+\"'?\")) {\n";
-	echo "\t\t$.mobile.changePage(window.reloadURL+'&Brisi='+ID, {transition:\"slideup\", reloadPage: true});\n";
-	echo "\t}\n";
-	echo "\treturn false;\n";
+	echo "if (confirm(\"Do you really want to delete '\"+Naziv+\"'?\")) {\n";
+	echo "$.mobile.changePage(window.reloadURL+'&Brisi='+ID, {transition:\"slideup\", reloadPage: true});\n";
+	echo "}\n";
+	echo "return false;\n";
 	echo "}\n";
 	echo "function setRefreshURL(URL) {window.reloadURL=URL;}\n";
 	echo "$('#list').live('pageinit', function(event) {\n";
-	echo "\tif ( window.tReload ) clearTimeout( window.tReload );\n";
-	echo "\tif (!window.reloadURL) setRefreshURL(\"". substr($DelURL,0,strlen($DelURL)-1) ."\");\n";
+	echo "if ( window.tReload ) clearTimeout( window.tReload );\n";
+	echo "if (!window.reloadURL) setRefreshURL(\"". substr($DelURL,0,strlen($DelURL)-1) ."\");\n";
 	echo "});\n";
 	echo "// -->\n";
 	echo "</script>\n";
@@ -185,25 +185,32 @@ if( $Mobile ) {
 ?>
 <script language="JavaScript" type="text/javascript">
 <!-- //
-function check(ID, Naziv) {
-	if (confirm("Do you really want to delete '"+Naziv+"'?")) {
-		URL = "<?php echo $DelURL ?>Brisi="+ID;
+var listURL;
+
+function check(ID, Item)
+{
+	if ( confirm("Do you really want to delete '"+Item+"'?") ) {
 		$("#imgClose").hide();
 		$("#imgSpinner").show();
-		$("#divList").load(URL); // automatically corrects spinner (from line above)
-		$("#divEdit").text(""); // clear editing template
+		// use setTimeout because of some nasty jQuery bug
+		setTimeout(function(){$("#divEdit").text(" ")}, 250); // clear editing template
+		$("#divList").load(listURL+"&Brisi="+ID); // automatically corrects spinner (from above)
 	}
 	return false;
 }
+window.check = check;
 
-function listRefresh() {
+function listRefresh()
+{
 	if ( window.check ) window.check = null;
-	if ( window.tReload ) clearTimeout( window.tReload );
-	//if ( window.customResize ) window.customResize = null;
-	$("#divList").load("<?php echo substr($DelURL,0,strlen($DelURL)-1); ?>");
+	if ( window.tReload ) clearTimeout(window.tReload);
+	$("#divList").load(listURL);
 }
+window.listRefresh = listRefresh;
 
 $(document).ready(function(){
+	listURL = "<?php echo substr($DelURL,0,strlen($DelURL)-1); ?>"
+	
 	$("#imgClose").show();
 	$("#imgSpinner").hide();
 	// bind to the form's submit event

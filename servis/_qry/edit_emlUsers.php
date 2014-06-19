@@ -31,19 +31,35 @@ if ( $_GET['ID'] == "0" ) {
 	if ( isset($_POST['Naziv']) ) {
 		$db->query("START TRANSACTION");
 		$db->query( "INSERT INTO emlMembers (Naziv, Podjetje, Naslov, Posta, Telefon, Fax, GSM, Email, Jezik, Aktiven, Datum)
-			VALUES ('".$db->escape($_POST['Naziv'])."',
-				'".$db->escape($_POST['Podjetje'])."',
-				'".$db->escape($_POST['Naslov'])."',
-				'".$db->escape($_POST['Posta'])."',
-				'".$db->escape($_POST['Telefon'])."',
-				'".$db->escape($_POST['Fax'])."',
-				'".$db->escape($_POST['GSM'])."',
-				'".$db->escape($_POST['Email'])."',
-				".($_POST['Jezik']=='' ? 'NULL' : "'".$db->escape($_POST['Jezik'])."'").",
-				".((isset($_POST['Aktiven']) && $_POST['Aktiven']=="yes") ? "1" : "0").",
-				'".date("Y-n-j H:m:s") ."')" );
+			VALUES ('".$db->escape($_POST['Naziv']) ."',
+				'". $db->escape($_POST['Podjetje']) ."',
+				'". $db->escape($_POST['Naslov']) ."',
+				'". $db->escape($_POST['Posta']) ."',
+				'". $db->escape($_POST['Telefon']) ."',
+				'". $db->escape($_POST['Fax']) ."',
+				'". $db->escape($_POST['GSM']) ."',
+				'". $db->escape($_POST['Email']) ."',
+				". ($_POST['Jezik']=='' ? 'NULL' : "'".$db->escape($_POST['Jezik'])."'") .",
+				". ((isset($_POST['Aktiven']) && $_POST['Aktiven']=="yes") ? "1" : "0") .",
+				'". date("Y-n-j H:m:s") ."')" );
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing user',
+				'Add mailing list member',
+				'". $db->escape($_POST['Email']) ."'
+			)"
+			);
 		$db->query("COMMIT");
 		// update URI
 		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
@@ -63,28 +79,61 @@ if ( $_GET['ID'] == "0" ) {
 					$set = ($value!="" ? "'".$db->escape($value)."'" : "NULL");
 					break;
 			}
-			$db->query( "UPDATE emlMembers SET $name = $set WHERE emlMemberID = ".(int)$_GET['ID'] );
+			$db->query("UPDATE emlMembers SET $name = $set WHERE emlMemberID=". (int)$_GET['ID']);
 		}
 		// fix for standard checkbox (undefined if not checked)
 		if ( isset($_POST['Naziv']) && !isset($_POST['Aktiven']) )
-			$db->query( "UPDATE emlMembers SET Aktiven = 0 WHERE emlMemberID = ".(int)$_GET['ID'] );
+			$db->query("UPDATE emlMembers SET Aktiven = 0 WHERE emlMemberID = ". (int)$_GET['ID']);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing user',
+				'Update mailing list member',
+				'". $db->get_var("SELECT Email FROM emlMembers WHERE emlMemberID=". (int)$_GET['ID']) ."'
+			)"
+			);
 		$db->query("COMMIT");
 
-	} else if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset($_POST['Action']) ) {
+	} elseif ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset($_POST['Action']) ) {
 
 		$db->query("START TRANSACTION");
 		if ( $_POST['Action'] == "Add" )
 			foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
-				$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
+				$db->query("INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES ($GroupID,". (int)$_POST['UserID'] .")");
 			}
 		if ( $_POST['Action'] == "Remove" )
-			$db->query( "DELETE FROM emlMembersGrp WHERE emlMemberID = ".(int)$_POST['UserID']." AND emlGroupID IN (".$_POST['GroupList'].")" );
+			$db->query("DELETE FROM emlMembersGrp WHERE emlMemberID=". (int)$_POST['UserID'] ." AND emlGroupID IN (". $_POST['GroupList'] .")");
 		if ( $_POST['Action'] == "Set" ) {
-			$db->query( "DELETE FROM emlMembersGrp WHERE emlMemberID = ".(int)$_POST['UserID'] );
-			foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
-				$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
+			$db->query("DELETE FROM emlMembersGrp WHERE emlMemberID=". (int)$_POST['UserID']);
+			foreach ( explode(",", $_POST['GroupList']) as $GroupID ) {
+				$db->query("INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES ($GroupID,". (int)$_POST['UserID'] .")");
 			}
 		}
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing user',
+				'Change group membership',
+				'". $db->get_var("SELECT Email FROM emlMembers WHERE emlMemberID=". (int)$_GET['ID'])
+				.",". $db->escape($_POST['Action']) .",". $db->escape($_POST['GroupList']) ."'
+			)"
+			);
 		$db->query("COMMIT");
 	}
 }

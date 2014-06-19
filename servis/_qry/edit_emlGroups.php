@@ -31,19 +31,51 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
 	if ( $_GET['ID'] > 0 ) {
 		$db->query(
 			"UPDATE emlGroups
-			SET Naziv = '".$db->escape($_POST['Naziv'])."',
+			SET Naziv = '". $db->escape($_POST['Naziv']) ."',
 				KtgID = ". ($_POST['KtgID']!="" ? "'". $db->escape($_POST['KtgID']) ."'" : "NULL") ."
 			WHERE emlGroupID = ".$_GET['ID']
-		);
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing group',
+				'Update mailing group',
+				'". $db->escape($_POST['Naziv']) ."'
+			)"
+			);
 	} else {
 		$db->query(
 			"INSERT INTO emlGroups (Naziv, KtgID)
-			VALUES ('".$db->escape($_POST['Naziv'])."',". ($_POST['KtgID']!="" ? "'". $db->escape($_POST['KtgID']) ."'" : "NULL") .")"
-		);
+			VALUES ('". $db->escape($_POST['Naziv']) ."',". ($_POST['KtgID']!="" ? "'". $db->escape($_POST['KtgID']) ."'" : "NULL") .")"
+			);
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Mailing group',
+				'Add mailing group',
+				'". $db->escape($_POST['Naziv']) ."'
+			)"
+			);
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) ."&ID=". $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 	}
 	$db->query("COMMIT");
 }
@@ -62,6 +94,23 @@ if ( isset($_POST['MemberList']) && $_POST['MemberList'] !== "" && isset($_POST[
 			$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES (".(int)$_POST['GroupID'].",$UserID)" );
 		}
 	}
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['ID'] .",
+			'Mailing user',
+			'Change group membership',
+			'". $db->get_var("SELECT Naziv FROM emlGroups WHERE emlGroupID=". (int)$_GET['ID'])
+			.",". $db->escape($_POST['Action']) .",". $db->escape($_POST['MemberList']) ."'
+		)"
+		);
 	$db->query("COMMIT");
 }
 ?>

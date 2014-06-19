@@ -99,8 +99,8 @@ $(document).ready(function(){
 			iframe: false, // fix for listRefresh
 			beforeSubmit: function( formDataArr, jqObj, options ) {
 				var fObj = jqObj[0];	// form object
-				if (empty(fObj.Naziv))					{alert("Please enter title!"); fObj.Naziv.focus(); return false;}
 				if (fObj.Dodaj && empty(fObj.Dodaj))	{alert("Please select or add a file!"); fObj.Dodaj.focus(); return false;}
+				if (empty(fObj.Naziv))					{fObj.Naziv.value = fObj.Dodaj.value; return false;}
 				$('#lgdData').html('<span class="gry"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
 				return true;
 			} // pre-submit callback

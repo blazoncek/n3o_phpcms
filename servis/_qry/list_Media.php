@@ -25,11 +25,11 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
+if ( isset($_GET['Brisi']) && (int)$_GET['Brisi'] != "" ) {
 	$db->query("START TRANSACTION");
 
 	// delete image
-	$Slika    = $db->get_var("SELECT Slika FROM Media WHERE MediaID = ".(int)$_GET['Brisi']);
+	$Slika = $db->get_var("SELECT Slika FROM Media WHERE MediaID=". (int)$_GET['Brisi']);
 	if ( $Slika && $Slika != "" ) {
 		$e = right($Slika, 4);
 		$b = left($Slika, strlen($Slika)-4);
@@ -38,10 +38,10 @@ if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
 	}
 
 	// delete main file
-	$Datoteka = $db->get_var("SELECT Datoteka FROM Media WHERE MediaID = ".(int)$_GET['Brisi']);
+	$Datoteka = $db->get_var("SELECT Datoteka FROM Media WHERE MediaID=". (int)$_GET['Brisi']);
 	if ( $Datoteka && $Datoteka != "" ) {
-		$tPath = $StoreRoot . (contains($Datoteka,"/")? "/": "/media/");
-		$tDir = dirname($tPath . $Datoteka);   // get full path
+		$tPath = $StoreRoot . (contains($Datoteka,"/") ? "/" : "/media/");
+		$tDir  = dirname($tPath . $Datoteka);  // get full path
 		$tFile = basename($tPath . $Datoteka); // get filename
 
 		// remove file
@@ -56,11 +56,28 @@ if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] != "" ) {
 		@unlink($tDir ."/large/". $tFile);
 	}
 
-	$db->query("DELETE FROM BesedilaMedia   WHERE MediaID = ".(int)$_GET['Brisi']);
-	$db->query("DELETE FROM BesedilaSlike   WHERE MediaID = ".(int)$_GET['Brisi']);
-	$db->query("DELETE FROM KategorijeMedia WHERE MediaID = ".(int)$_GET['Brisi']);
-	$db->query("DELETE FROM MediaOpisi      WHERE MediaID = ".(int)$_GET['Brisi']);
-	$db->query("DELETE FROM Media           WHERE MediaID = ".(int)$_GET['Brisi']);
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'Media',
+			'Delete media',
+			'". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". (int)$_GET['Brisi']) ."'
+		)"
+		);
+
+	$db->query("DELETE FROM BesedilaMedia   WHERE MediaID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM BesedilaSlike   WHERE MediaID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM KategorijeMedia WHERE MediaID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM MediaOpisi      WHERE MediaID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM Media           WHERE MediaID=". (int)$_GET['Brisi']);
 
 	$db->query("COMMIT");
 }

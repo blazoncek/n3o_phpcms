@@ -54,11 +54,11 @@ $List = $db->get_results(
 	FROM Media M
 		LEFT JOIN MediaOpisi MO ON M.MediaID = MO.MediaID
 	WHERE 1=1 " .
-		(($_GET['Find']=="")? "": "AND (M.Naziv LIKE '%".$_GET['Find']."%' OR M.Datoteka LIKE '%".$_GET['Find']."%' OR MO.Naslov LIKE '%".$_GET['Find']."%' OR MO.Opis LIKE '%".$_GET['Find']."%')") .
-		(($_GET['Tip']=="")? "": "AND M.Tip='".$_GET['Tip']."' ") .
+		($_GET['Find']=="" ? "" : "AND (M.Naziv LIKE '%".$_GET['Find']."%' OR M.Datoteka LIKE '%".$_GET['Find']."%' OR MO.Naslov LIKE '%".$_GET['Find']."%' OR MO.Opis LIKE '%".$_GET['Find']."%')") .
+		($_GET['Tip']=="" ? "" : "AND M.Tip='".$_GET['Tip']."' ") .
 	"ORDER BY $Sort" );
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 
 // override maximum number of rows to display
 if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];
@@ -96,9 +96,9 @@ echo "<TR>\n";
 echo "<TD>Sort:\n";
 echo "<SELECT NAME=\"Sort\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=".$_GET['Action']."&Tip=".$_GET['Tip']."&Sort='+this[this.selectedIndex].value);\">\n";
 echo "<OPTION VALUE=\"Vnos\">Entry ID</OPTION>\n";
-echo "<OPTION VALUE=\"Naziv\"".(($_GET['Sort']=="Naziv")? " SELECTED": "").">Title</OPTION>\n";
-echo "<OPTION VALUE=\"Datoteka\"".(($_GET['Sort']=="Datoteka")? " SELECTED": "").">File</OPTION>\n";
-echo "<OPTION VALUE=\"Datum\"".(($_GET['Sort']=="Datum")? " SELECTED": "").">Date</OPTION>\n";
+echo "<OPTION VALUE=\"Naziv\"". ($_GET['Sort']=="Naziv" ? " SELECTED" : "") .">Title</OPTION>\n";
+echo "<OPTION VALUE=\"Datoteka\"". ($_GET['Sort']=="Datoteka" ? " SELECTED" : "") .">File</OPTION>\n";
+echo "<OPTION VALUE=\"Datum\"". ($_GET['Sort']=="Datum" ? " SELECTED" : "") .">Date</OPTION>\n";
 echo "</SELECT>\n";
 echo "</TD>\n";
 echo "<TD ALIGN=\"right\">Type:\n";
@@ -106,7 +106,7 @@ echo "<SELECT NAME=\"Tip\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=
 echo "<OPTION VALUE=\"\">- all types -</OPTION>\n";
 $Tipi = $db->get_col("SELECT DISTINCT Tip FROM Media ORDER BY Tip");
 if ( $Tipi ) foreach ( $Tipi as $Tip )
-	echo "<OPTION VALUE=\"$Tip\"".(($_GET['Tip']==$Tip)? " SELECTED": "").">$Tip</OPTION>\n";
+	echo "<OPTION VALUE=\"$Tip\"". ($_GET['Tip']==$Tip ? " SELECTED": "") .">$Tip</OPTION>\n";
 echo "</SELECT>\n";
 echo "</TD>\n";
 echo "</TR>\n";

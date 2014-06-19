@@ -99,18 +99,35 @@ if ( $Texts ) foreach ( $Texts as $Text ) {
 		
 	// send messages
 	if ( $MailList ) {
-		$SMTPServer->SetFrom( $_SESSION['Email'], $_SESSION['Name'] );
+		$SMTPServer->SetFrom($_SESSION['Email'], $_SESSION['Name']);
 		foreach ( $MailList as $User )
-			$SMTPServer->AddBCC( $User->Email, $User->Name );
+			$SMTPServer->AddBCC($User->Email, $User->Name);
 		$SMTPServer->Subject = $Subject;
 		$SMTPServer->AltBody = $AltBody;
-		$SMTPServer->MsgHTML( $Message );
-		if ( $error = !$SMTPServer->Send() )
+		$SMTPServer->MsgHTML($Message);
+		if ( $error = !$SMTPServer->Send() ) {
 			$db->query(
 				"UPDATE emlMessages
 				SET Datum = '".date('Y-n-j H:m:s')."'
-				WHERE emlMessageID = ". $_GET['ID']
-			);
+				WHERE emlMessageID = ". (int)$_GET['ID']
+				);
+			// audit action
+			$db->query(
+				"INSERT INTO SMAudit (
+					UserID,
+					ObjectID,
+					ObjectType,
+					Action,
+					Description
+				) VALUES (
+					". $_SESSION['UserID'] .",
+					". (int)$_GET['ID'] .",
+					'Mailing list',
+					'Send mesage',
+					'". $db->get_var("SELECT Naziv FROM emlMessages WHERE emlMessageID=". (int)$_GET['ID']) ."'
+				)"
+				);
+		}
 //		file_put_contents('message.html',$Message);
 		$SMTPServer->ClearAddresses();
 	}

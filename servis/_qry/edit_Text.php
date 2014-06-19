@@ -123,7 +123,7 @@ if ( !isset($Error) && count($_POST) ) {
 		$_POST['Naslov']    = $db->escape(str_replace( "\"", "&quot;", $_POST['Naslov'] ));
 		$_POST['Podnaslov'] = $db->escape(str_replace( "\"", "&quot;", $_POST['Podnaslov'] ));
 		$_POST['Povzetek']  = $db->escape(str_replace( "\"", "&quot;", $_POST['Povzetek'] ));
-		$_POST['Opis']      = str_replace("\\\"","\"",$db->escape(CleanupTinyMCE($_POST['Opis'])));
+		$_POST['Opis']      = str_replace("\\\"","\\&quot;",$db->escape(CleanupTinyMCE($_POST['Opis'])));
 	}
 
 	// update database

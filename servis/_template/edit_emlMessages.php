@@ -271,7 +271,7 @@ if ( (int)$_GET['ID'] > 0 ) {
 <table border="0" cellpadding="0" cellspacing="0" width="400">
 <tr>
 	<td>
-	<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Action=<?php echo $_GET['Action'] ?>&Izbor=emlSend&ID=<?php echo $_GET['ID'] ?>');">Odpošlji sporočilo</A>
+	<A HREF="javascript:void(0);" ONCLICK="loadTo('Edit','inc.php?Action=<?php echo $_GET['Action'] ?>&Izbor=emlSend&ID=<?php echo $_GET['ID'] ?>');">Send message</A>
 	</td>
 	<td align="right">
 	</td>

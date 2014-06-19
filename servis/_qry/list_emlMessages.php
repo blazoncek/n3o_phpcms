@@ -25,28 +25,44 @@
 '---------------------------------------------------------------------------'
 */
 
-if ( isset( $_GET['Brisi'] ) && (int)$_GET['Brisi'] ) {
+if ( isset($_GET['Brisi']) && (int)$_GET['Brisi'] ) {
 	$db->query("START TRANSACTION");
-	$Datoteke = $db->get_results( "SELECT Datoteka FROM emlMessagesDoc WHERE emlMessageID = ".(int)$_GET['Brisi'] );
+	$Datoteke = $db->get_results("SELECT Datoteka FROM emlMessagesDoc WHERE emlMessageID=". (int)$_GET['Brisi']);
 
 	// BRISANJE DATOTEK
-	if ( $Datoteke ) foreach ($Datoteke as $Datoteka) {
-		$tPath = $StoreRoot . (contains($Datoteka,"/")? "/": "/media/");
-		@unlink(  $tPath . $Datoteka );
+	if ( $Datoteke ) foreach ( $Datoteke as $Datoteka ) {
+		$tPath = $StoreRoot . (contains($Datoteka,"/") ? "/" : "/media/");
+		@unlink($tPath . $Datoteka);
 		
 		// for image files delete eventual thumbs and originals
-		$tDir = dirname( $tPath . $Datoteka ); // get full path
-		$tFile = basename( $tPath . $Datoteka ); // get filename
-		if ( is_file( $tDir . "/large/" . $tFile ) )
-			@unlink( $tDir . "/large/" . $tFile );
-		if ( is_file( $tDir . "/thumbs/" . $tFile ) )
-			@unlink( $tDir . "/thumbs/" . $tFile );
+		$tDir = dirname($tPath . $Datoteka); // get full path
+		$tFile = basename($tPath . $Datoteka); // get filename
+		if ( is_file($tDir ."/large/". $tFile) )
+			@unlink($tDir ."/large/". $tFile);
+		if ( is_file($tDir ."/thumbs/". $tFile) )
+			@unlink($tDir ."/thumbs/". $tFile);
 	}
 
-	$db->query( "DELETE FROM emlMessagesDoc WHERE emlMessageID=".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM emlMessagesGrp WHERE emlMessageID=".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM emlMessagesTxt WHERE emlMessageID=".(int)$_GET['Brisi'] );
-	$db->query( "DELETE FROM emlMessages    WHERE emlMessageID=".(int)$_GET['Brisi'] );
+	// audit action
+	$db->query(
+		"INSERT INTO SMAudit (
+			UserID,
+			ObjectID,
+			ObjectType,
+			Action,
+			Description
+		) VALUES (
+			". $_SESSION['UserID'] .",
+			". (int)$_GET['Brisi'] .",
+			'Mailing message',
+			'Delete mail message',
+			'". $db->get_var("SELECT Naziv FROM emlMessages WHERE emlMessageID=". (int)$_GET['Brisi']) ."'
+		)"
+		);
+	$db->query("DELETE FROM emlMessagesDoc WHERE emlMessageID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM emlMessagesGrp WHERE emlMessageID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM emlMessagesTxt WHERE emlMessageID=". (int)$_GET['Brisi']);
+	$db->query("DELETE FROM emlMessages    WHERE emlMessageID=". (int)$_GET['Brisi']);
 	$db->query("COMMIT");
 }
 ?>

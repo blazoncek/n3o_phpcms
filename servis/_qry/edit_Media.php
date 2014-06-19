@@ -99,14 +99,51 @@ if ( isset($_FILES['Dodaj']) && !$_FILES['Dodaj']['error'] ) {
 			$Tip  = 'PIC';
 			// set metadata
 			$_POST['Meta'] = "f=". $path .";w=". $photo['iw'] .";h=". $photo['ih'] .";rw=". $photo['rw'] .";rh=". $photo['rh'] .";tw=". $photo['tw'] .";th=". $photo['th'] .";";
+			// audit action
+			$db->query(
+				"INSERT INTO SMAudit (
+					UserID,
+					ObjectID,
+					ObjectType,
+					Action,
+					Description
+				) VALUES (
+					". $_SESSION['UserID'] .",
+					NULL,
+					'Media',
+					'Upload media file',
+					'". $Datoteka .",". $Tip ."'
+				)"
+				);
+			if ( isset($_POST['Naziv']) ) $_POST['Naziv'] = $photo['name']; // fix change of name
 		} else {
 			$Error    = "Upload error!";
 			$Datoteka = null;
 		}
-	} else if ( @move_uploaded_file($_FILES['Dodaj']['tmp_name'], $uploadfile) ) {
+
+	} elseif ( @move_uploaded_file($_FILES['Dodaj']['tmp_name'], $uploadfile) ) {
+
 		$Size = filesize($uploadfile);
 		$Tip  = strtoupper(right($Datoteka,3));
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'Media',
+				'Upload media file',
+				'". $Datoteka .",". $Tip ."'
+			)"
+			);
+
 	} else {
+
 		$Error    = "Upload error!";
 		$Datoteka = null;
 	}
@@ -121,8 +158,8 @@ if ( isset($_POST['ObnoviSliko']) ) {
 	// square?
 	$S = isset($_POST['S']) && strtolower($_POST['S'])=="yes" ? true : false;
 
-	$Slika = $db->get_var( "SELECT Datoteka FROM Media WHERE MediaID = ".(int)$_GET['ID'] );
-	$Slika = $StoreRoot .'/'. $Slika;
+	$Datoteka = $db->get_var("SELECT Datoteka FROM Media WHERE MediaID=".(int)$_GET['ID']);
+	$Slika = $StoreRoot .'/'. $Datoteka;
 	$path  = dirname($Slika);
 	$ext   = strrchr(basename($Slika), '.'); // extension
 	$name  = left(basename($Slika), strlen(basename($Slika))-strlen($ext));
@@ -184,14 +221,32 @@ if ( isset($_POST['ObnoviSliko']) ) {
 		
 		// set metadata
 		$_POST['Meta'] = "f=". $path .";w=$i_width;h=$i_height;rw=$r_width;rh=$r_height;tw=$t_width;th=$t_height;";
+
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				NULL,
+				'Media',
+				'Recreate thumbnail',
+				'". $Datoteka .",". $Tip ."'
+			)"
+			);
+
 	} catch (Exception $e) {
-		$Error    = "Resize error!";
+		$Error = "Resize error!";
 	}
 }
 
 // remove old image
 if ( isset($_POST['BrisiSliko']) || (isset($_FILES['file']) && !$_FILES['file']['error']) ) {
-	$Slika = $db->get_var( "SELECT Slika FROM Media WHERE MediaID = ".(int)$_GET['ID'] );
+	$Slika = $db->get_var("SELECT Slika FROM Media WHERE MediaID = ".(int)$_GET['ID']);
 	if ( $Slika && $Slika != "" ) {
 		$imgpath = $StoreRoot ."/media/media";
 		$e = right($Slika, 4);
@@ -201,7 +256,28 @@ if ( isset($_POST['BrisiSliko']) || (isset($_FILES['file']) && !$_FILES['file'][
 		@unlink($imgpath .'/thumbs/'. $Slika);        // remove thumbnail
 		@unlink($imgpath .'/thumbs/'. $b .'@2x'. $e); // remove retina thumbnail
 		@unlink($imgpath .'/large/'. $Slika);         // remove large original
-		$db->query( "UPDATE Media SET Slika = NULL WHERE MediaID = ".(int)$_GET['ID'] );
+
+		$db->query("START TRANSACTION");
+		if ( isset($_POST['BrisiSliko']) ) {
+			// audit action
+			$db->query(
+				"INSERT INTO SMAudit (
+					UserID,
+					ObjectID,
+					ObjectType,
+					Action,
+					Description
+				) VALUES (
+					". $_SESSION['UserID'] .",
+					". (int)$_GET['ID'] .",
+					'Media',
+					'Remove media image',
+					'". $Slika .",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". (int)$_GET['ID']) ."'
+				)"
+				);
+		}
+		$db->query("UPDATE Media SET Slika=NULL WHERE MediaID=". (int)$_GET['ID']);
+		$db->query("COMMIT");
 	}
 	unset( $Slika );
 }
@@ -224,7 +300,25 @@ if ( isset($_FILES['file']) && !$_FILES['file']['error'] ) {
 
 	if ( $photo ) {
 		$Slika = $photo['name'];
-		$db->query( "UPDATE Media SET Slika = '".$Slika."' WHERE MediaID = ".(int)$_GET['ID'] );
+		$db->query("START TRANSACTION");
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Media',
+				'Upload media image',
+				'". $Slika .",". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". (int)$_GET['ID']) ."'
+			)"
+			);
+		$db->query("UPDATE Media SET Slika='".$Slika."' WHERE MediaID=". (int)$_GET['ID']);
+		$db->query("COMMIT");
 	} else {
 		$Error = "Upload error!";
 	}
@@ -237,7 +331,7 @@ if ( !isset($Error) && count($_POST) && !isset($_POST['Naslov']) ) {
 
 		// update record
 		if ( !isset($_POST['Izpis']) && !contains($_SERVER['PHP_SELF'],'upd.php') )
-			$db->query("UPDATE Media SET Izpis = 0 WHERE MediaID = ".(int)$_GET['ID']);
+			$db->query("UPDATE Media SET Izpis=0 WHERE MediaID=".(int)$_GET['ID']);
 
 		foreach ( $_POST as $name => $value ) {
 			if ( contains("BrisiSliko,ObnoviSliko,S,T,R,",$name.',') ) continue; //ignore
@@ -249,7 +343,7 @@ if ( !isset($Error) && count($_POST) && !isset($_POST['Naslov']) ) {
 					$set = ($value=="yes" ? 1 : 0);
 					break;
 				//case "Password":
-				//	$set = ($value!="" ? "'".$db->escape(MD5(PWSALT.$value))."'" : "NULL"); // salted
+				//	$set = ($value!="" ? "'".$db->escape(crypt(PWSALT.$value))."'" : "NULL"); // salted
 				//	break;
 				case "Naziv":
 					$file    = $db->get_var("SELECT Datoteka FROM Media WHERE MediaID = ". (int)$_GET['ID']);
@@ -278,18 +372,36 @@ if ( !isset($Error) && count($_POST) && !isset($_POST['Naslov']) ) {
 								rename($path .'/large/'. $oldname.'@2x'.$ext, $path .'/large/'. $newname.'@2x'.$ext);
 						}
 						// update DB
-						$db->query("UPDATE Media SET Datoteka = '". dirname($file).'/'.$newname.$ext ."' WHERE MediaID = ".(int)$_GET['ID']);
+						$db->query("UPDATE Media SET Datoteka='". dirname($file).'/'.$newname.$ext ."' WHERE MediaID=". (int)$_GET['ID']);
 					}
 					// continue updating DB (with default)
 				default : // string value
 					$set = ($value!="" ? "'".$db->escape($value)."'" : "NULL");
 					break;
 			}
-			$db->query("UPDATE Media SET $name = $set WHERE MediaID = ".(int)$_GET['ID']);
+
+			$db->query("UPDATE Media SET ". $name ."=". $set ." WHERE MediaID=". (int)$_GET['ID']);
 		}
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Media',
+				'Update media',
+				'". $db->get_var("SELECT Naziv FROM Media WHERE MediaID=". (int)$_GET['ID']) ."'
+			)"
+			);
 
 	} else {
 
+		if ( contains($_POST['Naziv'],'@2x.') ) $_POST['Naziv'] = str_replace('@2x.', '.', $_POST['Naziv']); // remove retina designator from name
 		// insert new record
 		$db->query("
 			INSERT INTO Media (
@@ -306,15 +418,15 @@ if ( !isset($Error) && count($_POST) && !isset($_POST['Naslov']) ) {
 				'". $Datoteka ."',
 				$Size,
 				'$Tip',
-				". (isset($Slika)? "'".$Slika."'": "NULL") .",
+				". (isset($Slika) ? "'".$Slika."'" : "NULL") .",
 				'". date("Y-m-d H:i:s") ."',
-				". (isset($_POST['Izpis'])? "1": "0") .",
-				". (($_POST['Meta']!="")? "'".$db->escape($_POST['Meta'])."'": "NULL") ."
+				". (isset($_POST['Izpis']) ? "1" : "0") .",
+				". ($_POST['Meta']!="" ? "'".$db->escape($_POST['Meta'])."'" : "NULL") ."
 			)");
 		// get inserted ID
 		$_GET['ID'] = $db->insert_id;
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 
 		if ( isset($_POST['KategorijaID']) ) {
 			$Polozaj = $db->get_var( "SELECT max(Polozaj)+1 FROM KategorijeMedia WHERE KategorijaID='".$_POST['KategorijaID']."'" );
@@ -329,33 +441,87 @@ if ( !isset($Error) && count($_POST) && !isset($_POST['Naslov']) ) {
 					". (($Polozaj)? $Polozaj: "1") ."
 				)");
 		}
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Media',
+				'Add media',
+				'". $db->escape($_POST['Naziv']) ."'
+			)"
+			);
 	}
 	$db->query("COMMIT");
 }
 
 if ( isset($_GET['BrisiOpis']) && $_GET['BrisiOpis'] != "" ) {
-	$db->query( "DELETE FROM MediaOpisi WHERE ID = " . (int) $_GET['BrisiOpis'] );
+	$db->query("START TRANSACTION");
+	$x = $db->get_row("SELECT MeidiaID, Jezik, Naslov FROM MediaOpisi WHERE ID=". (int)$_GET['BrisiOpis']);
+	if ( $x ) {
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". $x->MediaID .",
+				'Media',
+				'Delete media description',
+				'". $x->Naslov ."'
+			)"
+			);
+	}
+	$db->query("DELETE FROM MediaOpisi WHERE ID=". (int)$_GET['BrisiOpis']);
+	$db->query("COMMIT");
 }
 
 // VPISOVANJE PODATKOV O JEZIKOVNIH VARIANTAH
 if ( isset($_POST['Naslov']) ) {
 	// cleanup
-	$_POST['Naslov'] = str_replace( "\"", "'", $_POST['Naslov'] );
+	$_POST['Naslov'] = $db->escape(str_replace("\"", "&quot;", $_POST['Naslov']));
 	$Opis = $_POST['Opis'];
-	$Opis = str_replace( "&nbsp;", " ", $Opis );
-	$Opis = str_replace( "&scaron;", "š", $Opis );
-	$Opis = str_replace( "&Scaron;", "Š", $Opis );
-	$Opis = preg_replace( "/(SRC=\")\.\.\//i", '$1./', $Opis );
-	$Opis = preg_replace( "/<([\/]*)EM>/i", '<$1I>', $Opis );
-	$Opis = preg_replace( "/<([\/]*)STRONG>/i", '<$1B>', $Opis );
-	$_POST['Opis'] = $db->escape( $Opis );
+	$Opis = str_replace("&nbsp;", " ", $Opis);
+	$Opis = str_replace("&scaron;", "š", $Opis);
+	$Opis = str_replace("&Scaron;", "Š", $Opis);
+	$Opis = preg_replace("/(SRC=\")\.\.\//i", '$1./', $Opis);
+	$Opis = preg_replace("/<([\/]*)EM>/i", '<$1I>', $Opis);
+	$Opis = preg_replace("/<([\/]*)STRONG>/i", '<$1B>', $Opis);
+	$_POST['Opis'] = $db->escape(CleanupTinyMCE($Opis));
 
+	$db->query("START TRANSACTION");
 	if ( isset($_POST['OpisID']) ) {
 		$db->query("
 			UPDATE MediaOpisi
-			SET Naslov = ". (($_POST['Naslov']!="")? "'". $_POST['Naslov'] ."'": "NULL") .",
-				Opis = ". (($_POST['Opis']!="")? "'". $_POST['Opis'] ."'": "NULL") ."
-			WHERE ID = ". (int)$_POST['OpisID']
+			SET Naslov='". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(unnamed)") ."',
+				Opis=". ($_POST['Opis']!="" ? "'". $_POST['Opis'] ."'" : "NULL") ."
+			WHERE ID=". (int)$_POST['OpisID']
+			);
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Media',
+				'Update media description',
+				'". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(unnamed)") ."'
+			)"
 			);
 	} else {
 		$db->query("
@@ -365,11 +531,28 @@ if ( isset($_POST['Naslov']) ) {
 				Naslov,
 				Opis
 			) VALUES (
-				". (($_POST['Jezik']!="")? "'".$db->escape($_POST['Jezik'])."'": "NULL") .",
+				". ($_POST['Jezik']!="" ? "'".$db->escape($_POST['Jezik'])."'" : "NULL") .",
 				". (int)$_GET['ID'] .",
-				". (($_POST['Naslov']!="")? "'". $_POST['Naslov'] ."'": "'(unnamed)'") .",
-				". (($_POST['Opis']!="")? "'". $_POST['Opis'] ."'": "NULL") ."
+				'". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(unnamed)") ."',
+				". ($_POST['Opis']!="" ? "'". $_POST['Opis'] ."'" : "NULL") ."
 			)");
+		// audit action
+		$db->query(
+			"INSERT INTO SMAudit (
+				UserID,
+				ObjectID,
+				ObjectType,
+				Action,
+				Description
+			) VALUES (
+				". $_SESSION['UserID'] .",
+				". (int)$_GET['ID'] .",
+				'Media',
+				'Add media description',
+				'". ($_POST['Naslov']!="" ? $_POST['Naslov'] : "(unnamed)") ."'
+			)"
+			);
 	}
+	$db->query("COMMIT");
 }
 ?>
