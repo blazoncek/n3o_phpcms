@@ -26,12 +26,12 @@
 */
 
 if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
-if ( !isset( $_GET['Jezik'] ) ) $_GET['Jezik'] = "Novo";
+if ( !isset($_GET['Jezik']) ) $_GET['Jezik'] = "New";
 
 /* NOTE: moved to edit_Sifranti
 // insert/update text value
 if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
-	
+
 	$db->query("START TRANSACTION");
 	$ID = $db->get_var(
 		"SELECT ID ".
@@ -51,7 +51,7 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 			") VALUES (".
 			"	".$_POST['TxtID'].",".
 			"	".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",".
-			"	".(($_POST['Naziv']!="")? "'".$_POST['Naziv']."'": "'(prazno)'").",".
+			"	".(($_POST['Naziv']!="")? "'".$_POST['Naziv']."'": "'(empty)'").",".
 			"	".(($_POST['CVal1']!="")? "'".$_POST['CVal1']."'": "NULL").",".
 			"	".(($_POST['CVal2']!="")? "'".$_POST['CVal2']."'": "NULL").",".
 			"	".(($_POST['CVal3']!="")? "'".$_POST['CVal3']."'": "NULL").
@@ -60,7 +60,7 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 	else
 		$db->query(
 			"UPDATE SifrantiTxt ".
-			"SET SifNaziv = ".(($_POST['Naziv']!="")? "'".$_POST['Naziv']."'": "'(prazno)'").", ".
+			"SET SifNaziv = ".(($_POST['Naziv']!="")? "'".$_POST['Naziv']."'": "'(empty)'").", ".
 			"	SifCVal1 = ".(($_POST['CVal1']!="")? "'".$_POST['CVal1']."'": "NULL").", ".
 			"	SifCVal2 = ".(($_POST['CVal2']!="")? "'".$_POST['CVal2']."'": "NULL").", ".
 			"	SifCVal3 = ".(($_POST['CVal3']!="")? "'".$_POST['CVal3']."'": "NULL")." ".
@@ -78,7 +78,7 @@ $Podatek = $db->get_row(
 	"	AND ST.Jezik ".((isset($_GET['Jezik']) && $_GET['Jezik']!="")? "='".$_GET['Jezik']."'": "IS NULL")
 );
 if ( $Podatek )
-	$ACL = userACL( $Podatek->ACLID );
+	$ACL = userACL($Podatek->ACLID);
 else
 	$ACL = "LRWDX";
 ?>
@@ -111,7 +111,7 @@ $(document).ready(function(){
 <INPUT TYPE="hidden" NAME="TxtID" VALUE="<?php echo $_GET['ID'] ?>">
 <TR>
 	<TD ALIGN="right"><B>Jezik:</B>&nbsp;</TD>
-	<TD><SELECT <?php echo (($_GET['Jezik']!="Novo")? "DISABLED": "NAME=\"Jezik\"") ?> SIZE="1" TABINDEX="1">
+	<TD><SELECT <?php echo (($_GET['Jezik']!="New")? "DISABLED": "NAME=\"Jezik\"") ?> SIZE="1" TABINDEX="1">
 		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
 $Jeziki = $db->get_results(
@@ -119,7 +119,7 @@ $Jeziki = $db->get_results(
 	FROM Jeziki J
 		LEFT JOIN SifrantiTxt ST ON J.Jezik = ST.Jezik AND ST.SifrantID = ". (int)$_GET['ID'] ."
 	WHERE
-		J.Enabled=1". (($_GET['Jezik']=="Novo")? " AND ST.Jezik IS NULL": "")
+		J.Enabled=1". (($_GET['Jezik']=="New")? " AND ST.Jezik IS NULL": "")
 	);
 $All = $db->get_var(
 	"SELECT count(*) ".
@@ -127,7 +127,7 @@ $All = $db->get_var(
 	"WHERE ST.SifrantID = ".(int)$_GET['ID'].
 	"	AND ST.Jezik IS NULL"
 );
-if ( !($All && $_GET['Jezik'] == "Novo") )
+if ( !($All && $_GET['Jezik'] == "New") )
 	echo "<OPTION VALUE=\"\"".(($_GET['Jezik']=="")? " SELECTED": "").">- all languages -</OPTION>\n";
 if ( $Jeziki )
 	foreach ( $Jeziki as $Jezik )

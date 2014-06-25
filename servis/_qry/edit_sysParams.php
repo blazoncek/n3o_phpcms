@@ -180,7 +180,7 @@ if ( isset( $_GET['BrisiTxt'] ) && $_GET['BrisiTxt'] != "" ) {
 
 // insert/update text value
 if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
-	
+
 	$db->query("START TRANSACTION");
 	$ID = $db->get_var(
 		"SELECT ID ".
@@ -208,7 +208,7 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 			") VALUES (".
 			"	".$_POST['TxtID'].",".
 			"	".(($_POST['Jezik']!="")? "'".$db->escape($_POST['Jezik'])."'": "NULL").",".
-			"	".(($_POST['Naziv']!="")? "'".$db->escape($_POST['Naziv'])."'": "'(prazno)'").",".
+			"	".(($_POST['Naziv']!="")? "'".$db->escape($_POST['Naziv'])."'": "'(empty)'").",".
 			"	".(($_POST['CVal1']!="")? "'".$db->escape($_POST['CVal1'])."'": "NULL").",".
 			"	".(($_POST['CVal2']!="")? "'".$db->escape($_POST['CVal2'])."'": "NULL").",".
 			"	".(($_POST['CVal3']!="")? "'".$db->escape($_POST['CVal3'])."'": "NULL").",".
@@ -231,13 +231,13 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 				". (int)$_POST['TxtID'] .",
 				'Parameters',
 				'Add parameter text',
-				'". ($_POST['Naziv']!="" ? "'".$db->escape($_POST['Naziv'])."'" : "'(prazno)'"). ."'
+				'". ($_POST['Naziv']!="" ? $db->escape($_POST['Naziv']) : "(empty)") ."'
 			)"
 			);
 	} else
 		$db->query(
 			"UPDATE SifrantiTxt ".
-			"SET SifNaziv = ".(($_POST['Naziv']!="")? "'".$db->escape($_POST['Naziv'])."'": "'(prazno)'").", ".
+			"SET SifNaziv = ".(($_POST['Naziv']!="")? "'".$db->escape($_POST['Naziv'])."'": "'(empty)'").", ".
 			"	SifCVal1 = ".(($_POST['CVal1']!="")? "'".$db->escape($_POST['CVal1'])."'": "NULL").", ".
 			"	SifCVal2 = ".(($_POST['CVal2']!="")? "'".$db->escape($_POST['CVal2'])."'": "NULL").", ".
 			"	SifCVal3 = ".(($_POST['CVal3']!="")? "'".$db->escape($_POST['CVal3'])."'": "NULL")." ".
@@ -256,7 +256,7 @@ if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
 				". $ID .",
 				'Parameters',
 				'Update parameter text',
-				'". ($_POST['Naziv']!="" ? "'".$db->escape($_POST['Naziv'])."'" : "'(prazno)'"). ."'
+				'". ($_POST['Naziv']!="" ? $db->escape($_POST['Naziv']) : "(empty)") ."'
 			)"
 			);
 	$db->query("COMMIT");
