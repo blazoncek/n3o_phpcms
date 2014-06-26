@@ -51,9 +51,9 @@ if ( !(isset($_SESSION['Authenticated']) && $_SESSION['Authenticated']) ) {
 
 // get action & ACL
 if ( isset($_GET['Action']) )
-	$Action = $db->get_row("SELECT Action, ACLID, ActionID FROM SMActions WHERE ActionID = '". $_GET['Action'] ."'");
+	$Action = $db->get_row("SELECT Action, ACLID, ActionID FROM SMActions WHERE ActionID = '". $db->escape($_GET['Action']) ."'");
 elseif ( isset($_GET['Izbor']) )
-	$Action = $db->get_row("SELECT Action, ACLID, ActionID FROM SMActions WHERE Action = '". $_GET['Izbor'] ."'");
+	$Action = $db->get_row("SELECT Action, ACLID, ActionID FROM SMActions WHERE Action = '". $db->escape($_GET['Izbor']) ."'");
 
 if ( isset($Action) && $Action ) {
 	$_GET['Izbor']  = $Action->Action;

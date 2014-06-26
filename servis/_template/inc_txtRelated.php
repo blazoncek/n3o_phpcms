@@ -135,7 +135,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			AND B.BesediloID <> ".(int)$_GET['BesediloID']."
 			AND B.Tip = '".(isset($Tip) ? $Tip : "Text")."'
 			AND B.Izpis = 1".
-			($_GET['Find']!=""? " AND (BO.Naslov LIKE '%".$_GET['Find']."%' OR B.Ime LIKE '%".$_GET['Find']."%' OR B.Tip LIKE '".$_GET['Find']."%')": " ").
+			($_GET['Find']!="" ? " AND (BO.Naslov LIKE '%".$db->escape($_GET['Find'])."%' OR B.Ime LIKE '%".$db->escape($_GET['Find'])."%' OR B.Tip LIKE '".$db->escape($_GET['Find'])."%')" : " ").
 		"ORDER BY B.Ime"
 	);
 
@@ -184,7 +184,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 <?php else : ?>
 	<?php
 	$CurrentRow = 1;
-	$RecordCount = count( $List );
+	$RecordCount = count($List);
 	foreach ( $List as $Item ) {
 		if ( $Item->ACLID )
 			$rACL = userACL($Item->ACLID);
@@ -200,7 +200,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		if ( contains($rACL,"L") )
 			echo $Item->Ime;
 		else
-			echo "-- skrito besedilo --";
+			echo "-- hidden --";
 
 		if ( contains($rACL,"R") )
 			echo "</A>";

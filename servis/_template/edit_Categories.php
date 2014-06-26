@@ -280,7 +280,7 @@ $(document).ready(function(){
 <?php endif ?>
 		Titles &amp; descriptions</LEGEND>
 <?php
-		$List = $db->get_results("SELECT ID, Naziv, Jezik FROM KategorijeNazivi WHERE KategorijaID='". $_GET['ID'] ."' ORDER BY Jezik");
+		$List = $db->get_results("SELECT ID, Naziv, Jezik FROM KategorijeNazivi WHERE KategorijaID='". $db->escape($_GET['ID']) ."' ORDER BY Jezik");
 		echo "<TABLE BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 		if ( !$List ) 
 			echo "<TR><TD ALIGN=\"center\">No content!</TD></TR>\n";

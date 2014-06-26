@@ -84,9 +84,9 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 		)"
 		);
 	// move
-	$db->query( "UPDATE Sifranti SET SifrZapo=9999     WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=$ItemNew" );
-	$db->query( "UPDATE Sifranti SET SifrZapo=$ItemNew WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=$ItemPos" );
-	$db->query( "UPDATE Sifranti SET SifrZapo=$ItemPos WHERE SifrCtrl='".$_GET['Tip']."' AND SifrZapo=9999" );
+	$db->query( "UPDATE Sifranti SET SifrZapo=9999     WHERE SifrCtrl='".$db->escape($_GET['Tip'])."' AND SifrZapo=$ItemNew" );
+	$db->query( "UPDATE Sifranti SET SifrZapo=$ItemNew WHERE SifrCtrl='".$db->escape($_GET['Tip'])."' AND SifrZapo=$ItemPos" );
+	$db->query( "UPDATE Sifranti SET SifrZapo=$ItemPos WHERE SifrCtrl='".$db->escape($_GET['Tip'])."' AND SifrZapo=9999" );
 	$db->query("COMMIT");
 }
 ?>

@@ -121,7 +121,7 @@ if ( isset($_POST['Ime']) && $_POST['Ime'] != "" ) {
 	$_POST['Ime'] = str_replace(' ','-',$_POST['Ime']);
 
 	$db->query("START TRANSACTION");
-	$KatID  = $db->get_var( "SELECT KategorijaID FROM Kategorije WHERE KategorijaID = '".$_GET['ID']."'" );
+	$KatID  = $db->get_var("SELECT KategorijaID FROM Kategorije WHERE KategorijaID='". $db->escape($_GET['ID']) ."'");
 	if ( !$KatID ) {
 		$db->query(
 			"INSERT INTO Kategorije (

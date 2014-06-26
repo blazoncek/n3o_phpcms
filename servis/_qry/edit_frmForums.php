@@ -86,7 +86,7 @@ if ( count($_POST) > 0 ) {
 					$set = ($value!="" ? "'".$db->escape($value)."'" : "NULL");
 					break;
 			}
-			$db->query( "UPDATE frmForums SET $name = $set WHERE ID = ". (int)$_GET['ID'] );
+			$db->query("UPDATE frmForums SET ". $name ."=". $set ." WHERE ID=". (int)$_GET['ID']);
 		}
 /*
 		$db->query(
@@ -135,7 +135,7 @@ if ( count($_POST) > 0 ) {
 		}
 	} else {
 		// insert forum (classic only)
-		$Polozaj = $db->get_var( "SELECT max(ForumOrder) FROM frmForums WHERE CategoryID = ". (int)$_POST['CategoryID'] );
+		$Polozaj = $db->get_var("SELECT max(ForumOrder) FROM frmForums WHERE CategoryID=". (int)$_POST['CategoryID']);
 		$db->query(
 			"INSERT INTO frmForums (
 				CategoryID,
@@ -156,15 +156,15 @@ if ( count($_POST) > 0 ) {
 				PurgeDays
 			) VALUES (".
 				(int)$_POST['CategoryID'].",".
-				"'".$_POST['ForumName']."',".
-				($_POST['Description']!=""? "'".$_POST['Description']."'": "NULL").",".
+				"'".$db->escape($_POST['ForumName'])."',".
+				($_POST['Description']!=""? "'".$db->escape($_POST['Description'])."'": "NULL").",".
 				(int)$_POST['Moderator'].",".
 				(isset($_POST['NotifyModerator'])? "1": "0").",".
-				($_POST['Password']!=""? "'".$_POST['Password']."'": "NULL").",".
+				($_POST['Password']!=""? "'".$db->escape($_POST['Password'])."'": "NULL").",".
 				(isset($_POST['ApprovalRequired'])? "1": "0").",".
 				(isset($_POST['AllowFileUploads'])? "1": "0").",".
 				(isset($_POST['AllowFileUploads'])? (int)$_POST['MaxUploadSize']: "NULL").",".
-				(isset($_POST['AllowFileUploads'])? "'".$_POST['UploadType']."'": "NULL").",".
+				(isset($_POST['AllowFileUploads'])? "'".$db->escape($_POST['UploadType'])."'": "NULL").",".
 				(isset($_POST['ViewOnly'])? "1": "0").",".
 				(isset($_POST['Hidden'])? "1": "0").",".
 				(isset($_POST['Private'])? "1": "0").",".
@@ -191,7 +191,7 @@ if ( count($_POST) > 0 ) {
 		// get inserted ID
 		$_GET['ID'] = $ID;
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 	}
 	$db->query("COMMIT");
 }

@@ -76,7 +76,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			LEFT JOIN BesedilaOpisi BO ON B.BesediloID = BO.BesediloID
 		WHERE
 			(BM.MediaID IS NULL OR BM.MediaID <> ".(int)$_GET['MediaID'].") ".
-			($_GET['Find']!=""? "AND (B.Ime LIKE '%".$_GET['Find']."%' OR BO.Naslov LIKE '%".$_GET['Find']."%' OR BO.Opis LIKE '%".$_GET['Find']."%') ": " ").
+			($_GET['Find']!="" ? "AND (B.Ime LIKE '%".$db->escape($_GET['Find'])."%' OR BO.Naslov LIKE '%".$db->escape($_GET['Find'])."%' OR BO.Opis LIKE '%".$db->escape($_GET['Find'])."%') " : " ").
 		"ORDER BY
 			B.Ime"
 	);
@@ -151,7 +151,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			if ( contains($rACL,"L") )
 				echo $Item->Ime;
 			else
-				echo "-- skrita rubrika --";
+				echo "-- hidden --";
 			if ( contains($rACL,"R") )
 				echo "</A>";
 			echo "</TD>\n";

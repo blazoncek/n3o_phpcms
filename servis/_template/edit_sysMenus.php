@@ -25,7 +25,7 @@
 '---------------------------------------------------------------------------'
 */
 
-$Podatek = $db->get_row("SELECT * FROM SMActions WHERE ActionID = '". $_GET['ID'] ."'");	// URL param ID defined in qry/ script
+$Podatek = $db->get_row("SELECT * FROM SMActions WHERE ActionID = '". $db->escape($_GET['ID']) ."'");	// URL param ID defined in qry/ script
 // get ACL
 if ( $Podatek )
 	$ACL = userACL($Podatek->ACLID);

@@ -34,14 +34,14 @@ if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 		$db->query(
 			"UPDATE Sifranti ".
 			"SET SifrText = '".$db->escape($_POST['Text'])."',".
-			"	SifNVal1 = ".(($_POST['NVal1']!="")? "'".$_POST['NVal1']."'": "NULL").",".
-			"	SifNVal2 = ".(($_POST['NVal2']!="")? "'".$_POST['NVal2']."'": "NULL").",".
-			"	SifNVal3 = ".(($_POST['NVal3']!="")? "'".$_POST['NVal3']."'": "NULL").",".
-			"	SifDVal1 = ".(($_POST['DVal1']!="")? "'".date("Y-m-d",strtotime($_POST['DVal1']))."'": "NULL").",".
-			"	SifDVal2 = ".(($_POST['DVal2']!="")? "'".date("Y-m-d",strtotime($_POST['DVal2']))."'": "NULL").",".
-			"	SifDVal3 = ".(($_POST['DVal3']!="")? "'".date("Y-m-d",strtotime($_POST['DVal3']))."'": "NULL").",".
-			"	SifLVal1 = ".(isset($_POST['LVal1'])? "1": "0").",".
-			"	SifLVal2 = ".(isset($_POST['LVal2'])? "1": "0")." ".
+			"	SifNVal1 = ".($_POST['NVal1']!="" ? val($_POST['NVal1']) : "NULL").",".
+			"	SifNVal2 = ".($_POST['NVal2']!="" ? val($_POST['NVal2']) : "NULL").",".
+			"	SifNVal3 = ".($_POST['NVal3']!="" ? val($_POST['NVal3']) : "NULL").",".
+			"	SifDVal1 = ".($_POST['DVal1']!="" ? "'".date("Y-m-d",strtotime($_POST['DVal1']))."'" : "NULL").",".
+			"	SifDVal2 = ".($_POST['DVal2']!="" ? "'".date("Y-m-d",strtotime($_POST['DVal2']))."'" : "NULL").",".
+			"	SifDVal3 = ".($_POST['DVal3']!="" ? "'".date("Y-m-d",strtotime($_POST['DVal3']))."'" : "NULL").",".
+			"	SifLVal1 = ".(isset($_POST['LVal1']) ? "1" : "0").",".
+			"	SifLVal2 = ".(isset($_POST['LVal2']) ? "1" : "0")." ".
 			"WHERE SifrantID = " . (int)$_GET['ID']
 		);
 		// audit action
@@ -140,12 +140,12 @@ if ( isset($_POST['Ctrl']) && $_POST['Ctrl'] !== "" ) {
 				'Parameters',
 				'Add parameter',
 				'". $db->escape($_POST['Ctrl']) .",". $db->escape($_POST['Text']) .",".
-				(($_POST['NVal1']!="") ? $db->escape($_POST['NVal1']) : "") .",".
-				(($_POST['NVal2']!="") ? $db->escape($_POST['NVal2']) : "") .",".
-				(($_POST['NVal3']!="") ? $db->escape($_POST['NVal3']) : "") .",".
-				(($_POST['DVal1']!="") ? date("Y-m-d",strtotime($_POST['DVal1'])) : "") .",".
-				(($_POST['DVal2']!="") ? date("Y-m-d",strtotime($_POST['DVal2'])) : "") .",".
-				(($_POST['DVal3']!="") ? date("Y-m-d",strtotime($_POST['DVal3'])) : "") .",".
+				($_POST['NVal1']!="" ? $db->escape($_POST['NVal1']) : "") .",".
+				($_POST['NVal2']!="" ? $db->escape($_POST['NVal2']) : "") .",".
+				($_POST['NVal3']!="" ? $db->escape($_POST['NVal3']) : "") .",".
+				($_POST['DVal1']!="" ? date("Y-m-d",strtotime($_POST['DVal1'])) : "") .",".
+				($_POST['DVal2']!="" ? date("Y-m-d",strtotime($_POST['DVal2'])) : "") .",".
+				($_POST['DVal3']!="" ? date("Y-m-d",strtotime($_POST['DVal3'])) : "") .",".
 				(isset($_POST['LVal1']) ? "1" : "0") .",".
 				(isset($_POST['LVal2']) ? "1" : "0") ."'
 			)"

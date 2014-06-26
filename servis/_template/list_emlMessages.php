@@ -39,7 +39,7 @@ $List = $db->get_results(
 	FROM
 		emlMessages M
 		LEFT JOIN emlMessagesTxt MT ON M.emlMessageID=MT.emlMessageID "
-	.($_GET['Find'] == "" ? " " : "WHERE M.Naziv LIKE '%".$_GET['Find']."%' OR MT.Naziv LIKE '%".$_GET['Find']."%' OR MT.Opis LIKE '%".$_GET['Find']."%' " ).
+	.($_GET['Find'] == "" ? " " : "WHERE M.Naziv LIKE '%".$db->escape($_GET['Find'])."%' OR MT.Naziv LIKE '%".$db->escape($_GET['Find'])."%' OR MT.Opis LIKE '%".$db->escape($_GET['Find'])."%' ").
 	"ORDER BY M.Naziv" );
 
 $RecordCount = count( $List );

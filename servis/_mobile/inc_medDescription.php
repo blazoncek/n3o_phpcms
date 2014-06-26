@@ -65,11 +65,11 @@ echo "\t<FORM NAME=\"medDescription\" ACTION=\"edit.php?Izbor=Media&ID=". $_GET[
 $Jeziki = $db->get_results(
 	"SELECT J.Jezik, J.Opis
 	FROM Jeziki J
-		LEFT JOIN MediaOpisi MO ON J.Jezik = MO.Jezik AND MO.MediaID = '".$_GET['MediaID']."'
+		LEFT JOIN MediaOpisi MO ON J.Jezik = MO.Jezik AND MO.MediaID = ". (int)$_GET['MediaID']."
 	WHERE
-		J.Enabled=1". ((!$Podatek)? " AND MO.Jezik IS NULL": "")
+		J.Enabled=1". (!$Podatek ? " AND MO.Jezik IS NULL" : "")
 	);
-$All = $db->get_var("SELECT count(*) FROM MediaOpisi WHERE MediaID = '". $_GET['MediaID'] ."' AND Jezik IS NULL");
+$All = $db->get_var("SELECT count(*) FROM MediaOpisi WHERE MediaID=". (int)$_GET['MediaID'] ." AND Jezik IS NULL");
 
 if ( !($All) )
 	echo "<OPTION VALUE=\"\"".(($Podatek && $Podatek->Jezik == "")? " SELECTED": "").">- all -</OPTION>\n";

@@ -30,13 +30,13 @@ if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 // creating new room
 if ( isset($_POST['Name']) && $_POST['Name'] != "" ) {
 	if ( $_GET['ID'] != "0" ) {
-		$db->query("UPDATE chtRooms SET Room = '".$_POST['Name']."' WHERE ID = ".(int)$_GET['ID']);
+		$db->query("UPDATE chtRooms SET Room = '". $db->escape($_POST['Name']) ."' WHERE ID=". (int)$_GET['ID']);
 	} else {
-		$db->query("INSERT INTO chtRooms (Room) VALUES ('".$_POST['Name']."')");
+		$db->query("INSERT INTO chtRooms (Room) VALUES ('". $db->escape($_POST['Name']) ."')");
 		//retreive ACL's ID
 		$_GET['ID'] = $db->insert_id;
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 	}
 }
 ?>

@@ -121,10 +121,10 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		WHERE
 			M.Tip <> 'PIC' AND
 			(M.MediaID NOT IN (SELECT BM.MediaID FROM BesedilaMedia BM WHERE BM.BesediloID = ".(int)$_GET['BesediloID'].")) ".
-			($_GET['Find']!=""? "AND (M.Naziv LIKE '%".$_GET['Find']."%' OR M.Tip LIKE '".$_GET['Find']."%' OR MO.Naslov LIKE '%".$_GET['Find']."%' OR MO.Opis LIKE '%".$_GET['Find']."%') ": " ").
+			($_GET['Find']!="" ? "AND (M.Naziv LIKE '%".$db->escape($_GET['Find'])."%' OR M.Tip LIKE '".$db->escape($_GET['Find'])."%' OR MO.Naslov LIKE '%".$db->escape($_GET['Find'])."%' OR MO.Opis LIKE '%".$db->escape($_GET['Find'])."%') " : " ").
 		"ORDER BY
 			M.Naziv"
-	);
+		);
 
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	if ( !$List ) 

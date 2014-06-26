@@ -54,9 +54,10 @@ $List = $db->get_results(
 	FROM Media M
 		LEFT JOIN MediaOpisi MO ON M.MediaID = MO.MediaID
 	WHERE 1=1 " .
-		($_GET['Find']=="" ? "" : "AND (M.Naziv LIKE '%".$_GET['Find']."%' OR M.Datoteka LIKE '%".$_GET['Find']."%' OR MO.Naslov LIKE '%".$_GET['Find']."%' OR MO.Opis LIKE '%".$_GET['Find']."%')") .
-		($_GET['Tip']=="" ? "" : "AND M.Tip='".$_GET['Tip']."' ") .
-	"ORDER BY $Sort" );
+		($_GET['Find']=="" ? "" : "AND (M.Naziv LIKE '%".$db->escape($_GET['Find'])."%' OR M.Datoteka LIKE '%".$db->escape($_GET['Find'])."%' OR MO.Naslov LIKE '%".$db->escape($_GET['Find'])."%' OR MO.Opis LIKE '%".$db->escape($_GET['Find'])."%')") .
+		($_GET['Tip']=="" ? "" : "AND M.Tip='".$db->escape($_GET['Tip'])."' ") .
+	"ORDER BY ". $Sort
+	);
 
 $RecordCount = count($List);
 

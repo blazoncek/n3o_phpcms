@@ -429,14 +429,14 @@ if ( !isset($Error) && count($_POST) && !isset($_POST['Naslov']) ) {
 		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 
 		if ( isset($_POST['KategorijaID']) ) {
-			$Polozaj = $db->get_var( "SELECT max(Polozaj)+1 FROM KategorijeMedia WHERE KategorijaID='".$_POST['KategorijaID']."'" );
+			$Polozaj = $db->get_var("SELECT max(Polozaj)+1 FROM KategorijeMedia WHERE KategorijaID='".$db->escape($_POST['KategorijaID'])."'");
 			$db->query("
 				INSERT INTO KategorijeMedia (
 					KategorijaID,
 					MediaID,
 					Polozaj
 				) VALUES (
-					'". $_POST['KategorijaID'] ."',
+					'". $db->escape($_POST['KategorijaID']) ."',
 					". (int)$_GET['ID'] .",
 					". (($Polozaj)? $Polozaj: "1") ."
 				)");

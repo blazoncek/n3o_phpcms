@@ -33,10 +33,11 @@ if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 $List = $db->get_results(
 	"SELECT Naziv AS Name, PredlogaID AS ID, Jezik, Enabled, Tip, ACLID
 	FROM Predloge"
-	.($_GET['Find'] == "" ? " " : " WHERE Naziv LIKE '%".$_GET['Find']."%' OR Opis LIKE '%".$_GET['Find']."%' " ).
-	"ORDER BY Tip, Naziv" );
+	.($_GET['Find'] == "" ? " " : " WHERE Naziv LIKE '%".$db->escape($_GET['Find'])."%' OR Opis LIKE '%".$db->escape($_GET['Find'])."%' " ).
+	"ORDER BY Tip, Naziv"
+	);
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 
 // override maximum number of rows to display
 if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];

@@ -188,10 +188,10 @@ if ( !isset($Error) && count($_POST) ) {
 	} else {
 
 		// if text can have comments (SifLVal1=1) create new comment topic in forum named as text type
-		$Comments = $db->get_var("SELECT SifLVal1 FROM Sifranti WHERE SifrCtrl = 'BESE' AND SifrText = '". $_POST['Tip'] ."'");
+		$Comments = $db->get_var("SELECT SifLVal1 FROM Sifranti WHERE SifrCtrl = 'BESE' AND SifrText = '". $db->escape($_POST['Tip']) ."'");
 		if ( $Comments && $_POST['ForumTopicID'] == "" ) {
 			/// get thread ID
-			$ForumID = $db->get_var("SELECT ID FROM frmForums WHERE ForumName = '". $_POST['Tip'] ."'");
+			$ForumID = $db->get_var("SELECT ID FROM frmForums WHERE ForumName='". $db->escape($_POST['Tip']) ."'");
 			if ( $ForumID ) {
 				// create new topic
 				$db->query(
@@ -201,7 +201,7 @@ if ( !isset($Error) && count($_POST) ) {
 					"	MessageCount".
 					") VALUES (".
 					"	$ForumID,".
-					"	".(($_POST['Ime']!="")? "'".$db->escape(left($_POST['Ime'],128))."'": "'neimenovan-".rand(10000,99999)."'").",".
+					"	".(($_POST['Ime']!="")? "'".$db->escape(left($_POST['Ime'],128))."'": "'unnamed-".rand(10000,99999)."'").",".
 					"	0 )"
 				);
 				// remember inserted topic ID

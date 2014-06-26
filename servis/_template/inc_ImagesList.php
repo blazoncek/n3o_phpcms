@@ -37,7 +37,7 @@ if ( isset($_POST['MediaID']) && $_POST['MediaID'] != "" ) {
 		) VALUES (
 			".(int)$_GET['BesediloID'].",
 			".($polozaj? $polozaj+1: 1).",
-			".$_POST['MediaID']."
+			".(int)$_POST['MediaID']."
 		)"
 	);
 	// audit action

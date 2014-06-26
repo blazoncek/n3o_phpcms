@@ -152,7 +152,7 @@ $Jeziki = $db->get_results(
 $All = $db->get_var(
 	"SELECT count(*) ".
 	"FROM KategorijeNazivi ".
-	"WHERE KategorijaID = '".$_GET['KategorijaID']."'".
+	"WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."'".
 	"	AND Jezik IS NULL"
 );
 	if ( !$All || $Podatek )

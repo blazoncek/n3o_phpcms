@@ -33,7 +33,7 @@ if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 $List = $db->get_results(
 	"SELECT emlGroupID, Naziv
 	FROM emlGroups"
-	.($_GET['Find'] == "" ? " " : " WHERE Naziv LIKE '%".$_GET['Find']."%'" ).
+	.($_GET['Find'] == "" ? " " : " WHERE Naziv LIKE '%".$db->escape($_GET['Find'])."%'" ).
 	"ORDER BY Naziv" );
 
 $RecordCount = count($List);

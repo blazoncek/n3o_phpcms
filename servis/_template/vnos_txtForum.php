@@ -67,7 +67,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" )
 		"	LEFT JOIN frmForums F ON T.ForumID = F.ID ".
 		"WHERE ".( is_numeric($_GET['Find'])?
 			"T.ID = ".(int)$_GET['Find']:
-			"(T.TopicName LIKE '%".$_GET['Find']."%' OR F.ForumName LIKE '%".$_GET['Find']."%')" )." ".
+			"(T.TopicName LIKE '%".$db->escape($_GET['Find'])."%' OR F.ForumName LIKE '%".$db->escape($_GET['Find'])."%')" )." ".
 		"ORDER BY F.ForumName, T.TopicName"
 	);
 

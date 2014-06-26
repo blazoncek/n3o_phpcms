@@ -50,9 +50,10 @@ $List = $db->get_results(
 	FROM Besedila B
 		LEFT JOIN BesedilaOpisi BO ON B.BesediloID = BO.BesediloID
 	WHERE 1=1 " .
-		(($_GET['Find']=="")? "": "AND (B.Ime LIKE '%".trim($_GET['Find'])."%' OR BO.Naslov LIKE '%".trim($_GET['Find'])."%' OR BO.Povzetek LIKE '%".trim($_GET['Find'])."%')").
-		(($_GET['Tip']=="")? "": "AND B.Tip='".$_GET['Tip']."' ") .
-	"ORDER BY $Sort" );
+		(($_GET['Find']=="")? "": "AND (B.Ime LIKE '%".$db->escape(trim($_GET['Find']))."%' OR BO.Naslov LIKE '%".$db->escape(trim($_GET['Find']))."%' OR BO.Povzetek LIKE '%".$db->escape(trim($_GET['Find']))."%')").
+		(($_GET['Tip']=="")? "": "AND B.Tip='".$db->escape($_GET['Tip'])."' ") .
+	"ORDER BY ". $Sort
+	);
 
 $RecordCount = count($List);
 ?>

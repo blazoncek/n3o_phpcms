@@ -32,10 +32,10 @@ if ( isset($_POST['Name']) && $_POST['Name'] != "" ) {
 	if ( $_GET['ID'] != "0" ) {
 		$db->query(
 			"UPDATE frmCategories
-			SET CategoryName = '".$_POST['Name']."',
-				Administrator = ".((int)$_POST['Admin']? (int)$_POST['Admin']: "NULL")."
-			WHERE ID = ".(int)$_GET['ID']
-		);
+			SET CategoryName = '". $db->escape($_POST['Name']) ."',
+				Administrator = ". ((int)$_POST['Admin'] ? (int)$_POST['Admin'] : "NULL")."
+			WHERE ID = ". (int)$_GET['ID']
+			);
 	} else {
 		$Polozaj = $db->get_var( "SELECT max(CategoryOrder) FROM frmCategories" );
 		$db->query(
@@ -44,15 +44,15 @@ if ( isset($_POST['Name']) && $_POST['Name'] != "" ) {
 				Administrator,
 				CategoryOrder
 			) VALUES (
-				'".$_POST['Name']."',
-				".((int)$_POST['Admin']? (int)$_POST['Admin']: "NULL").",
-				".($Polozaj? $Polozaj+1: 1)."
+				'". $db->escape($_POST['Name']) ."',
+				". ((int)$_POST['Admin'] ? (int)$_POST['Admin'] : "NULL") .",
+				". ($Polozaj? $Polozaj+1: 1) ."
 			)"
-		);
+			);
 		//retreive ACL's ID
 		$_GET['ID'] = $db->insert_id;
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 	}
 }
 ?>

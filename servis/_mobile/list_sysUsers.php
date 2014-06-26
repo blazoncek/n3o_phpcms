@@ -32,7 +32,7 @@ if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 $List = $db->get_results(
 	"SELECT UserID, UserName, Name, Active
 	FROM SMUser"
-	.($_GET['Find'] == "" ? " " : " WHERE Name LIKE '%".$_GET['Find']."%' OR Username LIKE '%".$_GET['Find']."%' OR Email LIKE '%".$_GET['Find']."%'" ).
+	.($_GET['Find'] == "" ? " " : " WHERE Name LIKE '%".$db->escape($_GET['Find'])."%' OR Username LIKE '%".$db->escape($_GET['Find'])."%' OR Email LIKE '%".$db->escape($_GET['Find'])."%'" ).
 	"ORDER BY Name"
 	);
 

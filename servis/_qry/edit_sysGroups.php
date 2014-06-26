@@ -79,10 +79,10 @@ if ( isset($_POST['UserList']) && $_POST['UserList'] !== "" && isset($_POST['Act
 			$db->query("INSERT INTO SMUserGroups (GroupID, UserID) VALUES (".(int)$_POST['GroupID'].",$UserID)");
 		}
 	if ( $_POST['Action'] == "Remove" )
-		$db->query("DELETE FROM SMUserGroups WHERE GroupID = ".(int)$_POST['GroupID']." AND UserID IN (".$_POST['UserList'].")");
+		$db->query("DELETE FROM SMUserGroups WHERE GroupID = ".(int)$_POST['GroupID']." AND UserID IN (".$db->escape($_POST['UserList']).")");
 	if ( $_POST['Action'] == "Set" ) {
 		$db->query("DELETE FROM SMUserGroups WHERE GroupID = ".(int)$_POST['GroupID']);
-		foreach ( explode( ",", $_POST['UserList'] ) as $UserID ) {
+		foreach ( explode(",", $_POST['UserList']) as $UserID ) {
 			$db->query("INSERT INTO SMUserGroups (GroupID, UserID) VALUES (".(int)$_POST['GroupID'].",$UserID)");
 		}
 	}

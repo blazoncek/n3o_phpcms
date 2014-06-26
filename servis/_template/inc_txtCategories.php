@@ -73,7 +73,7 @@ if ( isset($_GET['BrisiKategorijo']) && $_GET['BrisiKategorijo'] != "" ) {
 			.",". $db->get_var("SELECT Ime FROM Kategorije WHERE KategorijaID IN (SELECT KategorijaID FROM KategorijeBesedila WHERE ID=". (int)$_GET['BrisiKategorijo'] .")") ."'
 		)"
 		);
-	$db->query("DELETE FROM KategorijeBesedila WHERE ID = ". (int)$_GET['BrisiKategorijo']);
+	$db->query("DELETE FROM KategorijeBesedila WHERE ID=". (int)$_GET['BrisiKategorijo']);
 	$db->query("COMMIT");
 }
 
@@ -83,7 +83,7 @@ if ( !isset($_GET['Find']) ) {
 		"SELECT KB.ID, KB.KategorijaID, K.Ime, K.ACLID
 		FROM KategorijeBesedila KB
 			LEFT JOIN Kategorije K ON KB.KategorijaID = K.KategorijaID
-		WHERE BesediloID = ". (int)$_GET['BesediloID']
+		WHERE BesediloID=". (int)$_GET['BesediloID']
 		);
 	echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	echo "<TR>\n";
@@ -95,7 +95,7 @@ if ( !isset($_GET['Find']) ) {
 		echo "<TR><TD ALIGN=\"center\">No assigned categories!</TD></TR>\n";
 	else {
 		$CurrentRow = 1;
-		$RecordCount = count( $List );
+		$RecordCount = count($List);
 		foreach ( $List as $Item ) {
 			$rACL = userACL($Item->ACLID);
 			if ( contains($rACL,"L") ) {
@@ -122,9 +122,9 @@ if ( !isset($_GET['Find']) ) {
 		"SELECT K.KategorijaID, K.Ime, K.ACLID, KB.ID
 		FROM Kategorije K 
 			LEFT JOIN KategorijeBesedila KB
-				ON K.KategorijaID = KB.KategorijaID AND KB.BesediloID = ".(int)$_GET['BesediloID']." ".
-		($_GET['Find']!=""? "WHERE Ime LIKE '%".$_GET['Find']."%'": "").
-		"ORDER BY K.KategorijaID"
+				ON K.KategorijaID = KB.KategorijaID AND KB.BesediloID = ". (int)$_GET['BesediloID'] ."
+		". ($_GET['Find']!="" ? "WHERE Ime LIKE '%". $db->escape($_GET['Find']) ."%'" : "") ."
+		ORDER BY K.KategorijaID"
 		);
 
 	echo "<script language=\"JavaScript\" type=\"text/javascript\">\n";

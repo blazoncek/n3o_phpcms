@@ -27,15 +27,15 @@
 
 // define default values for URL ID and Find parameters (in case not defined)
 if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get all
 $List = $db->get_results( "SELECT ID, Room AS Name FROM chtRooms"
-	.($_GET['Find'] == "" ? " " : " WHERE Room LIKE '%".$_GET['Find']."%'" ).
+	.($_GET['Find'] == "" ? " " : " WHERE Room LIKE '%".$db->escape($_GET['Find'])."%'" ).
 	"ORDER BY Room"
-);
+	);
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 
 // override maximum number of rows to display
 if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];

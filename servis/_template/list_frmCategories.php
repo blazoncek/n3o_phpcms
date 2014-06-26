@@ -31,11 +31,11 @@ if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
 
 // get all
 $List = $db->get_results( "SELECT ID, CategoryName AS Name FROM frmCategories"
-	.($_GET['Find'] == "" ? " " : " WHERE CategoryName LIKE '%".$_GET['Find']."%'" ).
+	.($_GET['Find'] == "" ? " " : " WHERE CategoryName LIKE '%".$db->escape($_GET['Find'])."%'").
 	"ORDER BY CategoryOrder"
-);
+	);
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 
 // override maximum number of rows to display
 if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];

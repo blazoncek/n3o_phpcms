@@ -27,16 +27,17 @@
 
 // define default values for URL ID and Find parameters (in case not defined)
 if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get all users
 $List = $db->get_results(
 	"SELECT UserID, UserName, Name, Active
 	FROM SMUser"
-	.($_GET['Find'] == "" ? " " : " WHERE Name LIKE '%".$_GET['Find']."%' OR Username LIKE '%".$_GET['Find']."%' OR Email LIKE '%".$_GET['Find']."%'" ).
-	"ORDER BY Name" );
+	.($_GET['Find'] == "" ? " " : " WHERE Name LIKE '%".$db->escape($_GET['Find'])."%' OR Username LIKE '%".$db->escape($_GET['Find'])."%' OR Email LIKE '%".$db->escape($_GET['Find'])."%'" ).
+	"ORDER BY Name"
+	);
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 
 // override maximum number of rows to display
 if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];

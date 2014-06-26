@@ -27,7 +27,7 @@
 
 if ( isset($_POST['Load']) && $_POST['Load'] != "" ) {
 	// may also use $_SERVER['DOCUMENT_ROOT']
-	$SQLdata = file_get_contents($StoreRoot ."/servis/qry/". $_POST['Load'], "r");
+	$SQLdata = file_get_contents($StoreRoot ."/servis/qry/". str_replace('../', '', $_POST['Load']), "r");
 }
 
 if ( isset($_POST['SQL']) && $_POST['SQL'] != "" )

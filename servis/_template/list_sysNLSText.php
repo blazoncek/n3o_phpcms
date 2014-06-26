@@ -27,16 +27,17 @@
 
 // define default values for URL ID and Find parameters (in case not defined)
 if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 
 // get all users
 $List = $db->get_results(
 	"SELECT DISTINCT NLSToken AS Name, NLSToken AS ID
 	FROM NLSText"
-	.($_GET['Find'] == "" ? " " : " WHERE NLSToken LIKE '%".$_GET['Find']."%' OR NLSShort LIKE '%".$_GET['Find']."%' OR NLSLong LIKE '%".$_GET['Find']."%' " ).
-	"ORDER BY NLSToken" );
+	.($_GET['Find'] == "" ? " " : " WHERE NLSToken LIKE '%".$db->escape($_GET['Find'])."%' OR NLSShort LIKE '%".$db->escape($_GET['Find'])."%' OR NLSLong LIKE '%".$db->escape($_GET['Find'])."%' ").
+	"ORDER BY NLSToken"
+	);
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 
 // override maximum number of rows to display
 if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];

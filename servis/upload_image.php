@@ -99,7 +99,7 @@ if ( $photo ) { // successful upload & resize
 	if ( isset($_GET['kid']) ) {
 		$db->query("BEGIN TRANSACTION");
 		// remove old image
-		$old = $db->get_var("SELECT Slika FROM Kategorije WHERE KategorijaID = '". $_GET['kid'] ."'");
+		$old = $db->get_var("SELECT Slika FROM Kategorije WHERE KategorijaID = '". $db->escape($_GET['kid']) ."'");
 		if ( $old && $old != "" ) {
 			$e = right($old, 4);
 			$b = left($old, strlen($old)-4);
@@ -108,9 +108,9 @@ if ( $photo ) { // successful upload & resize
 			@unlink($uploadpath .'/thumbs/'. $old); // remove thumbnail
 			@unlink($uploadpath .'/thumbs/'. $b .'@2x'. $e); // remove retina thumbnail
 			@unlink($uploadpath .'/large/'. $old); // remove large original
-			$db->query("UPDATE Kategorije SET Slika = NULL WHERE KategorijaID = '". $_GET['kid'] ."'");
+			$db->query("UPDATE Kategorije SET Slika = NULL WHERE KategorijaID = '". $db->escape($_GET['kid']) ."'");
 		}
-		$db->query("UPDATE Kategorije SET Slika = '". $photo['name'] ."' WHERE KategorijaID = '". $_GET['kid'] ."'");
+		$db->query("UPDATE Kategorije SET Slika = '". $photo['name'] ."' WHERE KategorijaID = '". $db->escape($_GET['kid']) ."'");
 		$db->query("COMMIT");
 	}
 
@@ -149,8 +149,8 @@ if ( $photo ) { // successful upload & resize
 				Izpis
 			) VALUES (
 				'". $photo['name'] ."',
-				'". $_GET['p'] .'/'. $photo['name'] ."',
-				'f=". $_GET['p'] .";w=". $photo['iw'] .";h=". $photo['ih'] .";rw=". $photo['rw'] .";rh=". $photo['rh'] .";tw=". $photo['tw'] .";th=". $photo['th'] ."',
+				'". $db->escape($_GET['p']) .'/'. $photo['name'] ."',
+				'f=". $db->escape($_GET['p']) .";w=". $photo['iw'] .";h=". $photo['ih'] .";rw=". $photo['rw'] .";rh=". $photo['rh'] .";tw=". $photo['tw'] .";th=". $photo['th'] ."',
 				". $photo['size'] .",
 				'PIC',
 				NULL,

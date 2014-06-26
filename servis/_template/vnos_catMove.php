@@ -30,7 +30,7 @@ if ( isset($_GET['Cilj']) && $_GET['Cilj'] != "" ) {
 	// fing new vacant ID
 	$List = $db->get_row(
 		"SELECT KategorijaID FROM Kategorije
-		WHERE KategorijaID LIKE '". $_GET['Cilj'] ."__'
+		WHERE KategorijaID LIKE '". $db->escape($_GET['Cilj']) ."__'
 		ORDER BY KategorijaID DESC"
 		);
 	if ( count($List) == 0 )

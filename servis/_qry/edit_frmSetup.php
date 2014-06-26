@@ -28,14 +28,14 @@
 if ( isset($_POST['NewName']) ) {
 	$db->query("START TRANSACTION");
 	if ( trim($_POST['NewName'])!='' )
-		$db->query( "INSERT INTO frmParameters (ParamName, ParamValue) VALUES ('".$_POST['NewName']."', '".$_POST['NewValue']."')" );
+		$db->query( "INSERT INTO frmParameters (ParamName, ParamValue) VALUES ('".$db->escape($_POST['NewName'])."', '".$db->escape($_POST['NewValue'])."')" );
 
 	foreach ( $_POST as $Key => $Param ) {
 		if ( $Key != "NewName" && $Key != "NewValue" )
 			if ( $Param == '' )
-				$db->query( "DELETE FROM frmParameters WHERE ParamName='$Key'" );
+				$db->query("DELETE FROM frmParameters WHERE ParamName='". $db->escape($Key) ."'");
 			else
-				$db->query( "UPDATE frmParameters SET ParamValue='$Param' WHERE ParamName='$Key'" );
+				$db->query("UPDATE frmParameters SET ParamValue='". $db->escape($Param) ."' WHERE ParamName='". $db->escape($Key) ."'");
 	}
 	$db->query("COMMIT");
 }

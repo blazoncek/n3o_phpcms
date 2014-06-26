@@ -85,9 +85,9 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
-		$db->query("UPDATE KategorijeBesedila SET Polozaj = 9999     WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemNew");
-		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemNew WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemPos");
-		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemPos WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = 9999");
+		$db->query("UPDATE KategorijeBesedila SET Polozaj = 9999     WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."' AND Polozaj = $ItemNew");
+		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemNew WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."' AND Polozaj = $ItemPos");
+		$db->query("UPDATE KategorijeBesedila SET Polozaj = $ItemPos WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."' AND Polozaj = 9999");
 	}
 	$db->query("COMMIT");
 	// update URI
@@ -95,7 +95,7 @@ if ( isset($_GET['Smer']) && $_GET['Smer'] != "" ) {
 	$_SERVER['QUERY_STRING'] = preg_replace( "/\&Predmet=[0-9]+/", "", $_SERVER['QUERY_STRING'] );
 }
 
-$ACLID = $db->get_var("SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$_GET['KategorijaID']."'");
+$ACLID = $db->get_var("SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."'");
 if ( $ACLID )
 	$ACL = userACL($ACLID);
 else
@@ -110,7 +110,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		FROM Besedila B 
 			LEFT JOIN KategorijeBesedila KB
 				ON B.BesediloID = KB.BesediloID AND KB.KategorijaID = '".$_GET['KategorijaID']."' ".
-		($_GET['Find']!=""? "WHERE (B.Ime LIKE '%".$_GET['Find']."%' OR B.Tip LIKE '".$_GET['Find']."%')": "").
+		($_GET['Find']!="" ? "WHERE (B.Ime LIKE '%".$db->escape($_GET['Find'])."%' OR B.Tip LIKE '".$db->escape($_GET['Find'])."%')" : "").
 		"ORDER BY B.Ime"
 		);
 
@@ -145,7 +145,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		"SELECT KB.ID, KB.KategorijaID, B.BesediloID, B.Ime, B.Tip, B.ACLID, B.Izpis ".
 		"FROM KategorijeBesedila KB ".
 		"	LEFT JOIN Besedila B ON KB.BesediloID = B.BesediloID ".
-		"WHERE KategorijaID = '".$_GET['KategorijaID']."'
+		"WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."'
 		ORDER BY KB.Polozaj DESC"
 	);
 

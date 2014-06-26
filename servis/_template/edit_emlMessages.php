@@ -167,9 +167,9 @@ $(document).ready(function(){
 		$List = $db->get_results(
 			"SELECT emlMessageTxtID AS ID, Naziv, Jezik
 			FROM emlMessagesTxt
-			WHERE emlMessageID=". $_GET['ID'] ."
+			WHERE emlMessageID=". (int)$_GET['ID'] ."
 			ORDER BY Jezik"
-		);
+			);
 		echo "<TABLE BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 		if ( !$List ) 
 			echo "<TR><TD ALIGN=\"center\">No content!</TD></TR>\n";

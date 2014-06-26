@@ -51,7 +51,7 @@ if ( isset($_GET["login"]) && isset($_POST["Usr"]) ) {
 		FROM
 			SMUser
 		WHERE
-			Username = '". $_POST["Usr"] ."'"
+			Username = '". $db->escape($_POST["Usr"]) ."'"
 		);
 
 	if ( $User && $User->Active == 1 ) {

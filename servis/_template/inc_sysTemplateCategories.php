@@ -26,23 +26,25 @@
 */
 
 // remove category
-if ( isset( $_GET['Odstrani'] ) && $_GET['Odstrani'] != "" ) {
-	$db->query( "DELETE FROM KategorijeVsebina WHERE ID = ".(int)$_GET['Odstrani'] );
+if ( isset($_GET['Odstrani']) && $_GET['Odstrani'] != "" ) {
+	$db->query("DELETE FROM KategorijeVsebina WHERE ID=". (int)$_GET['Odstrani']);
 }
 
-$ACLID = $db->get_var( "SELECT ACLID FROM Predloge WHERE PredlogaID = ".(int)$_GET['PredlogaID'] );
+$ACLID = $db->get_var("SELECT ACLID FROM Predloge WHERE PredlogaID=". (int)$_GET['PredlogaID']);
+
 if ( $ACLID )
 	$ACL = userACL($ACLID);
 else
 	$ACL = "LRWDX";
 
 $List = $db->get_results(
-	"SELECT KV.ID, KV.KategorijaID, KV.PredlogaID, KV.Ekstra, K.Ime, K.ACLID, K.Izpis ".
-	"FROM KategorijeVsebina KV ".
-	"	LEFT JOIN Kategorije K ON KV.KategorijaID = K.KategorijaID ".
-	"WHERE KV.PredlogaID = ".(int)$_GET['PredlogaID']." ".
-	"ORDER BY KV.KategorijaID"
-);
+	"SELECT KV.ID, KV.KategorijaID, KV.PredlogaID, KV.Ekstra, K.Ime, K.ACLID, K.Izpis
+	FROM KategorijeVsebina KV
+		LEFT JOIN Kategorije K ON KV.KategorijaID = K.KategorijaID
+	WHERE KV.PredlogaID = ". (int)$_GET['PredlogaID'] ."
+	ORDER BY KV.KategorijaID"
+	);
+
 echo "<TABLE BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 if ( !$List ) 
 	echo "<TR><TD ALIGN=\"center\">Not attached to any category!</TD></TR>\n";
@@ -65,7 +67,7 @@ else {
 		if ( contains($rACL,"L") )
 			echo $Item->Ime;
 		else
-			echo "-- skrita rubrika --";
+			echo "-- hidden --";
 		if ( contains($rACL,"R") )
 			echo "</A>";
 		if ( !$Item->Izpis )

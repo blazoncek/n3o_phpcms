@@ -122,10 +122,10 @@ if ( $_GET['ID'] == "0" ) {
 				$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
 			}
 		if ( $_POST['Action'] == "Remove" )
-			$db->query( "DELETE FROM SMUserGroups WHERE UserID = ".(int)$_POST['UserID']." AND GroupID IN (".$_POST['GroupList'].")" );
+			$db->query("DELETE FROM SMUserGroups WHERE UserID=".(int)$_POST['UserID']." AND GroupID IN (".$db->escape($_POST['GroupList']).")");
 		if ( $_POST['Action'] == "Set" ) {
-			$db->query( "DELETE FROM SMUserGroups WHERE UserID = ".(int)$_POST['UserID'] );
-			foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
+			$db->query("DELETE FROM SMUserGroups WHERE UserID=".(int)$_POST['UserID']);
+			foreach ( explode(",", $_POST['GroupList']) as $GroupID ) {
 				$db->query( "INSERT INTO SMUserGroups (GroupID, UserID) VALUES ($GroupID,".(int)$_POST['UserID'].")" );
 			}
 		}
@@ -139,7 +139,7 @@ if ( $_GET['ID'] == "0" ) {
 				Description
 			) VALUES (
 				". $_SESSION['UserID'] .",
-				". $_GET['ID'] .",
+				". (int)$_GET['ID'] .",
 				'SMUserGroups',
 				'Change user membership',
 				'". (int)$_POST['UserID'] .",". $db->escape($_POST['Action']) .",". $db->escape($_POST['GroupList']) ."'

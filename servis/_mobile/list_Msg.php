@@ -110,20 +110,20 @@ if ( isset($_GET['upload']) ) {
 		);
 		
 		//remove original
-		@unlink($StoreRoot. '/media/upload/'.$_GET['upload']);
+		@unlink($StoreRoot. '/media/upload/'. $_GET['upload']);
 	} else {
 		$Error = "Upload error!";
 	}
 
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( '/\&upload=[^&"]+/', '', $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace('/\&upload=[^&"]+/', '', $_SERVER['QUERY_STRING']);
 }
 
 // delete uploaded file
 if ( isset($_GET['delete']) ) {
 	@unlink($StoreRoot ."/media/upload/". $_GET['delete']);
 	// update URI
-	$_SERVER['QUERY_STRING'] = preg_replace( '/\&delete=[^&"]+/', '', $_SERVER['QUERY_STRING'] );
+	$_SERVER['QUERY_STRING'] = preg_replace('/\&delete=[^&"]+/', '', $_SERVER['QUERY_STRING']);
 }
 
 // process mail message

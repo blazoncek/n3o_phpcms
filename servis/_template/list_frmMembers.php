@@ -49,9 +49,10 @@ $List = $db->get_results(
 		Patron
 	FROM frmMembers
 	WHERE 1=1 $filter ".
-	(($_GET['Find']=="")? "": "AND (Name LIKE '%".$_GET['Find']."%' OR Nickname LIKE '%".$_GET['Find']."%' OR Email LIKE '%".$_GET['Find']."%' OR ID = ".(int)$_GET['Find'].") ").
+	(($_GET['Find']=="")? "" : "AND (Name LIKE '%".$db->escape($_GET['Find'])."%' OR Nickname LIKE '%".$db->escape($_GET['Find'])."%' OR Email LIKE '%".$db->escape($_GET['Find'])."%' OR ID = ".(int)$_GET['Find'].") ").
 	"ORDER BY AccessLevel DESC, Nickname"
-);
+	);
+
 $RecordCount = count($List);
 
 // override maximum number of rows to display

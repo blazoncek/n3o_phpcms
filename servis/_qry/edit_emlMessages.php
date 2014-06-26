@@ -55,7 +55,7 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
 		$db->query(
 			"UPDATE emlMessages
 			SET Naziv = '".$db->escape($_POST['Naziv'])."'
-			WHERE emlMessageID = ". $_GET['ID']
+			WHERE emlMessageID = ". (int)$_GET['ID']
 			);
 		// audit action
 		$db->query(

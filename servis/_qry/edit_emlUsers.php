@@ -110,7 +110,7 @@ if ( $_GET['ID'] == "0" ) {
 				$db->query("INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES ($GroupID,". (int)$_POST['UserID'] .")");
 			}
 		if ( $_POST['Action'] == "Remove" )
-			$db->query("DELETE FROM emlMembersGrp WHERE emlMemberID=". (int)$_POST['UserID'] ." AND emlGroupID IN (". $_POST['GroupList'] .")");
+			$db->query("DELETE FROM emlMembersGrp WHERE emlMemberID=". (int)$_POST['UserID'] ." AND emlGroupID IN (". $db->escape($_POST['GroupList']) .")");
 		if ( $_POST['Action'] == "Set" ) {
 			$db->query("DELETE FROM emlMembersGrp WHERE emlMemberID=". (int)$_POST['UserID']);
 			foreach ( explode(",", $_POST['GroupList']) as $GroupID ) {

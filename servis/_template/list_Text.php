@@ -83,11 +83,11 @@ function loop($Menu="", &$BgCol="white")
 						"SELECT B.BesediloID AS ID, B.Ime, B.Datum, B.Izpis, B.ACLID, KB.ID AS kbID, KB.Polozaj
 						FROM Besedila B
 							LEFT JOIN KategorijeBesedila KB ON B.BesediloID = KB.BesediloID
-						WHERE KB.KategorijaID = '".$_GET['ID']."'
+						WHERE KB.KategorijaID = '".$db->escape($_GET['ID'])."'
 						ORDER BY KB.Polozaj" );
 
 					$CurrentRow = 1;
-					$RecordCount = count( $List );
+					$RecordCount = count($List);
 					if ( $List ) foreach ( $List as $Item ) {
 						$ACL = userACL( $Item->ACLID );
 						if ( $BgCol == "white" )
@@ -211,11 +211,11 @@ if ( $Simple && $_GET['Find'] == "" ) {
 		FROM Besedila B
 			LEFT JOIN BesedilaOpisi BO ON B.BesediloID = BO.BesediloID
 		WHERE 1=1 " .
-			(($_GET['Find']=="")? "": "AND (B.Ime LIKE '%".trim($_GET['Find'])."%' OR BO.Naslov LIKE '%".trim($_GET['Find'])."%' OR BO.Povzetek LIKE '%".trim($_GET['Find'])."%')").
-			(($_GET['Tip']=="")? "": "AND B.Tip='".$_GET['Tip']."' ") .
+			($_GET['Find']=="" ? "" : "AND (B.Ime LIKE '%".$db->escape(trim($_GET['Find']))."%' OR BO.Naslov LIKE '%".$db->escape(trim($_GET['Find']))."%' OR BO.Povzetek LIKE '%".$db->escape(trim($_GET['Find']))."%')").
+			($_GET['Tip']=="" ? "" : "AND B.Tip='".$db->escape($_GET['Tip'])."' ") .
 		"ORDER BY $Sort" );
 
-	$RecordCount = count( $List );
+	$RecordCount = count($List);
 	
 	// override maximum number of rows to display
 	if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];

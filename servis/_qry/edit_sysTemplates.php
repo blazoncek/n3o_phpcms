@@ -97,18 +97,18 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] !== "" ) {
 			);
 
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 
 		if ( isset($_GET['KategorijaID']) && $_GET['KategorijaID'] != "" ) {
 			$Polozaj = (int)$db->get_var(
 				"SELECT max(Polozaj)+1 ".
 				"FROM KategorijeVsebina ".
-				"WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Ekstra =".(int)$_GET['Ekstra']
-			);
+				"WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."' AND Ekstra =".(int)$_GET['Ekstra']
+				);
 			$db->query(
 				"INSERT INTO KategorijeVsebina (PredlogaID, KategorijaID, Polozaj, Ekstra) ".
-				"VALUES (".(int)$_GET['ID'].", '".$_GET['KategorijaID']."', ".(($Polozaj)? $Polozaj: "1").", ".(int)$_GET['Ekstra'].")"
-			);
+				"VALUES (".(int)$_GET['ID'].", '".$db->escape($_GET['KategorijaID'])."', ".($Polozaj ? $Polozaj : "1").", ".(int)$_GET['Ekstra'].")"
+				);
 		}
 	}
 	$db->query("COMMIT");

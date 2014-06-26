@@ -26,10 +26,10 @@
 */
 
 if ( isset($_POST['addIP']) && $_POST['addIP']!='' )
-	$db->query( "INSERT INTO frmBanList (IP) VALUES ('".$_POST['addIP']."')" );
+	$db->query("INSERT INTO frmBanList (IP) VALUES ('".$db->escape($_POST['addIP'])."')");
 
 if ( isset($_POST['Brisi']) && $_POST['Brisi']!='' )
-	$db->query( "DELETE FROM frmBanList WHERE ID = ".(int)$_POST['Brisi'] );
+	$db->query("DELETE FROM frmBanList WHERE ID = ".(int)$_POST['Brisi']);
 
 $BanList = $db->get_results(
 	"SELECT

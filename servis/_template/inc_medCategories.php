@@ -57,7 +57,7 @@ else {
 		if ( contains($rACL,"L") )
 			echo $Item->Ime;
 		else
-			echo "-- skrita rubrika --";
+			echo "-- hidden --";
 		if ( contains($rACL,"R") )
 			echo "</A>";
 		if ( !$Item->Izpis )

@@ -32,7 +32,7 @@ if ( isset($_POST['Opis']) && $_POST['Opis'] != "" ) {
 		if ( isset($_POST['S1']) ) {
 			@unlink($StoreRoot ."/pic/". $_POST['S1']);
 		}
-//		$Slika = $db->get_var("SELECT Slika FROM Jeziki WHERE Jezik = '". $_GET['Brisi'] ."'");
+//		$Slika = $db->get_var("SELECT Slika FROM Jeziki WHERE Jezik = '". $db->escape($_GET['Brisi']) ."'");
 //		if ( $Slika && $Slika != "" ) {
 //			@unlink( $StoreRoot . "/pic/" . $Slika );
 //		}

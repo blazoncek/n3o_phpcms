@@ -28,55 +28,14 @@
 if ( !isset($_GET['ID']) ) $_GET['ID'] = "0";
 if ( !isset($_GET['Jezik']) ) $_GET['Jezik'] = "New";
 
-/* NOTE: moved to edit_Sifranti
-// insert/update text value
-if ( isset($_POST['TxtID']) && $_POST['TxtID'] != "" ) {
-
-	$db->query("START TRANSACTION");
-	$ID = $db->get_var(
-		"SELECT ID ".
-		"FROM SifrantiTxt ".
-		"WHERE SifrantID = ".$_POST['TxtID']." AND ".
-		"	Jezik ".(($_POST['Jezik']!="")? "='".$_POST['Jezik']."'": "IS NULL")
-	);
-	if ( !$ID )
-		$db->query(
-			"INSERT INTO SifrantiTxt (".
-			"	SifrantID,".
-			"	Jezik,".
-			"	SifNaziv,".
-			"	SifCVal1,".
-			"	SifCVal2,".
-			"	SifCVal3".
-			") VALUES (".
-			"	".$_POST['TxtID'].",".
-			"	".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",".
-			"	".(($_POST['Naziv']!="")? "'".$_POST['Naziv']."'": "'(empty)'").",".
-			"	".(($_POST['CVal1']!="")? "'".$_POST['CVal1']."'": "NULL").",".
-			"	".(($_POST['CVal2']!="")? "'".$_POST['CVal2']."'": "NULL").",".
-			"	".(($_POST['CVal3']!="")? "'".$_POST['CVal3']."'": "NULL").
-			")"
-		);
-	else
-		$db->query(
-			"UPDATE SifrantiTxt ".
-			"SET SifNaziv = ".(($_POST['Naziv']!="")? "'".$_POST['Naziv']."'": "'(empty)'").", ".
-			"	SifCVal1 = ".(($_POST['CVal1']!="")? "'".$_POST['CVal1']."'": "NULL").", ".
-			"	SifCVal2 = ".(($_POST['CVal2']!="")? "'".$_POST['CVal2']."'": "NULL").", ".
-			"	SifCVal3 = ".(($_POST['CVal3']!="")? "'".$_POST['CVal3']."'": "NULL")." ".
-			"WHERE ID= " . $ID
-		);
-	$db->query("COMMIT");
-}
-*/
-
 $Podatek = $db->get_row(
-	"SELECT ST.*, S.ACLID " .
-	"FROM SifrantiTxt ST " .
-	"	LEFT JOIN Sifranti S ON ST.SifrantID = S.SifrantID " .
-	"WHERE ST.SifrantID = " . (int)$_GET['ID'] .
-	"	AND ST.Jezik ".((isset($_GET['Jezik']) && $_GET['Jezik']!="")? "='".$_GET['Jezik']."'": "IS NULL")
-);
+	"SELECT ST.*, S.ACLID
+	FROM SifrantiTxt ST
+		LEFT JOIN Sifranti S ON ST.SifrantID = S.SifrantID
+	WHERE ST.SifrantID=". (int)$_GET['ID'] ."
+		AND ST.Jezik ". ((isset($_GET['Jezik']) && $_GET['Jezik']!="") ? "='".$db->escape($_GET['Jezik'])."'" : "IS NULL")
+	);
+
 if ( $Podatek )
 	$ACL = userACL($Podatek->ACLID);
 else
@@ -105,13 +64,13 @@ $(document).ready(function(){
 </script>
 
 <FIELDSET style="width:340px;">
-<LEGEND>Vnos tekstov</LEGEND>
+<LEGEND>Title &amp; description</LEGEND>
 <FORM NAME="Text" ACTION="edit.php?Action=<?php echo $_GET['Action'] ?>&ID=<?php echo $_GET['ID'] ?>" METHOD="post">
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">
 <INPUT TYPE="hidden" NAME="TxtID" VALUE="<?php echo $_GET['ID'] ?>">
 <TR>
-	<TD ALIGN="right"><B>Jezik:</B>&nbsp;</TD>
-	<TD><SELECT <?php echo (($_GET['Jezik']!="New")? "DISABLED": "NAME=\"Jezik\"") ?> SIZE="1" TABINDEX="1">
+	<TD ALIGN="right"><B>Language:</B>&nbsp;</TD>
+	<TD><SELECT <?php echo ($_GET['Jezik']!="New" ? "DISABLED": "NAME=\"Jezik\"") ?> SIZE="1" TABINDEX="1">
 		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
 $Jeziki = $db->get_results(
@@ -122,19 +81,20 @@ $Jeziki = $db->get_results(
 		J.Enabled=1". (($_GET['Jezik']=="New")? " AND ST.Jezik IS NULL": "")
 	);
 $All = $db->get_var(
-	"SELECT count(*) ".
-	"FROM SifrantiTxt ST ".
-	"WHERE ST.SifrantID = ".(int)$_GET['ID'].
-	"	AND ST.Jezik IS NULL"
-);
+	"SELECT count(*)
+	FROM SifrantiTxt ST
+	WHERE ST.SifrantID = ". (int)$_GET['ID'] ."
+		AND ST.Jezik IS NULL"
+	);
+
 if ( !($All && $_GET['Jezik'] == "New") )
-	echo "<OPTION VALUE=\"\"".(($_GET['Jezik']=="")? " SELECTED": "").">- all languages -</OPTION>\n";
+	echo "<OPTION VALUE=\"\"". ($_GET['Jezik']=="" ? " SELECTED" : "") .">- all languages -</OPTION>\n";
 if ( $Jeziki )
 	foreach ( $Jeziki as $Jezik )
-		echo "<OPTION VALUE=\"$Jezik->Jezik\"".(($Jezik->Jezik==$_GET['Jezik'])? " SELECTED": "").">$Jezik->Opis</OPTION>\n";
+		echo "<OPTION VALUE=\"$Jezik->Jezik\"". ($Jezik->Jezik==$_GET['Jezik'] ? " SELECTED" : "") .">$Jezik->Opis</OPTION>\n";
 ?>
 	</SELECT>
-	<?php if ($_GET['Jezik']!="Novo") : ?><INPUT NAME="Jezik" TYPE="Hidden" VALUE="<?php echo $_GET['Jezik'] ?>"><?php endif ?>
+	<?php if ($_GET['Jezik']!="New") : ?><INPUT NAME="Jezik" TYPE="Hidden" VALUE="<?php echo $_GET['Jezik'] ?>"><?php endif ?>
 	</TD>
 </TR>
 <TR>

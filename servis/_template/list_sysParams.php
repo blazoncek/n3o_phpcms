@@ -27,8 +27,8 @@
 
 // define default values for URL ID and Find parameters (in case not defined)
 if ( !isset($_GET['ID']) )   $_GET['ID'] = "0";
-if ( !isset( $_GET['Find'] ) ) $_GET['Find'] = "";
-if ( !isset( $_GET['Tip'] ) )  $_GET['Tip'] = "";
+if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
+if ( !isset($_GET['Tip']) )  $_GET['Tip'] = "";
 
 // get all
 if ( $_GET['Find'] != "" )
@@ -36,18 +36,20 @@ if ( $_GET['Find'] != "" )
 		"SELECT S.SifrantID AS ID, S.SifrText AS Name, S.SifrCtrl AS Tip, S.ACLID
 		FROM Sifranti S
 			LEFT JOIN SifrantiTxt ST ON S.SifrantID = ST.SifrantID
-		WHERE (S.SifrText LIKE '%".$_GET['Find']."%'
-				OR ST.SifNaziv LIKE '%".$_GET['Find']."%'
-				OR ST.SifCVal1 LIKE '%".$_GET['Find']."%'
-				OR ST.SifCVal2 LIKE '%".$_GET['Find']."%'
-				OR ST.SifCVal3 LIKE '%".$_GET['Find']."%'
+		WHERE (S.SifrText LIKE '%".$db->escape($_GET['Find'])."%'
+				OR ST.SifNaziv LIKE '%".$db->escape($_GET['Find'])."%'
+				OR ST.SifCVal1 LIKE '%".$db->escape($_GET['Find'])."%'
+				OR ST.SifCVal2 LIKE '%".$db->escape($_GET['Find'])."%'
+				OR ST.SifCVal3 LIKE '%".$db->escape($_GET['Find'])."%'
 			)
-		ORDER BY SifrText" );
+		ORDER BY SifrText"
+		);
 else
 	$List = $db->get_results(
 		"SELECT DISTINCT SifrCtrl AS Name, ACLID
 		FROM Sifranti
-		ORDER BY SifrCtrl" );
+		ORDER BY SifrCtrl"
+		);
 
 if ( count( $List ) == 0 ) {
 	echo "<div class=\"frame\" style=\"display: table;height: 100px;width: 100%;\">";

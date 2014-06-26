@@ -45,7 +45,7 @@ if ( isset($_POST['Name']) ) {
 				MobileCapable=" . (isset($_POST['Mobile']) && $_POST['Mobile'] == "yes" ? "1" : "0" ) . ",
 				Action =" . (($_POST['Action'] != "") ? "'".$db->escape($_POST['Action'])."'" : "NULL" ) . ",
 				Icon   =" . (($_POST['Icon'] != "")   ? "'".$db->escape($_POST['Icon'])."'" : "NULL" ) . "
-			WHERE ActionID = '".$_GET['ID']."'"
+			WHERE ActionID = '".$db->escape($_GET['ID'])."'"
 			);
 		// audit action
 		$db->query(
@@ -66,7 +66,7 @@ if ( isset($_POST['Name']) ) {
 	} else {
 		$db->query(
 			"INSERT INTO SMActions (ActionID, Name, Action, Enabled, MobileCapable, Icon)
-			VALUES ('".$_GET['ID']."',"
+			VALUES ('".$db->escape($_GET['ID'])."',"
 				. (($_POST['Name'] != "")   ? "'".$db->escape($_POST['Name'])."'" : "NULL" ) . ","
 				. (($_POST['Action'] != "") ? "'".$db->escape($_POST['Action'])."'" : "NULL" ) . ","
 				. (isset($_POST['Show']) && $_POST['Show'] == "yes" ? "1" : "0" ) . ","

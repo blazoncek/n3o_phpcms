@@ -85,9 +85,9 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 		// calculate new position
 		$ItemNew = $ItemPos + (int)$_GET['Smer'];
 		// move
-		$db->query("UPDATE KategorijeMedia SET Polozaj = 9999     WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemNew");
-		$db->query("UPDATE KategorijeMedia SET Polozaj = $ItemNew WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = $ItemPos");
-		$db->query("UPDATE KategorijeMedia SET Polozaj = $ItemPos WHERE KategorijaID = '".$_GET['KategorijaID']."' AND Polozaj = 9999");
+		$db->query("UPDATE KategorijeMedia SET Polozaj = 9999     WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."' AND Polozaj = $ItemNew");
+		$db->query("UPDATE KategorijeMedia SET Polozaj = $ItemNew WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."' AND Polozaj = $ItemPos");
+		$db->query("UPDATE KategorijeMedia SET Polozaj = $ItemPos WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."' AND Polozaj = 9999");
 	}
 	$db->query("COMMIT");
 	// update URI
@@ -95,7 +95,7 @@ if ( isset( $_GET['Smer'] ) && $_GET['Smer'] != "" ) {
 	$_SERVER['QUERY_STRING'] = preg_replace("/\&Predmet=[0-9]+/", "", $_SERVER['QUERY_STRING']);
 }
 
-$ACLID = $db->get_var("SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$_GET['KategorijaID']."'");
+$ACLID = $db->get_var("SELECT ACLID FROM Kategorije WHERE KategorijaID = '".$db->escape($_GET['KategorijaID'])."'");
 if ( $ACLID )
 	$ACL = userACL($ACLID);
 else
@@ -109,11 +109,11 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 		"SELECT M.MediaID, M.Naziv, M.Tip, M.ACLID, KB.ID
 		FROM Media M
 			LEFT JOIN KategorijeMedia KB
-				ON M.MediaID = KB.MediaID AND KB.KategorijaID = '".$_GET['KategorijaID']."'
+				ON M.MediaID = KB.MediaID AND KB.KategorijaID = '".$db->escape($_GET['KategorijaID'])."'
 			LEFT JOIN MediaOpisi MO
 				ON M.MediaID = MO.MediaID
 		WHERE M.Tip <> 'PIC' ".
-		($_GET['Find']!=""? " AND (M.Naziv LIKE '%".$_GET['Find']."%' OR M.Tip LIKE '".$_GET['Find']."%' OR MO.Naslov LIKE '%".$_GET['Find']."%' OR MO.Opis LIKE '%".$_GET['Find']."%') ": " ").
+		($_GET['Find']!="" ? " AND (M.Naziv LIKE '%".$db->escape($_GET['Find'])."%' OR M.Tip LIKE '".$db->escape($_GET['Find'])."%' OR MO.Naslov LIKE '%".$db->escape($_GET['Find'])."%' OR MO.Opis LIKE '%".$db->escape($_GET['Find'])."%') ": " ").
 		"ORDER BY M.Naziv"
 		);
 
@@ -132,7 +132,7 @@ if ( isset($_GET['Find']) && $_GET['Find'] != "" ) {
 			if ( contains($rACL,"L") )
 				echo $Item->Naziv;
 			else
-				echo "-- skrita priponka --";
+				echo "-- hidden --";
 			if ( !$Item->ID )
 				echo "</A>";
 			echo "</TD>\n";

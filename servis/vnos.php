@@ -43,7 +43,7 @@ if ( !isset($_SESSION['Authenticated']) || !$_SESSION['Authenticated'] ) {
 }
 
 // get ACL
-$Action = $db->get_row("SELECT Action, ACLID FROM SMActions WHERE Action = '". $_GET['Izbor'] ."'");
+$Action = $db->get_row("SELECT Action, ACLID FROM SMActions WHERE Action = '". $db->escape($_GET['Izbor']) ."'");
 if ( $Action )
 	$ActionACL = userACL($Action->ACLID);
 else

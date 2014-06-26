@@ -96,7 +96,7 @@ $(document).ready(function(){
 			<OPTION VALUE="">- for all -</OPTION>
 <?php
 		// determine next poll date (14 days ahead)
-		$Datum = $db->get_var("SELECT max(Datum) FROM Ankete WHERE (Jezik='". $_GET['Tip'] ."' OR Jezik IS NULL)");
+		$Datum = $db->get_var("SELECT max(Datum) FROM Ankete WHERE (Jezik='". $db->escape($_GET['Tip']) ."' OR Jezik IS NULL)");
 		if ( $Datum && compareDate($Datum,now()) < 0 )
 			$Datum = date("j.n.Y", sqldate2time($Datum)+24*3600*14);
 		else

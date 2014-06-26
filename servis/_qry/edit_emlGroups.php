@@ -33,7 +33,7 @@ if ( isset($_POST['Naziv']) && $_POST['Naziv'] != "" ) {
 			"UPDATE emlGroups
 			SET Naziv = '". $db->escape($_POST['Naziv']) ."',
 				KtgID = ". ($_POST['KtgID']!="" ? "'". $db->escape($_POST['KtgID']) ."'" : "NULL") ."
-			WHERE emlGroupID = ".$_GET['ID']
+			WHERE emlGroupID = ". (int)$_GET['ID']
 			);
 		// audit action
 		$db->query(
@@ -87,7 +87,7 @@ if ( isset($_POST['MemberList']) && $_POST['MemberList'] !== "" && isset($_POST[
 			$db->query( "INSERT INTO emlMembersGrp (emlGroupID, emlMemberID) VALUES (".(int)$_POST['GroupID'].",$UserID)" );
 		}
 	if ( $_POST['Action'] == "Remove" )
-		$db->query( "DELETE FROM emlMembersGrp WHERE emlGroupID = ".(int)$_POST['GroupID']." AND emlMemberID IN (".$_POST['MemberList'].")" );
+		$db->query( "DELETE FROM emlMembersGrp WHERE emlGroupID = ".(int)$_POST['GroupID']." AND emlMemberID IN (".$db->escape($_POST['MemberList']).")" );
 	if ( $_POST['Action'] == "Set" ) {
 		$db->query( "DELETE FROM emlMembersGrp WHERE emlGroupID = ".(int)$_POST['GroupID'] );
 		foreach ( explode( ",", $_POST['MemberList'] ) as $UserID ) {

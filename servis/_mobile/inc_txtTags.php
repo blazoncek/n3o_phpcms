@@ -37,13 +37,9 @@ if ( isset($_GET['newtag']) && $_GET['newtag'] != "" ) {
 					"VALUES (". (int)$_GET['BesediloID'] .",".$ID.")"
 					);
 		} else {
-			$db->query(
-				"INSERT INTO Tags (TagName) ".
-				"VALUES ('".$_GET['newtag']."')" );
-			$ID = $db->get_var( "SELECT TagID FROM Tags WHERE TagName='".$_GET['newtag']."'" );
-			$db->query(
-				"INSERT INTO BesedilaTags (BesediloID, TagID) ".
-				"VALUES (".(int)$_GET['BesediloID'].",".$ID.")" );
+			$db->query("INSERT INTO Tags (TagName) VALUES ('". $db->escape($_GET['newtag']) ."')");
+			$ID = $db->insert_id;
+			$db->query("INSERT INTO BesedilaTags (BesediloID, TagID) VALUES (". (int)$_GET['BesediloID'] .",". $ID .")");
 		}
 		$db->query("COMMIT");
 	} catch (Exception $e) {

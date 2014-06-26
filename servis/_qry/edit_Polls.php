@@ -83,7 +83,7 @@ if ( isset($_POST['D']) || isset($_POST['V']) || (isset($_POST['O1']) && isset($
 			"	Rez1, Rez2, Rez3, Rez4, Rez5, Rez6, Rez7, Rez8, Rez9, Rez10, Multiple,".
 			"	StGlasov ".
 			") VALUES (".
-			"	".(($_POST['Jezik']!="")? "'".$_POST['Jezik']."'": "NULL").",".
+			"	".(($_POST['Jezik']!="")? "'".$db->escape($_POST['Jezik'])."'": "NULL").",".
 			"	'".date("Y-m-d",strtotime($_POST['D']))."',".
 			"	'".$db->escape(left($_POST['V'],255))."',".
 			"	".(($_POST['K']!="")? "'".left($_POST['K'],255)."'": "NULL").",".

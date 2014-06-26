@@ -33,13 +33,14 @@ if ( !isset( $_GET['Show'] ) ) $_GET['Show'] = "";
 
 // get poll entries
 $List = $db->get_results(
-	"SELECT ID, Vprasanje AS Name, Datum, ACLID " .
-	"FROM Ankete " .
-	"WHERE Jezik " . (($_GET['Tip']!="")? "= '".$_GET['Tip']."' ": "IS NULL ") .
-	(($_GET['Tip']!="")? "AND Vprasanje LIKE '%".$_GET['Find']."%' ": " ").
-	"ORDER BY Datum DESC" );
+	"SELECT ID, Vprasanje AS Name, Datum, ACLID
+	FROM Ankete
+	WHERE Jezik ". ($_GET['Tip']!="" ? "= '".$db->escape($_GET['Tip'])."' " : "IS NULL ") .
+		( $_GET['Find']!="" ? "AND Vprasanje LIKE '%".$db->escape($_GET['Find'])."%' " : " ") ."
+	ORDER BY Datum DESC"
+	);
 
-$RecordCount = count( $List );
+$RecordCount = count($List);
 
 // override maximum number of rows to display
 if ( isset($_COOKIE['listmax']) ) $MaxRows = (int)$_COOKIE['listmax'];

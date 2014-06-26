@@ -57,24 +57,24 @@ if ( isset($_GET['ACL']) && $_GET['ACL'] != "" ) {
 		//retreive ACL's ID
 		$_GET['ID'] = $db->insert_id;
 		// update URI
-		$_SERVER['QUERY_STRING'] = preg_replace( "/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING'] ) . "&ID=" . $_GET['ID'];
+		$_SERVER['QUERY_STRING'] = preg_replace("/\&ID=[0-9]+/", "", $_SERVER['QUERY_STRING']) ."&ID=". $_GET['ID'];
 
 
 		//set everyones privileges
-		$db->query("INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (".$_GET['ID'].", 1, 'LRWDX')");
+		$db->query("INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (".(int)$_GET['ID'].", 1, 'LRWDX')");
 		//set user's privileges
 		$db->query("INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (".$_GET['ID'].", ".$_SESSION['UserID'].", 'LRWDX')");
 	
 		// update object's ACL
 		switch ( $_GET['ACL'] ) {
-			case "Servis":       $db->query("UPDATE SMActions   SET ACLID = ".$_GET['ID']." WHERE ActionID = ".$_GET['ActionID']);         break;
-			case "Sifranti":     $db->query("UPDATE Sifranti    SET ACLID = ".$_GET['ID']." WHERE SifrCtrl = ".$_GET['SifrantID']);        break;
-			case "Predloge":     $db->query("UPDATE Predloge    SET ACLID = ".$_GET['ID']." WHERE PredlogaID = ".$_GET['PredlogaID']);     break;
-			case "Kategorije":   $db->query("UPDATE Kategorije  SET ACLID = ".$_GET['ID']." WHERE KategorijaID = ".$_GET['KategorijaID']); break;
-			case "Media":        $db->query("UPDATE Media       SET ACLID = ".$_GET['ID']." WHERE MediaID = ".$_GET['MediaID']);           break;
-			case "Besedila":     $db->query("UPDATE Besedila    SET ACLID = ".$_GET['ID']." WHERE BesdiloID = ".$_GET['BesediloID']);      break;
-			case "Ankete":       $db->query("UPDATE Ankete      SET ACLID = ".$_GET['ID']." WHERE ID = ".$_GET['AnketaID']);               break;
-			case "emlSporocila": $db->query("UPDATE emlMessages SET ACLID = ".$_GET['ID']." WHERE emlMessageID = ".$_GET['emlMessageID']); break;
+			case "sysMenus":      $db->query("UPDATE SMActions   SET ACLID = ".(int)$_GET['ID']." WHERE ActionID='".$db->escape($_GET['ActionID'])."'"); break;
+			case "sysParameters": $db->query("UPDATE Sifranti    SET ACLID = ".(int)$_GET['ID']." WHERE SifrCtrl=".(int)$_GET['SifrantID']);             break;
+			case "sysTemplates":  $db->query("UPDATE Predloge    SET ACLID = ".(int)$_GET['ID']." WHERE PredlogaID=".(int)$_GET['PredlogaID']);          break;
+			case "Categories":    $db->query("UPDATE Kategorije  SET ACLID = ".(int)$_GET['ID']." WHERE KategorijaID='".$db->escape($_GET['KategorijaID'])."'"); break;
+			case "Media":         $db->query("UPDATE Media       SET ACLID = ".(int)$_GET['ID']." WHERE MediaID=".(int)$_GET['MediaID']);                break;
+			case "Text":          $db->query("UPDATE Besedila    SET ACLID = ".(int)$_GET['ID']." WHERE BesdiloID=".(int)$_GET['BesediloID']);           break;
+			case "Polls":         $db->query("UPDATE Ankete      SET ACLID = ".(int)$_GET['ID']." WHERE ID=".(int)$_GET['AnketaID']);                    break;
+			case "emlMessages":   $db->query("UPDATE emlMessages SET ACLID = ".(int)$_GET['ID']." WHERE emlMessageID=".(int)$_GET['emlMessageID']);      break;
 		}
 
 		// audit action
@@ -149,10 +149,10 @@ if ( isset($_POST['UserList']) && $_POST['UserList'] !== "" && isset($_POST['Act
 			$db->query( "INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '     ')");
 		}
 	if ( $_POST['Action'] == "Remove" )
-		$db->query("DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID IN (". $_POST['UserList'] .")");
+		$db->query("DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID IN (". $db->escape($_POST['UserList']) .")");
 	if ( $_POST['Action'] == "Set" ) {
-		$db->query("DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID NOT IN (". $_POST['UserList'] .")");
-		foreach ( explode( ",", $_POST['UserList'] ) as $UserID ) {
+		$db->query("DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND UserID NOT IN (". $db->escape($_POST['UserList']) .")");
+		foreach ( explode(",", $_POST['UserList']) as $UserID ) {
 			@$db->query("INSERT INTO SMACLr (ACLID, UserID, MemberACL) VALUES (". (int)$_GET['ID'] .", $UserID, '". ($UserID==1? "LRWDX":"     ") ."')");
 		}
 	}
@@ -183,10 +183,10 @@ if ( isset($_POST['GroupList']) && $_POST['GroupList'] !== "" && isset($_POST['A
 			$db->query( "INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (". (int)$_GET['ID'] .", $GroupID, '     ')" );
 		}
 	if ( $_POST['Action'] == "Remove" )
-		$db->query( "DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND GroupID IN (". $_POST['GroupList'] .")" );
+		$db->query( "DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND GroupID IN (". $db->escape($_POST['GroupList']) .")" );
 	if ( $_POST['Action'] == "Set" ) {
-		$db->query( "DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND GroupID NOT IN (". $_POST['GroupList'] .")" );
-		foreach ( explode( ",", $_POST['GroupList'] ) as $GroupID ) {
+		$db->query( "DELETE FROM SMACLr WHERE ACLID = ". (int)$_GET['ID'] ." AND GroupID NOT IN (". $db->escape($_POST['GroupList']) .")" );
+		foreach ( explode(",", $_POST['GroupList']) as $GroupID ) {
 			@$db->query( "INSERT INTO SMACLr (ACLID, GroupID, MemberACL) VALUES (". (int)$_GET['ID'] .", $GroupID, '". ($GroupID==2? "LRWDX":"     ") ."')" );
 		}
 	}
@@ -216,9 +216,9 @@ if ( isset($_POST['GroupID']) || isset($_POST['UserID']) ) {
 		"SELECT MemberACL ".
 		"FROM SMACLr ".
 		"WHERE ACLID = ".(int)$_GET['ID']." AND (".
-		"	".((isset($_POST['UserID']) && $_POST['UserID']!="0")? "UserID = ".$_POST['UserID']: "").
+		"	".((isset($_POST['UserID']) && $_POST['UserID']!="0")? "UserID = ".(int)$_POST['UserID']: "").
 		"	".(((isset($_POST['UserID']) && $_POST['UserID']!="0") && (isset($_POST['GroupID']) && $_POST['GroupID']!="0"))? " OR ": "").
-		"	".((isset($_POST['GroupID']) && $_POST['GroupID']!="0")? "GroupID = ".$_POST['GroupID']: "").
+		"	".((isset($_POST['GroupID']) && $_POST['GroupID']!="0")? "GroupID = ".(int)$_POST['GroupID']: "").
 		")"
 	);
 	$ACL = $ACL? substr( $ACL."     ", 0, 5 ): "     ";
@@ -235,9 +235,9 @@ if ( isset($_POST['GroupID']) || isset($_POST['UserID']) ) {
 		"UPDATE SMACLr ".
 		"SET MemberACL = '$ACL' ".
 		"WHERE ACLID = ".(int)$_GET['ID']." AND (".
-		"	".((isset($_POST['UserID']) && $_POST['UserID']!="0")? "UserID = ".$_POST['UserID']: "").
+		"	".((isset($_POST['UserID']) && $_POST['UserID']!="0")? "UserID = ".(int)$_POST['UserID']: "").
 		"	".(((isset($_POST['UserID']) && $_POST['UserID']!="0") && (isset($_POST['GroupID']) && $_POST['GroupID']!="0"))? " OR ": "").
-		"	".((isset($_POST['GroupID']) && $_POST['GroupID']!="0")? "GroupID = ".$_POST['GroupID']: "").
+		"	".((isset($_POST['GroupID']) && $_POST['GroupID']!="0")? "GroupID = ".(int)$_POST['GroupID']: "").
 		")"
 	);
 

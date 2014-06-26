@@ -33,8 +33,9 @@ if ( !isset($_GET['Find']) ) $_GET['Find'] = "";
 $List = $db->get_results(
 	"SELECT Jezik AS ID, Opis AS Name, Enabled, DefLang
 	FROM Jeziki"
-	.($_GET['Find'] == "" ? " " : " WHERE Opis LIKE '%".$_GET['Find']."%'" ).
-	"ORDER BY Jezik" );
+	.($_GET['Find'] == "" ? " " : " WHERE Opis LIKE '%".$db->escape($_GET['Find'])."%'").
+	"ORDER BY Jezik"
+	);
 
 $RecordCount = count($List);
 
