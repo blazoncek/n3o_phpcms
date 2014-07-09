@@ -52,7 +52,12 @@ if ( $x->CommentsAllowed ) $CommentsAllowed = (bool) $x->CommentsAllowed;
 
 //-----------------------
 // detect comment post and insert one
-if ( isset($_POST['MessageBody']) && $_POST['MessageBody'] != "" ) {
+$CaptchaOK = $db->get_var("SELECT count(*) FROM frmParameters WHERE ParamName LIKE 'Captcha%'") == 0;
+if ( isset($_POST['CaptchaName']) && isset($_POST['CaptchaVal']) ) {
+	$CaptchaOK = $db->get_var("SELECT ParamValue FROM frmParameters WHERE ParamName='". $_POST['CaptchaName'] ."'") === $_POST['CaptchaVal'];
+}
+
+if ( isset($_POST['MessageBody']) && $_POST['MessageBody'] != ""  && $CaptchaOK ) {
 	// cleanup HTML
 	$_POST['MessageBody'] = str_replace("< ", "&lt; ",  $_POST['MessageBody']);
 	$_POST['MessageBody'] = str_replace(" >", " &gt;",  $_POST['MessageBody']);
@@ -392,6 +397,14 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 				echo "<p><input name=\"UserEmail\" type=\"Text\" size=\"22\">";
 				echo "<label for=\"UserEmail\">". multiLang('<Email>', $lang) ."</label></p>\n";
 				echo "<p><textarea name=\"MessageBody\" cols=\"40\" rows=\"4\"></textarea></p>\n";
+				$Captchas = $db->get_col("SELECT ParamName FROM frmParameters WHERE ParamName LIKE 'Captcha%'");
+				if ( count($Captchas) > 0 ) {
+					srand(time()); // seed RNG
+					$i = rand(1, count($Captchas)); // get a random row
+					echo "<p><input name=\"CaptchaVal\" type=\"Text\" value=\"\">";
+					echo "<input name=\"CaptchaName\" type=\"Hidden\" value=\"". $Captchas[$i-1] ."\">";
+					echo "<label for=\"CaptchaVal\">". multiLang('<'.$Captchas[$i-1].'>', $lang) ."</label></p>\n";
+				}
 				echo "<p class=\"a9\">". multiLang('<CommApproval>', $lang) ."</p>\n";
 				echo "<p><input value=\"". multiLang('<Send>', $lang) ."\" type=\"Submit\"></p>\n";
 				echo "</FORM>\n";

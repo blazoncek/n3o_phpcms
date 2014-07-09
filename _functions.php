@@ -390,39 +390,40 @@ function CleanupTinyMCE($str)
 **************************************/
 function ReplaceSmileys($str, $folder="./pic/")
 {
-	//$smileys = array(2);
-	$smileys[1][1] = '/([ >])\:\-*\(([ <])/';		$smileys[1][2] = 's01.png';
-	$smileys[2][1] = '/([ >])o\:\-*\)([ <])/';		$smileys[2][2] = 's15.png';
-	$smileys[3][1] = '/([ >])\:\-*D([ <])/';		$smileys[3][2] = 's03.png';
-	$smileys[4][1] = '/([ >])\;\-*\)([ <])/';		$smileys[4][2] = 's04.png';
-	$smileys[5][1] = '/([ >])\:\-*O([ <])/';		$smileys[5][2] = 's05.png';
-	$smileys[6][1] = '/([ >])\:\-*S([ <])/';		$smileys[6][2] = 's06.png';
-	$smileys[7][1] = '/([ >])\:\-*\$([ <])/';		$smileys[7][2] = 's07.png';
-	$smileys[8][1] = '/([ >])\:\'\(([ <])/';		$smileys[8][2] = 's08.png';
-	$smileys[9][1] = '/([ >])\:\-*\|([ <])/';		$smileys[9][2] = 's09.png';
-	$smileys[10][1] = '/([ >])\:\-*P([ <])/';		$smileys[10][2] = 's10.png';
-	$smileys[11][1] = '/([ >])8\-*\)([ <])/';		$smileys[11][2] = 's22.png';
-	$smileys[12][1] = '/([ >])\:\-*\{\}([ <])/';	$smileys[12][2] = 's12.png';
-	$smileys[13][1] = '/([ >])\:\-*\*([ <])/';		$smileys[13][2] = 's12.png';
-	$smileys[14][1] = '/([ >])\(L\)([ <])/';		$smileys[14][2] = 's13.png';
-	$smileys[15][1] = '/([ >])\(U\)([ <])/';		$smileys[15][2] = 's14.png';
-	$smileys[16][1] = '/([ >])\:\-*\)([ <])/';		$smileys[16][2] = 's02.png';
-	$smileys[17][1] = '/([ >])>*\:\-*>([ <])/';		$smileys[17][2] = 's16.png';
-	$smileys[18][1] = '/([ >])\(T\)([ <])/';		$smileys[18][2] = 's17.png';
-	$smileys[19][1] = '/([ >])\(\@\)([ <])/';		$smileys[19][2] = 's18.png';
-	$smileys[20][1] = '/([ >])\:\@([ <])/';			$smileys[20][2] = 's18.png';
-	$smileys[21][1] = '/([ >])&gt;*\:\-*&gt;([ <])/';	$smileys[21][2] = 's16.png';
-	$smileys[22][1] = '/([ >])\:\-*[\/]([ <])/';	$smileys[22][2] = 's19.png';
-	$smileys[23][1] = '/([ >])[^ps]\:\-*[\/]([ <])/';	$smileys[23][2] = 's19.png';
-	$smileys[24][1] = '/([ >])\;\-*\(([ <])/';		$smileys[24][2] = 's20.png';
-	$smileys[25][1] = '/([ >])\@\}\->\-+([ <])/';	$smileys[25][2] = 's21.png';
-	$smileys[26][1] = '/([ >])\@\}\-(&gt;)\-+([ <])/';	$smileys[26][2] = 's21.png';
-	$smileys[27][1] = '/([ >])\*FLOWER\*([ <])/';	$smileys[27][2] = 's21.png';
-	$smileys[28][1] = '/([ >])\:\.\(([ <])/';		$smileys[28][2] = 's08.png';
-	$smileys[29][1] = '/([ >])B\-*\)([ <])/';		$smileys[29][2] = 's11.png';
-	$smileys[30][1] = '/([ >])O\.o([ <])/';			$smileys[30][2] = 's22.png';
-	for ( $i=1; $i<=count($smileys); $i++ ) {
- 		$str = preg_replace($smileys[$i][1], "$1<IMG CLASS=\"smiley\" SRC=\"" . $folder . $smileys[$i][2] . "\" BORDER=0>$2", $str);
+	$smileys = array();
+	$smileys[] = array('/([ >])(\:\-*\()([ <])/',        's01.png'); // :-(
+	$smileys[] = array('/([ >])(\:\-*\))([ <])/',        's02.png'); // :-)
+	$smileys[] = array('/([ >])(\:\-*D)([ <])/',         's03.png'); // :-D
+	$smileys[] = array('/([ >])(\;\-*\))([ <])/',        's04.png'); // ;-)
+	$smileys[] = array('/([ >])(\:\-*O)([ <])/i',        's05.png'); // :-O
+	$smileys[] = array('/([ >])(\:\-*S)([ <])/i',        's06.png'); // :-S
+	$smileys[] = array('/([ >])(\:\-*\$)([ <])/',        's07.png'); // :-$
+	$smileys[] = array('/([ >])(\:\'\()([ <])/',         's08.png'); // :'(
+	$smileys[] = array('/([ >])(\:\-*\|)([ <])/',        's09.png'); // :-|
+	$smileys[] = array('/([ >])(\:\-*P)([ <])/',         's10.png'); // :-P
+	$smileys[] = array('/([ >])(8\-*\))([ <])/',         's11.png'); // 8-)
+	$smileys[] = array('/([ >])(\:\-*\{\})([ <])/',      's12.png'); // :-{}
+	$smileys[] = array('/([ >])(\:\*\)*)([ <])/',        's12.png'); // :* :*)
+	$smileys[] = array('/([ >])(\<3)([ <])/i',           's13.png'); // <3
+	$smileys[] = array('/([ >])(\:\-*[Xx#!])([ <])/',    's14.png'); // :-X :-# :-!
+	$smileys[] = array('/([ >])(o\:\-*\))([ <])/i',      's15.png'); // o:-)
+	$smileys[] = array('/([ >])(>*\:\-*[>)])([ <])/',    's16.png'); // >:-> >:-)
+	$smileys[] = array('/([ >])(\-[_.]\-)([ <])/i',      's17.png'); // -_- -.-
+	$smileys[] = array('/([ >])(\(\@\))([ <])/',         's18.png'); // (@)
+	$smileys[] = array('/([ >])(\:\@)([ <])/',           's18.png'); // :@
+	$smileys[] = array('/([ >])(&gt;*\:\-*&gt;)([ <])/', 's16.png'); // >:->
+	$smileys[] = array('/([ >])(\:\-*[\/])([ <])/',      's19.png'); // :-/ :-\
+	$smileys[] = array('/([ >])([^ps]\:\-*[\/])([ <])/', 's19.png'); // :-/ :-\
+	$smileys[] = array('/([ >])(\;\-*\()([ <])/',        's20.png'); // ;-(
+	$smileys[] = array('/([ >])(\@\}\-[>;]\-+)([ <])/',  's21.png'); // @}->-- @}-;--
+	$smileys[] = array('/([ >])(\@\}\-(&gt;)\-+)([ <])/','s21.png'); // @}->--
+	$smileys[] = array('/([ >])(\*FLOWER\*)([ <])/i',    's21.png'); // @}->--
+	$smileys[] = array('/([ >])(\:\.\()([ <])/',         's08.png'); // :.(
+	$smileys[] = array('/([ >])(B\-*\))([ <])/',         's11.png'); // B-)
+	$smileys[] = array('/([ >])(O\.o)([ <])/',           's22.png'); // O.o
+	$smileys[] = array('/([ >])(\*\.\*)([ <])/',         's20.png'); // *.*
+	for ( $i=0; $i < count($smileys); $i++ ) {
+ 		$str = preg_replace($smileys[$i][0], "$1<IMG CLASS=\"smiley\" ALT=\"$2\" SRC=\"" . $folder . $smileys[$i][1] . "\" BORDER=0>$3", $str);
 	}
 	return $str;
 }
