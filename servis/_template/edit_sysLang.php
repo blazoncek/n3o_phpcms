@@ -2,7 +2,7 @@
 /*~ edit_Jeziki.php - Edit available language customizations.
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -98,7 +98,7 @@ if ( ($Podatek && $Podatek->Ikona!="") ){
 	echo "<INPUT TYPE=\"Hidden\" NAME=\"S1\" VALUE=\"\">\n";
 ?>
 	</TD>
-</TR>	
+</TR>
 <?php if ( contains($ActionACL,"W") ) : ?>
 <TR>
 	<TD ALIGN="right" COLSPAN="2" STYLE="margin-top:3px;padding-top:3px;border-top:silver solid 1px;"><INPUT TYPE="submit" VALUE=" Save " CLASS="but"></TD>

@@ -7,6 +7,7 @@ BODY, TABLE, TD, INPUT, SELECT, TEXTAREA {
 	color: black;
 	font-family: sans-serif;
 	font-size: 12px;
+	-webkit-font-smoothing: antialiased;
 }
 
 BODY {
@@ -23,7 +24,7 @@ INPUT.but {
 	color:white;
 	background-color: #6699CC;
 	border-top: solid #99CCFF 1px;
-	border-left: solid #99CCFF 1px; 
+	border-left: solid #99CCFF 1px;
 	border-bottom: solid #003366 1px;
 	border-right: solid #003366 1px;
 	font-size: 11px;
@@ -35,7 +36,7 @@ INPUT.del {
 	color:white;
 	background-color: #F80000;
 	border-top: solid #FF99CC 1px;
-	border-left: solid #FF99CC 1px; 
+	border-left: solid #FF99CC 1px;
 	border-bottom: solid #660033 1px;
 	border-right: solid #660033 1px;
 	font-size: 11px;

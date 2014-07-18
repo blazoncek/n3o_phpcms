@@ -2,7 +2,7 @@
 /*~ edit_Uporabniki.php - Edit users. Add update user info and add/remove user from groups.
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |

@@ -2,7 +2,7 @@
 /*~ edit_Besedila.php - text metadata editing (queries and image manipulation)
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -110,7 +110,7 @@ if ( (isset($_FILES['file']) && !$_FILES['file']['error']) ) {
 
 // if no error and we did post something
 if ( !isset($Error) && count($_POST) ) {
-	
+
 	// cleanup Ime (used for permalinks)
 	if ( isset($_POST['Ime']) ) {
 		$_POST['Ime'] = CleanString($_POST['Ime'], true);
@@ -120,10 +120,10 @@ if ( !isset($Error) && count($_POST) ) {
 
 	// if we have WYSIWYG editor cleanup text
 	if ( isset($_POST['Naslov']) ) {
-		$_POST['Naslov']    = $db->escape(str_replace( "\"", "&quot;", $_POST['Naslov'] ));
-		$_POST['Podnaslov'] = $db->escape(str_replace( "\"", "&quot;", $_POST['Podnaslov'] ));
-		$_POST['Povzetek']  = $db->escape(str_replace( "\"", "&quot;", $_POST['Povzetek'] ));
-		$_POST['Opis']      = str_replace("\\\"","\\&quot;",$db->escape(CleanupTinyMCE($_POST['Opis'])));
+		$_POST['Naslov']    = $db->escape(str_replace("\"", "&quot;", left($_POST['Naslov'],128)));
+		$_POST['Podnaslov'] = $db->escape(str_replace("\"", "&quot;", left($_POST['Podnaslov'],128)));
+		$_POST['Povzetek']  = $db->escape(left($_POST['Povzetek'],511));
+		$_POST['Opis']      = $db->escape(CleanupTinyMCE($_POST['Opis']));
 	}
 
 	// update database
@@ -149,13 +149,13 @@ if ( !isset($Error) && count($_POST) ) {
 					$set = ($value=="yes" ? 1 : 0);
 					break;
 				//case "Password":
-				//	$set = ($value!="" ? "'".$db->escape(MD5(PWSALT.$value))."'" : "NULL"); // salted
+				//	$set = ($value!="" ? "'".$db->escape(crypt(PWSALT.$value))."'" : "NULL"); // salted
 				//	break;
 				case "Ime":
-					$set = ($value!="" ? "'".$db->escape(left($value,128))."'" : "'neimenovan-".rand(10000,99999)."'");
+					$set = ($value!="" ? "'".$db->escape(left($value,128))."'" : "'unnamed-".rand(10000,99999)."'");
 					break;
 				case "Tip":
-					$set = ($value!="" ? "'".$db->escape($value)."'" : "'Besedilo'");
+					$set = ($value!="" ? "'".$db->escape($value)."'" : "'Text'");
 					break;
 				case "Datum": // date value
 					$set = "'". date("Y-m-d",strtotime($value)) ."'";
@@ -250,10 +250,10 @@ if ( !isset($Error) && count($_POST) ) {
 				". $ID .",
 				". ($_POST['Jezik']!="" ? "'". $db->escape($_POST['Jezik']) ."'" : "NULL").",
 				1,
-				". ($_POST['Naslov']!="" ? "'". $db->escape($_POST['Naslov']) ."'" : "'(unnamed)'") .",
-				". ($_POST['Podnaslov']!="" ? "'". left($_POST['Podnaslov'],128) ."'" : "NULL") .",
-				". ($_POST['Povzetek']!="" ? "'". left($_POST['Povzetek'],511) ."'" : "NULL") .",
-				". ($_POST['Opis']!="" ? "'". $db->escape($_POST['Opis']) ."'" : "NULL")."
+				". ($_POST['Naslov']!="" ? "'". $_POST['Naslov'] ."'" : "'(unnamed)'") .",
+				". ($_POST['Podnaslov']!="" ? "'". $_POST['Podnaslov'] ."'" : "NULL") .",
+				". ($_POST['Povzetek']!="" ? "'". $_POST['Povzetek'] ."'" : "NULL") .",
+				". ($_POST['Opis']!="" ? "'". $_POST['Opis'] ."'" : "NULL")."
 			)"
 			);
 

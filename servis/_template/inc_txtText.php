@@ -2,7 +2,7 @@
 /* inc_BesedilaOpis.php - WYSIWYG text editing
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -31,8 +31,8 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 	// cleanup
 	$_POST['Naslov']    = $db->escape(str_replace("\"", "&quot;", left($_POST['Naslov'],128)));
 	$_POST['Podnaslov'] = $db->escape(str_replace("\"", "&quot;", left($_POST['Podnaslov'],128)));
-	$_POST['Povzetek']  = $db->escape(left($_POST['Povzetek'],512));
-	$_POST['Opis']      = str_replace("\\\"","\"",$db->escape(CleanupTinyMCE($_POST['Opis'])));
+	$_POST['Povzetek']  = $db->escape(left($_POST['Povzetek'],511));
+	$_POST['Opis']      = $db->escape(CleanupTinyMCE($_POST['Opis']));
 
 	$db->query("START TRANSACTION");
 	if ( $_GET['ID'] != "0" ) {
@@ -65,7 +65,7 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 	} else {
 		$Polozaj = $db->get_var("SELECT max(Polozaj) FROM BesedilaOpisi WHERE BesediloID = ".(int)$_GET['BesediloID'].
 			" AND Jezik ".($_POST['Jezik']!="" ? "='".$_POST['Jezik']."'" : "IS NULL"));
-		
+
 		$db->query(
 			"INSERT INTO BesedilaOpisi (
 				BesediloID,
@@ -106,7 +106,7 @@ if ( isset($_POST['Naslov']) && $_POST['Naslov'] != "" ) {
 	}
 	$db->query("UPDATE Besedila SET DatumSpremembe='". date('Y-m-d H:i:s') ."' WHERE BesediloID=". (int)$_GET['BesediloID']);
 	$db->query("COMMIT");
-	
+
 	echo "<SCRIPT LANGUAGE=JAVASCRIPT>\n";
 	echo "<!--\n";
 	echo "\$(document).ready(function(){loadTo('Edit','edit.php?Izbor=Text&ID=".(int)$_GET['BesediloID']."')});\n";
@@ -248,7 +248,7 @@ $(document).ready(function(){
 		theme_advanced_buttons3 : "",
 		theme_advanced_styles : "Koda=code;Citat=quote;Slika=imgcenter;Slika (levo)=imgleft;Slika (desno)=imgright"
 	});
-	
+
 	// resize HTML editor
 	window.customResize();
 });
@@ -293,14 +293,14 @@ $(document).ready(function(){
 	<TD COLSPAN="4" VALIGN="top"><B>Content:</B> <SPAN CLASS="f10 gry">(Copy/Paste from Word is not recommended)</SPAN></TD>
 </TR>
 <?php
-	$Opis = $Podatek ? str_replace("\\\"","\"",$Podatek->Opis) : ""; // strip escaped quotes
+	$Opis = $Podatek ? str_replace("\\\"","\&quot;",$Podatek->Opis) : ""; // strip escaped quotes
 	$Opis = $Podatek ? str_replace('&lt;','&amp;lt;',$Opis) : ""; // TinyMCE bugfix
 	$Opis = $Podatek ? str_replace('&gt;','&amp;gt;',$Opis) : ""; // TinyMCE bugfix
 	$Opis = preg_replace( "/(<img\s+src=\")(?!(?:http|data|\/))/i", '$1../', $Opis ); // adjust path for images
 ?>
 <TR>
 	<TD COLSPAN="4" VALIGN="top"><TEXTAREA NAME="Opis" ID="HTMLeditor" STYLE="width:100%;height:100%;"><?php echo ($Podatek ? $Opis : "") ?></TEXTAREA></TD>
-</TR>	
+</TR>
 </TABLE>
 </FORM>
 </DIV>

@@ -2,7 +2,7 @@
 /* _userACL.php - Access Control List check (permissions check).
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaû Kristan (blaz@kristan-sp.si)                              |

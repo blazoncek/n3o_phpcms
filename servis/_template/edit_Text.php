@@ -2,11 +2,11 @@
 /*~ edit_Besedila.php - text metadata editing
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS                                                        |
-|   Version: 2.2.0                                                          |
-|   Contact: contact author (also www.kristan-sp.si/blazk)                  |
+|   Version: 2.2.2                                                          |
+|   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
-| Copyright (c) 2000-2013, Blaž Kristan. All Rights Reserved.               |
+| Copyright (c) 2007-2014, Blaž Kristan. All Rights Reserved.               |
 | ------------------------------------------------------------------------- |
 |   License: Distributed under the Lesser General Public License (LGPL)     |
 |            http://www.gnu.org/copyleft/lesser.html                        |
