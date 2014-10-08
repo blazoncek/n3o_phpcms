@@ -59,6 +59,21 @@ function fileExists($fileName, $caseSensitive=false)
 }
 
 /**************************************
+* retinaImgExists - check if retina image exists
+*--------------------------------------
+* @parameter string - filename with full path
+* @parameter boolean - case sensitivity toggle
+* @returns string/boolean - filename if found/false otherwise
+**************************************/
+function retinaImgExists($file, $caseSensitive=false)
+{
+	$ext    = strrchr($file, '.');
+	$name   = left($file, strlen($file)-4);
+	if ( right($name, 3) === '@2x' ) return false;
+	return fileExists($name.'@2x'.$ext, $caseSensitive);
+}
+
+/**************************************
 * AddLightboxLink - find <IMG> tag in string and surround it with <A HREF=... REL="fancybox">
 *--------------------------------------
 * @parameter string - input string
@@ -79,15 +94,15 @@ function AddLightboxLink($str, $ID="", $folder="large")
 		$sSrc = $aSrc[1]; // SRC="" content (without SRC="")
 		$sAlt = $aAlt[1]; // ALT="" content
 		if ( $sSrc != "" ) {
-			$sSrc  = str_replace($WebPath.'/','',$sSrc); // remove base
-			$sPath = dirname($StoreRoot .'/'. $sSrc); // filesystem path
 			$rPath = dirname($sSrc); // web relative path
+			if ( $WebPath!="" ) $sSrc  = str_replace($WebPath, '', $sSrc); // remove base
+			$sPath = dirname($StoreRoot .'/'. $sSrc); // filesystem path
 			$sName = basename($sSrc); // filename
 			$sAlt  = $sAlt=="" ? $sName : $sAlt;
 			// check if large file exists
 			if ( fileExists($sPath .'/'. $folder .'/'. $sName) ) {
 				// add "lightbox" link to large image
-				$str = str_replace($img, "<a href=\"". $WebPath .'/'. $rPath .'/'. $folder .'/'. $sName ."\" class=\"fancybox\" rel=\"lightbox$ID\" title=\"". $sAlt ."\">". $img ."</a>", $str);
+				$str = str_replace($img, "<a href=\"". $rPath .'/'. $folder .'/'. $sName ."\" class=\"fancybox\" rel=\"lightbox$ID\" title=\"". $sAlt ."\">". $img ."</a>", $str);
 			}
 		}
 	}
@@ -113,9 +128,9 @@ function AddImageLink($str, $link="", $folder="large")
 		$sSrc = $aSrc[1]; // SRC="" content (without SRC="")
 		$sAlt = $aAlt[1]; // ALT="" content
 		if ( $sSrc != "" ) {
-			$sSrc  = str_replace($WebPath.'/','',$sSrc); // remove base
-			$sPath = dirname($StoreRoot .'/'. $sSrc); // filesystem path
 			$rPath = dirname($sSrc); // web relative path
+			if ( $WebPath!="" ) $sSrc  = str_replace($WebPath, '', $sSrc); // remove base
+			$sPath = dirname($StoreRoot .'/'. $sSrc); // filesystem path
 			$sName = basename($sSrc); // filename
 			$sAlt  = $sAlt=="" ? $sName : $sAlt;
 			// check if large file exists
