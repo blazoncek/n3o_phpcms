@@ -96,7 +96,7 @@ $(document).ready(function(){
 <?php else : ?>
 <?php
 foreach ( $Podatki as $Podatek ) {
-?> 
+?>
 <FORM NAME="Vnos" ACTION="<?php echo $_SERVER['PHP_SELF'] ?>?<?php echo $_SERVER['QUERY_STRING'] ?>" METHOD="post">
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="430">
 <INPUT TYPE="Hidden" NAME="Jezik" VALUE="<?php echo $Podatek->Jezik ?>">
@@ -117,7 +117,7 @@ foreach ( $Podatki as $Podatek ) {
 </FORM>
 </TABLE>
 <?php } ?>
-	
+
 <?php
 $Jeziki = $db->get_results(
 	"SELECT J.Jezik, J.Opis
@@ -133,7 +133,7 @@ if ( $Jeziki ) {
 <TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="430">
 <INPUT TYPE="Hidden" NAME="NLSToken" VALUE="<?php echo $Podatek->NLSToken ?>">
 <TR>
-	<TD ALIGN="right">Jezik:&nbsp;</TD>
+	<TD ALIGN="right">Language:&nbsp;</TD>
 	<TD><SELECT NAME="Jezik" SIZE="1">
 <?php
 		foreach ( $Jeziki as $Jezik )

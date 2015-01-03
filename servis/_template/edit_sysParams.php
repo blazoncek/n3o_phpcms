@@ -192,7 +192,7 @@ $(document).ready(function(){
 	<FIELDSET ID="fldText" style="width:340px;">
 	<LEGEND ID="lgdText">
 <?php if ( contains($ACL,"W") ) : ?>
-		<A HREF="javascript:void(0);" ONCLICK="$('#editTekst').load('inc.php?Action=<?php echo $_GET['Action'] ?>&Izbor=sysParametersTxt&Jezik=Novo&ID=<?php echo $_GET['ID'] ?>')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
+		<A HREF="javascript:void(0);" ONCLICK="$('#editTekst').load('inc.php?Action=<?php echo $_GET['Action'] ?>&Izbor=sysParametersTxt&Jezik=New&ID=<?php echo $_GET['ID'] ?>')" TITLE="Add"><IMG SRC="pic/control.add_document.gif" WIDTH=14 HEIGHT=14 ALT="Add" BORDER="0" CLASS="icon"></A>&nbsp;:
 <?php endif ?>
 		Text values</LEGEND>
 	<TABLE BORDER="0" CELLPADDING="2" CELLSPACING="0" WIDTH="100%">

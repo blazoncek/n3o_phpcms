@@ -234,7 +234,7 @@ $(document).ready(function(){
 		element_format : "html",
 		theme : "advanced",
 		content_css : "editor_css.php",
-		plugins : "safari,table,advimage,advhr,contextmenu",
+		plugins : "inlinepopups,safari,table,advimage,advhr,contextmenu",
 		auto_cleanup_word : true,
 		extended_valid_elements : "a[href|target|title],img[src|border=0|alt|class|hspace|vspace|width|height|align|style],hr[size|noshade],font[face|size|color|style],div[class|align|style],span[class|style],ol[type],ul[type]",
 		invalid_elements : "iframe,layer,script,link",

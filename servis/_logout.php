@@ -38,6 +38,6 @@ if ( isset($_GET["logout"]) ) {
 	unset($_SESSION['Password']);
 	unset($_SESSION['Name']);
 	unset($_SESSION['Groups']);
-	header("Refresh:10; URL=../");
+	header("Refresh:15; URL=". $WebURL);
 }
 ?>

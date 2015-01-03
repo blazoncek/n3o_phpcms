@@ -89,12 +89,12 @@ function CheckEmails($mailServer, $mailUser, $mailPass, $mailSSL=false) {
 <meta name="Author" content="Blaž Kristan (blaz@kristan-sp.si)" />
 <link rel="icon" type="image/png" href="pic/servis-icon-128.png" />
 <link rel="stylesheet" type="text/css" href="<?php echo $WebPath ?>/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $WebPath ?>/js/jquery/css/jquery-ui-smoothness.css" />
 <link rel="stylesheet" type="text/css" href="style.css" />
 <link rel="stylesheet" type="text/css" href="xmenu.css" />
 <script language="javascript" type="text/javascript" src="<?php echo $js ?>/funcs.js"></script>
-<script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/jquery/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/jquery/jquery-ui.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/jquery/jquery.form.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/jquery/jquery.ui.widget.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/jquery/jquery.iframe-transport.min.js"></script>

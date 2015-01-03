@@ -41,59 +41,6 @@ if ( $_GET['base'] != "" ) {
 }
 $URLpath .= '/';
 
-// fallback if AJAX is not working (see upload_image.php)
-if ( isset($_FILE['file']) ) {
-
-	if ( $_POST['maxsize']=="" ) 
-		$_POST['maxsize'] = "640";
-
-	// create upload folders
-	@mkdir($UPLOADpath, 0777, true);
-	@mkdir($UPLOADpath."/thumbs");
-	@mkdir($UPLOADpath."/large");
-
-	if ( isset($_POST['square']) )
-		$_POST['thumbnail'] = -abs((int)$_POST['thumbnail']); // square thumbnail
-	else
-		$_POST['thumbnail'] = abs((int)$_POST['thumbnail']); // regular thumbnail
-
-	// upload & resize image
-	$photo = ImageResize(
-		'file',      // $_FILE field
-		$UPLOADpath, // upload path
-		'thumbs/',   // thumbnail prefix
-		'large/',    // original image prefix
-		abs((int)$_POST['maxsize']),    // reduced size
-		$_POST['thumbnail'], // thumbnail
-		$jpgPct      // JPEG quality
-		);
-
-	if ( $photo ) { // successful upload & resize
-		$message = "<div class=\"red\">Slika naložena!</div>\n";
-
-		// rename the file if text id known
-		if ( isset($_POST['bid']) && (int)$_POST['bid'] ) {
-			$n = strtolower($db->get_var("SELECT Ime FROM Besedila WHERE BesediloID=". (int)$_POST['bid']));
-			$o = $photo['name'];
-			$e = strrchr($o, '.');
-			$b = left($o, strlen($o)-strlen($e));
-			$i = 1;
-			while ( is_file($UPLOADpath.'/'.$n.'_'.$i.$e) && $i<1000 ) {
-				$i++;
-			}
-			$n = $n.'_'.$i;
-
-			rename($UPLOADpath.'/'.$b.$e, $UPLOADpath.'/'.$n.$e);
-			if ( is_file($UPLOADpath.'/'.$b.'@2x'.$e) )        rename($UPLOADpath.'/'.$b.'@2x'.$e, $UPLOADpath.'/'.$n.'@2x'.$e);
-			if ( is_file($UPLOADpath.'/thumbs/'.$b.$e) )       rename($UPLOADpath.'/thumbs/'.$b.$e, $UPLOADpath.'/thumbs/'.$n.$e);
-			if ( is_file($UPLOADpath.'/thumbs/'.$b.'@2x'.$e) ) rename($UPLOADpath.'/thumbs/'.$b.'@2x'.$e, $UPLOADpath.'/thumbs/'.$n.'@2x'.$e);
-			if ( is_file($UPLOADpath.'/large/'.$b.$e) )        rename($UPLOADpath.'/large/'.$b.$e, $UPLOADpath.'/large/'.$n.$e);
-		}
-	} else { // error during upload or resize
-		$message = "<div class=\"red\">Error uploading image!</div>\n";
-	}
-}
-
 // delete image
 if ( isset($_GET['delete']) && $_GET['delete'] != "" ) {
 	$e = strrchr($_GET['delete'], '.');
@@ -150,7 +97,7 @@ INPUT.check { border: none; padding:0px; margin:0px; }
 <!-- //
 // fix internal height
 function fixSize() {
-	var list  = $("#divList").width(0).height(0);
+	var list  = $("#divListFU").width(0).height(0);
 	list.width( $(window).width() ).height( $(window).height() - list.position().top );
 }
 // prevent default drop behaviour on drop (outside fileupload area)
@@ -163,11 +110,12 @@ $(document).ready(function(){
 	// drag&drop image uploading
     $('#fileupload').fileupload({
         dataType: 'json',
-		dropZone: $('#divList'),
+		dropZone: $('#divListFU'),
 		pasteZone: null,
+		//fileInput: null, // prevent automatic upload
 		add: function(e, data) {
 			$('#loading').remove();
-			data.context = $('#divList').prepend('<div id="loading" class="gry center"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
+			data.context = $('#divListFU').prepend('<div id="loading" class="gry center"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 			data.url = 'upload_image.php?p='+$('input[name=base]').val()
 				+'&bid='+$('input[name=bid]').val()
 				+'&t='+$('input[name=thumbnail]').val()
@@ -217,8 +165,14 @@ function deleteimg(img_name) {
 }
 
 function loading(o) {
-	$('#divList').html('<div class="gry" style="text-align:center;"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
+	$('#divListFU').html('<div class="gry" style="text-align:center;"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</span>');
+	o.action = 'upload_image.php?p='+$('input[name=base]').val()
+		+'&bid='+$('input[name=bid]').val()
+		+'&t='+$('input[name=thumbnail]').val()
+		+'&s='+$('input[name=maxsize]').val()
+		+($('input[name=square]:checked').val() ? '&sq=on' : '');
 	o.submit();
+	setTimeout('location.replace("<?php echo $FindURL ?>");', 500);
 	return false;
 }
 
@@ -247,24 +201,26 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 <?php if ( isset($message) ) echo $message; ?>
 <?php if ( isset($_COOKIE['img_upload']) && $_COOKIE['img_upload'] != "0" ) : ?>
 <div id="dropzone" style="margin:5px;">
-<form name="frm_upload" action="<?php echo $FindURL ?>" onsubmit="return loading(this);" enctype="multipart/form-data" method="post">
+<form name="frm_upload" action="upload_image.php" onsubmit="return loading(this);" enctype="multipart/form-data" method="post">
 <table border="0" cellspacing="0" cellpadding="1" width="100%">
 <tr>
-	<td colspan="3" class="f10">Image:<input type="Hidden" name="bid" value="<?php echo isset($_GET['ID'])? (int)$_GET['ID']: "0" ?>">
+	<td colspan="2" class="f10">Set thumbnail size to
+	<input type="Text" name="thumbnail" size="3" maxlength="3" value="<?php echo isset($_GET['T'])? abs((int)$_GET['T']): "64" ?>" class="text">px
+	(0=none);
+	<input name="square" type="checkbox" <?php echo (isset($_GET['T']) && (int)$_GET['T'] < 0) ? "checked" : "" ?> style="border:none;padding:0px;margin:0px;">
+	use square thumbnail;
+	<input name="large" type="checkbox" checked class="check">
+	retain image &gt; 
+	<input name="maxsize" type="text" size="4" maxlength="4" value="<?php echo isset($_GET['S'])? $_GET['S']: "512" ?>" class="text" onchange="checkImg(this.form.file.value);">px
+	and then select image:</td>
+</tr>
+<tr>
+	<td class="f10"><input type="Hidden" name="bid" value="<?php echo isset($_GET['ID'])? (int)$_GET['ID']: "0" ?>">
 	<input id="fileupload" type="file" name="file" style="border:none;" onchange="checkImg(this.value);"></td>
-</tr>
-<tr>
-	<td colspan="3" class="f10">Thumb size
-	<input type="Text" name="thumbnail" size="3" maxlength="3" value="<?php echo isset($_GET['T'])? abs((int)$_GET['T']): "64" ?>" class="text">
-	px (0=none);
-	<input name="square" type="checkbox" <?php echo (isset($_GET['T']) && (int)$_GET['T'] < 0) ? "checked" : "" ?> style="border:none;padding:0px;margin:0px;"> square thumb
-	</td>
-</tr>
-<tr>
-	<td colspan="2" class="f10"><input name="large" type="checkbox" checked class="check"> Retain image &gt; 
-	<input name="maxsize" type="text" size="4" maxlength="4" value="<?php echo isset($_GET['S'])? $_GET['S']: "512" ?>" class="text" onchange="checkImg(this.form.file.value);">
-	px.</td>
 	<td align="right" class="f10" width="30%"><input type="submit" value=" Add &raquo; " class="but" style="font-weight:bold;">&nbsp;</td>
+</tr>
+<tr>
+	<td colspan="2" class="f10">(If the image is not uploaded automatically use the Add button.)</td>
 </tr>
 </table>
 </form>
@@ -375,7 +331,7 @@ tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
 		echo "</DIV>\n";
 	}
 
-	echo "<DIV id=\"divList\" style=\"overflow-y:auto;\">\n";
+	echo "<DIV id=\"divListFU\" style=\"overflow-y:auto;\">\n";
 	echo "<TABLE ID=\"tblList\" BORDER=\"0\" CELLPADDING=\"1\" CELLSPACING=\"0\" WIDTH=\"100%\">\n";
 	if ( $_GET['base']!='') {
 		echo "<TR ONMOUSEOVER=\"this.style.backgroundColor='#edf3fe';\" ONMOUSEOUT=\"this.style.backgroundColor='';\">\n";

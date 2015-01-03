@@ -165,7 +165,7 @@ $(document).ready(function(){
 			// and set url acordingly
 			switch ( e.originalEvent.currentTarget.id ) {
 			  case 'divSlike' :
-				data.url = 'upload_image.php?gid=<?php echo $_GET['ID'] ?>&p=<?php echo $GalleryBase ?>&t=<?php echo $DefThumbSize ?>&s=<?php echo $DefPicSize ?>&sq=on';
+				data.url = 'upload_image.php?gid=<?php echo $_GET['ID'] ?>&p=<?php echo $GalleryBase ."/". date("Y") ?>&t=<?php echo $DefThumbSize ?>&s=<?php echo $DefPicSize ?>&sq=on';
 				data.context = $('#divSlike').html('<div class="gry center"><img src="pic/control.spinner.gif" alt="Updating" border="0" height="14" width="14" align="absmiddle">&nbsp;: Updating ...</div>');
 				break;
 			  case 'thumbImage' :
@@ -235,7 +235,7 @@ $(document).ready(function(){
 		element_format : "html",
 		theme : "advanced",
 		content_css : "editor_css.php",
-		plugins : "safari,table,advimage,advhr,contextmenu",
+		plugins : "inlinepopups,safari,table,advimage,advhr,contextmenu",
 		auto_cleanup_word : true,
 		extended_valid_elements : "a[href|target|title],img[src|border=0|alt|class|hspace|vspace|width|height|align|style],hr[size|noshade],font[face|size|color|style],div[class|align|style],span[class|style],ol[type],ul[type]",
 		invalid_elements : "iframe,layer,script,link",
@@ -256,7 +256,7 @@ $(document).ready(function(){
 	if ( $("#divMe").text() )    $("#divMe").load('inc.php?Izbor=txtMedia&BesediloID=<?php echo $_GET['ID'] ?>');
 	if ( $("#rubrike").text() )  $("#rubrike").load('inc.php?Izbor=txtCategories&BesediloID=<?php echo $_GET['ID'] ?>');
 	if ( $("#tags").text() )     $("#tags").load('inc.php?Izbor=txtTags&BesediloID=<?php echo $_GET['ID'] ?>');
-	
+
 	// initialize LigtBox
 	$("a.fancybox").fancybox({
 		'padding'       :   10,
@@ -266,8 +266,8 @@ $(document).ready(function(){
 		'titlePosition' :   'over',
 		'transitionIn'	:	'elastic',
 		'transitionOut'	:	'elastic',
-		'speedIn'		:	300, 
-		'speedOut'		:	200, 
+		'speedIn'		:	300,
+		'speedOut'		:	200,
 		'overlayShow'	:	true
 	});
 
@@ -332,7 +332,7 @@ $(document).ready(function(){
 ?>
 	</SELECT>
 	</TD>
-	<TD ALIGN="right" width="10%"><B>Ime:</B>&nbsp;</TD>
+	<TD ALIGN="right" width="10%"><B>Name:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="Ime" MAXLENGTH="127" VALUE="" STYLE="width:100%;" TABINDEX="3"></TD>
 	<TD ALIGN="right"><?php if ( contains($ActionACL,"W") ) : ?><INPUT TYPE="submit" VALUE=" Save " CLASS="but"><?php endif ?></TD>
 </TR>
@@ -385,7 +385,7 @@ $(document).ready(function(){
 </TR>
 <TR>
 	<TD COLSPAN="7" VALIGN="top"><TEXTAREA NAME="Opis" ID="HTMLeditor" TABINDEX="11" STYLE="width:99%;"></TEXTAREA></TD>
-</TR>	
+</TR>
 </TABLE>
 </FORM>
 
@@ -478,7 +478,7 @@ $(document).ready(function(){
 
 	</TD>
 	<TD VALIGN="top">
-	
+
 	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 	<!--
 	function checkLang(ID, Naziv) {
@@ -494,10 +494,10 @@ $(document).ready(function(){
 <?php
 		$Kategorija = $db->get_var("SELECT KategorijaID FROM KategorijeBesedila WHERE BesediloID=". (int)$_GET['ID'] ." LIMIT 1");
 		$Jeziki = $db->get_results("SELECT Jezik, Opis FROM Jeziki WHERE Enabled=1");
-		
+
 		if ( count($Jeziki) > 1 )
 			echo "<li><a href=\"#all\">All</a></li>\n";
-		
+
 		if ( $Jeziki ) foreach ( $Jeziki as $Jezik )
 			echo "<li><a href=\"#$Jezik->Jezik\">$Jezik->Jezik</a></li>\n";
 ?>
@@ -526,7 +526,7 @@ $(document).ready(function(){
 			echo "</TD>\n";
 			echo "</TR>\n";
 		}
-		if ( !$List ) 
+		if ( !$List )
 			echo "<TR><TD ALIGN=\"center\">No content!</TD></TR>\n";
 		else {
 			$CurrentRow = 1;
@@ -576,7 +576,7 @@ $(document).ready(function(){
 				echo "</TD>\n";
 				echo "</TR>\n";
 			}
-			if ( !$List ) 
+			if ( !$List )
 				echo "<TR><TD ALIGN=\"center\">No content!</TD></TR>\n";
 			else {
 				$CurrentRow = 1;

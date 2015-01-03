@@ -82,7 +82,7 @@ $(document).ready(function(){
 		});
 		return false;
 	});
-	
+
 	// resize HTML editor
 	window.customResize();
 
@@ -95,7 +95,7 @@ $(document).ready(function(){
 		element_format : "html",
 		theme : "advanced",
 		content_css : "editor_css.php",
-		plugins : "safari,table,advimage,advhr,contextmenu",
+		plugins : "inlinepopups,safari,table,advimage,advhr,contextmenu",
 		auto_cleanup_word : true,
 		extended_valid_elements : "a[href|target|title],img[src|border=0|alt|class|hspace|vspace|width|height|align|style],hr[size|noshade],font[face|size|color|style],div[class|align|style],span[class|style],ol[type],ul[type]",
 		invalid_elements : "iframe,layer,script,link",
@@ -129,7 +129,7 @@ $(document).ready(function(){
 <TR>
 	<TD NOWRAP><B>Subject:</B>&nbsp;</TD>
 	<TD><INPUT TYPE="text" NAME="Subject" MAXLENGTH="128" VALUE="<?php echo ($Podatek? $Podatek->Naziv : "") ?>" STYLE="width:100%" TABINDEX="7"></TD>
-	<TD>&nbsp;Language: 
+	<TD>&nbsp;Language:
 	<SELECT NAME="Jezik" SIZE="1" <?php echo (($Podatek)? "DISABLED": "") ?>>
 		<OPTION VALUE="" DISABLED STYLE="background-color:whitesmoke;">Select...</OPTION>
 <?php
@@ -141,7 +141,7 @@ $Jeziki = $db->get_results(
 		J.Enabled = 1". ((!$Podatek)? " AND MT.Jezik IS NULL": "")
 	);
 $All = $db->get_var(
-	"SELECT count(*) 
+	"SELECT count(*)
 	FROM emlMessagesTxt
 	WHERE emlMessageID = ".(int)$_GET['emlMessageID']."	AND Jezik IS NULL"
 );

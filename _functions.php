@@ -2,7 +2,7 @@
 /*~ _functions.php
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -697,7 +697,7 @@ function ImageResize(
 
 				// limit original image size
 				if ( $size['width'] > $limit || $size['height'] > $limit ) {
-					$thumb->resize($limit, $limit)->save();
+					$thumb->resize($limit, $limit)->save($largefile);
 					$size = $thumb->getCurrentDimensions();
 				}
 				$r_width  = $i_width  = $size['width'];

@@ -50,7 +50,7 @@ if ( isset($_POST['Who']) ) {
 	$AltBody = preg_replace( "/<([\/]*)DIV([^>]*)>/i", "<\1p>", $Body );
 	$AltBody = str_ireplace( '<li>', "* ", $AltBody );
 	$AltBody = preg_replace( "/<([\/]*)([^>]*)>/i", "", $AltBody );
-	
+
 	$Body = "<style>" . file_get_contents('./mail.css') . "</style>\n" . $Body;
 
 	if ( $MailList ) foreach ( $MailList as $User ) {
@@ -97,7 +97,7 @@ $(document).ready(function(){
 			return false;
 		});
 	});
-	
+
 	// resize content div
 	window.customResize();
 
@@ -110,7 +110,7 @@ $(document).ready(function(){
 		element_format : "html",
 		theme : "advanced",
 		content_css : "editor_css.php",
-		plugins : "safari,contextmenu",
+		plugins : "inlinepopups,safari,contextmenu",
 		auto_cleanup_word : true,
 		extended_valid_elements : "a[href|target|title],hr[size|noshade],font[face|size|color|style],div[class|align|style],span[class|style],ol[type],ul[type]",
 		invalid_elements : "iframe,layer,script,link",

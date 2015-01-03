@@ -328,6 +328,34 @@ if ( isset( $_SESSION['Authenticated'] ) && $_SESSION['Authenticated'] ) {
 			default         : echo "<SPAN STYLE=\"color: red;\"><B>Unspecified error!</B></SPAN>\n"; break;
 		}
 	}
+	
+	$url = '';
+	if ( !isset($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS'])=="off" ) {
+		// check for available HTTPS connection if entry was insecure
+		$url = 'https://'. $_SERVER['SERVER_NAME'];
+		$ch = curl_init();
+		$options = array(
+			CURLOPT_URL => $url,
+			CURLOPT_HEADER => TRUE,
+			CURLOPT_NOBODY => TRUE,
+			CURLOPT_TIMEOUT => 3,
+			CURLOPT_CONNECTTIMEOUT => 3,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_SSL_VERIFYPEER => false, // ignore certification path
+			CURLOPT_USERAGENT => "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)"
+			);
+		curl_setopt_array($ch, $options);
+		$ok = (bool)curl_exec($ch); // ignore output, just check if there is output
+		$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); // verify response code
+		$found = $httpCode >= 200 && $httpCode < 400;
+		curl_close($ch);
+		if ( !($ok && $found) ) {
+			// HTTPS not available
+			$url = '';
+		}
+	}
+	$url .= $_SERVER['PHP_SELF'];
+
 ?>
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
 <!--
@@ -361,7 +389,7 @@ onload="selectEdit()";
 <?php else : ?>
 	<div style="margin:0 10px;">
 <?php endif ?>
-	<FORM ACTION="<?php echo $_SERVER['PHP_SELF']?>?login" METHOD="post" NAME="loginform" ONSUBMIT="return validate(this);">
+	<FORM ACTION="<?php echo $url?>?login" METHOD="post" NAME="loginform" ONSUBMIT="return validate(this);">
 	Username:<BR>
 	<INPUT Name="Usr" Type="TEXT" Size="20" MAXLENGTH="50" class="txt" TABINDEX=1 VALUE="<?php if ( isset($_COOKIE['User']) ) echo $_COOKIE['User']; ?>"><BR>
 	Password:<BR>

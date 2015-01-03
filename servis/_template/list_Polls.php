@@ -77,7 +77,7 @@ echo "<TABLE WIDTH=\"100%\" BORDER=\"0\" CELLPADDING=\"2\" CELLSPACING=\"0\" CLA
 echo "<TR>\n";
 echo "<TD>";
 echo "</TD>\n";
-echo "<TD ALIGN=\"right\">Jezik:\n";
+echo "<TD ALIGN=\"right\">Language:\n";
 echo "<SELECT NAME=\"Tip\" SIZE=\"1\" ONCHANGE=\"loadTo('List','list.php?Action=".$_GET['Action']."&Tip='+this[this.selectedIndex].value);\">\n";
 echo "<OPTION VALUE=\"\">- all -</OPTION>\n";
 $Tipi = $db->get_results("SELECT Jezik, Opis FROM Jeziki WHERE Enabled=1");

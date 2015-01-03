@@ -2,7 +2,7 @@
 /*~ _application.php - application initialization script
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -80,7 +80,7 @@ if (function_exists('apache_get_modules')) {
 // detect mobile device
 require_once($StoreRoot .'/inc/mobile_device_detect.php');
 $Tablet = $Mobile = mobile_device_detect();
-if ( $Mobile && preg_match('/(ipad|tab)/i',$_SERVER['HTTP_USER_AGENT']) ) {
+if ( $Mobile && preg_match('/(ipad|tab|SM-T|GT-P|GT-N)/i',$_SERVER['HTTP_USER_AGENT']) ) { // inc. Samsung tablets
 	$Mobile = false;
 	$Tablet = true;
 }
@@ -356,7 +356,7 @@ $ColorSchemes = $db->get_row(
 		ST.Jezik
 	LIMIT 1"
 	);
-	
+
 if ( $db->num_rows==0 ) { // default values
 	$ColorScheme = "Default;640;170;170;0;black;white;#666600;#cccccc;#999999;black;#ffffcc;white;#6699ff;black;#999933; ";
 	$TextPermalinks = false;

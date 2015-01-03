@@ -36,10 +36,6 @@ if ( !isset($_GET['p']) || !(isset($_FILES['file']) && !$_FILES['file']['error']
 	die();
 }
 
-// adjust path for galleries
-if ( left($_GET['p'],8) == 'gallery' )
-	$_GET['p'] .= '/'. date("Y"); // add current year to path
-
 // set base in media/ folder & prevent dir traversal & remove trailing /
 $_GET['p']  = trim('media/'. str_replace('../','',$_GET['p']), '/');
 $uploadpath = $StoreRoot .'/'. $_GET['p'];

@@ -268,9 +268,9 @@ function loopXmenu($menuID="00", $Name="")
 <link rel="apple-touch-icon" sizes="114x114" href="pic/servis-icon-precomposed-114.png" />
 <link rel="apple-touch-icon" sizes="144x144" href="pic/servis-icon-precomposed-144.png" />
 <link rel="icon" type="image/png" href="pic/servis-icon-128.png" />
-<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.css" media="screen" />
-<script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $WebPath ?>/js/jquery/css/jquery.mobile.css" media="screen" />
+<script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/jquery/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/jquery/jquery.mobile.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $WebPath ?>/js/funcs.js"></script>
 </head>
 <body>
