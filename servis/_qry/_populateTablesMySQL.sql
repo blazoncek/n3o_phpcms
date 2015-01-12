@@ -1,6 +1,6 @@
 --.---------------------------------------------------------------------------.
 --|  Software: N3O CMS (frontend and backend)                                 |
---|   Version: 2.2.0                                                          |
+--|   Version: 2.2.2                                                          |
 --|   Contact: contact author (also http://blaz.at/home)                      |
 --| ------------------------------------------------------------------------- |
 --|    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -62,6 +62,7 @@ INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VA
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0103','Files',1,'Media','attachment',1,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0104','',1,NULL,NULL,1,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0105','Polls',1,'Polls','accept',1,NULL);
+INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0106','Tags',1,'textTags','tag_blue',0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('02','Mailing lists',1,NULL,NULL,0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0201','Groups',1,'emlGroups','folder',0,NULL);
 INSERT INTO SMActions (ActionID,Name,Enabled,Action,Icon,MobileCapable,ACLID) VALUES ('0202','Members',1,'emlUsers','user',0,NULL);
