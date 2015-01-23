@@ -2,7 +2,7 @@
 /*
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend)                                             |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -29,6 +29,7 @@
 $ktg = $db->get_row(
 	"SELECT
 		K.KategorijaID,
+		K.Ime,
 		KO.Naziv
 	FROM
 		Kategorije K
@@ -38,12 +39,13 @@ $ktg = $db->get_row(
 		AND (KO.Jezik IS NULL OR KO.Jezik='$lang')
 	LIMIT 1"
 );
+$kat = ($TextPermalinks) ? ($IsIIS ? "$WebFile/" : ''). $ktg->Ime ."/" : '?kat='. $ktg->KategorijaID;
 ?>
 <div id="cookies">
 <div class="cont">
 <div class="text">
 <?php echo multiLang('<Cookies>', $lang); ?><br>
-<a href="?kat=<?php echo $ktg->KategorijaID ?>"><?php echo $ktg->Naziv; ?></a>
+<a href="<?php echo $WebPath .'/'. $kat ?>"><?php echo $ktg->Naziv; ?></a>
 </div>
 <div class="buttons">
 <input type="button" value="<?php echo multiLang('<Agree>', $lang); ?>" onclick="setCookie('accept_cookies','yes',365);$('#cookies').hide();" />

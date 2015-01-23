@@ -2,7 +2,7 @@
 /* _blog.php - Diary page, last records displayed first.
 .---------------------------------------------------------------------------.
 |  Software: N3O CMS (frontend and backend)                                 |
-|   Version: 2.2.0                                                          |
+|   Version: 2.2.2                                                          |
 |   Contact: contact author (also http://blaz.at/home)                      |
 | ------------------------------------------------------------------------- |
 |    Author: Blaž Kristan (blaz@kristan-sp.si)                              |
@@ -135,7 +135,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 //-----------------------
 // display a single post
 //-----------------------
-	
+
 	echo "<div class=\"post\" id=\"entry-". (int)$_GET['ID'] ."\">\n";
 
 	// display post image
@@ -153,9 +153,9 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 	$j = 0;
 	// display a single post (comprised of multiple texts)
 	if ( $Teksti ) foreach( $Teksti as $Tekst ) {
-		
+
 		echo "\t<div class=\"title\">\n";
-		// display post title			
+		// display post title
 		if ( left($Tekst->Naslov,1) != '.' ) {
 			echo "\t".($j==0 ? "<h1>" : "<h2>")."";
 			echo $Tekst->Naslov;
@@ -194,7 +194,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 				echo "</div>\n";
 			}
 		}
-		
+
 		// display subtitle
 		if ( !empty($Tekst->Podnaslov) && left($Tekst->Podnaslov,1) != '.' ) {
 			echo "\t<h3>". $Tekst->Podnaslov ."</h3>\n";
@@ -229,7 +229,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 		$Bes = ReplaceSmileys($Bes, "$WebPath/pic/");
 		echo "$Bes\n";
 		echo "\t</div>\n";
-		
+
 		$j++;
 	}
 	echo "\t</div>\n"; // post
@@ -248,7 +248,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 			$sFile = basename($sFile);
 			// file title exists?
 			$sName = $Slika->Naslov != "" ? $Slika->Naslov : $sFile;
-	
+
 			echo "\t<li>";
 			// add link tag
 			echo "<A HREF=\"$rPath/". (fileExists("$sPath/large/".$sFile)?"large/":"") ."$sFile\" ". ($Mobile?" REL=\"external\"":"CLASS=\"fancybox\" REL=\"lightbox_gal\"") ." TITLE=\"$sName\">";
@@ -267,14 +267,14 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 				try {
 					$thumb = PhpThumbFactory::create($sPath."/".((strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') ? DecodeUTF8($sFile) : $sFile));
 					$thumb->adaptiveResize($DefThumbSize, $DefThumbSize);
-					$imageAsString = $thumb->getImageAsString(); 
+					$imageAsString = $thumb->getImageAsString();
 					echo "<IMG SRC=\"data:image/". strtolower($thumb->getFormat()) .";base64,". base64_encode($imageAsString) ."\" ALT=\"$sName\" BORDER=\"0\" class=\"thumb\" retina=\"no\">";
 				} catch (Exception $e) {
 					// display missing thumbnail image
 					echo "<IMG SRC=\"$WebPath/pic/nislike_112.png\" ALT=\"\" BORDER=\"0\" class=\"thumb\">";
 				}
 			}
-	
+
 			// add closing link tag
 			echo "</A>";
 			echo "</li>\n";
@@ -363,12 +363,12 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 			ORDER BY
 				MessageDate"
 			);
-		
+
 		if ( $CommentsAllowed || count($Comments) > 0 ) {
 			echo "<DIV CLASS=\"comment\">\n";
 			echo "<div class=\"head\">". multiLang('<Comments>', $lang) ."</div>\n";
 			// display confirmation about message post
-			if ( isset($_POST['MessageBody']) && $_POST['MessageBody'] != "" ) 
+			if ( isset($_POST['MessageBody']) && $_POST['MessageBody'] != "" )
 				echo "<DIV CLASS=\"body\">". multiLang('<MessageSent>', $lang) ."</DIV>\n";
 			// display actual comments
 			if ( count($Comments) > 0 ) {
@@ -419,7 +419,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 	$kat = ($TextPermalinks) ? ($IsIIS ? "$WebFile/" : ''). $KatText .'/' : '?kat='. $_GET['kat'];
 	$bid = ($TextPermalinks) ? $Tekst->Ime .'/' : '&amp;ID='. $_GET['ID'];
 	$URL = $WebURL .'/'. $kat . $bid;
-	
+
 	// add social buttons
 	echo "<DIV CLASS=\"social\">\n";
 	// twitter
@@ -464,38 +464,38 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 
 	// are we requested do display different page?
 	$Page = isset($_GET['pg']) ? (int)$_GET['pg'] : 1; // #evaluate('(Galerija.RecordCount-1) \ MaxRows + 1')#
-	
+
 	if ( count($Besedila) > 0 ) {
 		// get maximum number of posts displayed
 		$MaxRows = $BlogMaxPosts;
-		
+
 		// all available rows
 		$AllRows = count($Besedila);
-		
+
 		// number of possible pages
 		$NuPg = (int)(($AllRows-1) / $MaxRows) + 1;
-		
+
 		// fix page number if out of limits
 		$Page = max($Page, 1);
 		$Page = min($Page, $NuPg);
-		
+
 		// start & end page
 		$StPg = min(max(1, $Page - 5), max(1, $NuPg - 10));
 		$EdPg = min($StPg + 10, min($Page + 10, $NuPg));
-		
+
 		// previous and next page numbers
 		$PrPg = $Page - 1;
 		$NePg = $Page + 1;
-		
+
 		// start and end row from recordset
 		$StaR = ($Page - 1) * $MaxRows + 1;
 		$EndR = min(($Page * $MaxRows), $AllRows);
-	
+
 		// loop until all texts for current page are displayed
 		for( $i=$StaR; $i<=$EndR; $i++ ) {
 			// get the record
 			$Besedilo = $Besedila[$AllRows-$i];
-			
+
 			// get text pages (for mobile client just get first page of text)
 			$Tekst = $db->get_row(
 				"SELECT
@@ -531,18 +531,18 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 					BS.Polozaj
 				LIMIT 1"
 				);
-			
+
 			// display a single post (comprised of multiple texts)
 			if ( $Tekst ) {
 				echo "<div class=\"post list\" id=\"entry-". $Besedilo->ID ."\">\n";
 				// set Tweet text
 				$TweetText = ( left($Tekst->Naslov,1)!='.' ? $Tekst->Naslov : "Tweet text placeholder" );
-				
+
 				// display link in list
 				$kat = ($TextPermalinks) ? ($IsIIS ? "$WebFile/" : ''). $KatText .'/' : '?kat='. $_GET['kat'];
 				$bid = ($TextPermalinks) ? $Besedilo->Ime .'/' : '&amp;ID='. $Besedilo->ID;
 				echo "\t<a href=\"$WebPath/$kat". $bid ."\" class=\"postlink\">\n";
-	
+
 				// display image if not mobile site
 				//if ( !$Mobile ) {
 					$pic = ""; //default: no image
@@ -586,7 +586,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 									$thumb->adaptiveResize(abs($DefThumbSize), abs($DefThumbSize));
 								else
 									$thumb->resize($DefThumbSize, $DefThumbSize);
-								$imageAsString = $thumb->getImageAsString(); 
+								$imageAsString = $thumb->getImageAsString();
 								$pic = "data:image/". strtolower($thumb->getFormat()) .";base64,". base64_encode($imageAsString);
 							}
 						} catch (Exception $e) {
@@ -599,7 +599,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 						$rPath = $WebPath   ."/". dirname($sFile);
 						$sPath = $StoreRoot ."/". dirname($sFile);
 						$sFile = basename($sFile);
-				
+
 						if ( fileExists($sPath."/thumbs/".$sFile) ) {
 							$pic = $rPath ."/thumbs/". $sFile; // existing thumbnail
 						}
@@ -608,16 +608,16 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 
 						// find 1st embeded image
 						if ( preg_match("/<img[^>]*>/i", str_replace("\\\"","\"",$Tekst->Opis), $src) ) {
-							if ( preg_match("/src=\"(?!http)([^\"]*)\"/i", $src[0], $pic) ) { // find SRC= content
-								$sPath = dirname($StoreRoot ."/". $pic[1]); // filesystem path
-								$rPath = dirname($WebPath ."/". $pic[1]); // web relative path
-								$sName = basename($WebPath ."/". $pic[1]); // filename
-						
+							if ( preg_match("/src=\"(?!(?:http|data))([^\"]*)\"/i", $src[0], $img) ) { // find SRC= content
+								$sPath = dirname($StoreRoot ."/". $img[1]); // filesystem path
+								$rPath = dirname($WebPath ."/". $img[1]); // web relative path
+								$sName = basename($WebPath ."/". $img[1]); // filename
+
 								// check if thumbnail exists
 								if ( fileExists($sPath .'/thumbs/'. $sName) ) {
 									$pic = "$rPath/thumbs/". $sName;
 								} else {
-									$pic = "";
+									$pic = $rPath ."/". $sName;
 								}
 							}
 						}
@@ -665,7 +665,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 							TopicID = ". (int)$Besedilo->ForumTopicID ."
 							AND IsApproved = 1"
 						);
-				
+
 					if ( $Comments > 0 )
 						echo "<div class=\"bubble\">". (int)$Comments ."</div>\n";
 				}
@@ -676,7 +676,7 @@ if ( isset($_GET['ID']) && (int)$_GET['ID'] != 0 ) {
 				echo "</div>\n";
 
 				echo "\t</a>\n";
-				
+
 				echo "</div>\n"; // post
 			}
 			unset($Tekst);
